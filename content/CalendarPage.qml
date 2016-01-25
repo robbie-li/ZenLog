@@ -43,6 +43,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Private 1.0
 import QtQuick.Controls.Styles 1.1
 import robbie.calendar 1.0
+import "."
 
 Rectangle {
     objectName: 'CalendarPage'
@@ -167,68 +168,11 @@ Rectangle {
                 anchors.margins: 10
                 model: eventModel.coursesForDate(calendar.selectedDate)
 
-                delegate: Rectangle {
+                delegate: ListViewDelegate {
                     width: eventsListView.width
-                    height: eventItemColumn.height
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Image {
-                        anchors.top: parent.top
-                        anchors.topMargin: 4
-                        width: 12
-                        height: width
-                        source: "qrc:/res/images/eventindicator.png"
-                    }
-
-                    Rectangle {
-                        width: parent.width
-                        height: 1
-                        color: "#eee"
-                    }
-
-                    Row {
-                        id: eventItemColumn
-                        anchors.left: parent.left
-                        anchors.leftMargin: 20
-                        anchors.right: parent.right
-                        height: 40
-                        spacing: 10
-
-                        Rectangle {
-                            width: (parent.width - parent.spacing) / 3
-                            height: parent.height
-
-                            Label {
-                                anchors.fill: parent
-                                width: parent.width
-                                wrapMode: Text.Wrap
-                                text: modelData.name
-                            }
-                        }
-
-                        Rectangle {
-                            width: (parent.width - parent.spacing) / 3
-                            height: parent.height
-
-                            Label {
-                                anchors.fill: parent
-                                width: parent.width
-                                wrapMode: Text.Wrap
-                                text: modelData.time
-                            }
-                        }
-
-                        Rectangle {
-                            width: (parent.width - parent.spacing) / 3
-                            height: parent.height
-
-                            Label {
-                                anchors.fill: parent
-                                width: parent.width
-                                wrapMode: Text.Wrap
-                                text: modelData.count
-                            }
-                        }
+                    onTrashButtonClicked: {
+                        eventModel.delCourse(index)
+                        eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
                     }
                 }
             }

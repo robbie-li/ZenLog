@@ -6,7 +6,7 @@ import FlatUI 1.0
 Rectangle {
     id: datePicker
     width: parent.width
-    height: 80
+    height: 60
 
     property var currentDate: new Date()
     property bool expanded: false
@@ -29,7 +29,7 @@ Rectangle {
 
     Rectangle {
         id: headerRect
-        height: 70
+        height: 50
         anchors { top: parent.top; left: parent.left; right: parent.right; margins: 5 }
         clip: true
 

@@ -49,12 +49,16 @@ class Course : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(int index READ index WRITE setIndex NOTIFY indexChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString time READ time WRITE setTime NOTIFY timeChanged)
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
     Q_PROPERTY(QDateTime date READ date WRITE setDate NOTIFY dateChanged)
 public:
     explicit Course(QObject *parent = 0);
+
+    int index() const;
+    void setIndex(const int index);
 
     QString name() const;
     void setName(const QString &name);
@@ -69,11 +73,13 @@ public:
     void setDate(const QDateTime &date);
 
 signals:
+    void indexChanged(const int index);
     void nameChanged(const QString &name);
     void timeChanged(const QString &name);
     void countChanged(const int count);
     void dateChanged(const QDateTime &date);
 private:
+    int mIndex;
     int mCount;
     QString mName;
     QString mTime;

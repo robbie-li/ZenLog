@@ -102,5 +102,6 @@
         <file>modules/FlatUI/VerticalScrollBar.qml</file>
         <file>modules/FlatUI/qmldir</file>
         <file>content/MyButton.qml</file>
+        <file>content/ListViewDelegate.qml</file>
     </qresource>
 </RCC>

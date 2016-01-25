@@ -11,6 +11,7 @@ OTHER_FILES += \
     content/DailyLogPage.qml \
     content/DatePicker.qml \
     content/MyButton.qml \
+    content/ListViewDelegate.qml \
     content/StatisticPage.qml
 
 RESOURCES += \

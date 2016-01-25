@@ -45,6 +45,19 @@ Course::Course(QObject *parent) :
 {
 }
 
+int Course::index() const
+{
+    return mIndex;
+}
+
+void Course::setIndex(const int index)
+{
+    if (index != mIndex) {
+        mIndex = index;
+        emit indexChanged(mIndex);
+    }
+}
+
 QString Course::name() const
 {
     return mName;

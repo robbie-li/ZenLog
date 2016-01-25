@@ -65,7 +65,7 @@ Item {
             FlatSelect {
                 id: course_name
                 width: (parent.width - option.spacing) /2
-                height: 80
+                height: 60
                 dropdownItemHeight: height
                 dropdownWidth: width
                 dropdownRadius: 0
@@ -81,7 +81,7 @@ Item {
             FlatSelect {
                 id: course_time
                 width: (parent.width - option.spacing) /2
-                height: 80
+                height: 60
                 dropdownItemHeight: height
                 dropdownWidth: width
                 dropdownRadius: 0
@@ -98,7 +98,7 @@ Item {
 
         TextField {
             id: course_count
-            height: 80
+            height: 60
             anchors { top: option.bottom; left: parent.left; right: parent.right; margins: 30 }
             validator: IntValidator {bottom: 0; top: 1000000;}
             style: touchStyle
@@ -109,22 +109,42 @@ Item {
         DatePicker {
             id: datepicker
             anchors { top: course_count.bottom; left: parent.left; right: parent.right; margins: 30; }
+            onCurrentDateChanged: {
+                eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
+            }
         }
 
         FlatButton {
             anchors { top: datepicker.bottom; left: parent.left; right: parent.right; margins: 30 }
             id: saveButton
             text: "Save"
-            height: times.height
+            height: 60
 
             Behavior on y {
                 NumberAnimation { duration: 1000 }
             }
 
             onClicked: {
-                if(course_time.text != '') {
+                if(course_count.text != '') {
                     eventModel.addCourse(datepicker.currentDate, course_name.text, course_time.text, course_count.text)
-                    course_time.text = ''
+                    course_count.text = ''
+                    eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
+                }
+            }
+        }
+
+        ListView {
+            anchors { top: saveButton.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; margins: 30 }
+            id: eventsListView
+            spacing: 4
+            clip: true
+            model: eventModel.coursesForDate(datepicker.currentDate)
+
+            delegate: ListViewDelegate {
+                width: eventsListView.width
+                onTrashButtonClicked: {
+                    eventModel.delCourse(index)
+                    eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
                 }
             }
         }

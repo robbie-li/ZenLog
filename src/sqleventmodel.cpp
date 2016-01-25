@@ -63,6 +63,7 @@ QList<QObject*> SqlEventModel::coursesForDate(const QDate &date)
     QList<QObject*> courses;
     while (query.next()) {
         Course *course = new Course(this);
+        course->setIndex(query.value("id").toInt());
         course->setName(query.value("name").toString());
         course->setTime(query.value("time").toString());
         course->setCount(query.value("count").toInt());
@@ -92,19 +93,31 @@ void SqlEventModel::createConnection()
 
     QSqlQuery query;
     // We store the time as seconds because it's easier to query.
-    if(!query.exec("create table Course (name TEXT, date DATE, time TEXT, count INTEGER)")) {
-       qFatal("Failed to create table");
+    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, time TEXT, count INTEGER)")) {
+       //qFatal("Failed to create table");
     }
     return;
 }
 
 bool SqlEventModel::addCourse(const QDate &date, const QString& name, const QString& time, const QString& count)
 {
-    const QString queryStr = QString::fromLatin1("insert into Course values('%1', '%2', '%3','%4')").arg(name, date.toString("yyyy-MM-dd"), time, count);
+    const QString queryStr = QString::fromLatin1("insert into Course (name,date,time,count) values('%1', '%2', '%3','%4')").arg(name, date.toString("yyyy-MM-dd"), time, count);
     qDebug() << "executing:" << queryStr;
     QSqlQuery query;
     if (!query.exec(queryStr)) {
-        qFatal("Query failed");
+        qDebug() << query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool SqlEventModel::delCourse(const int index)
+{
+    const QString queryStr = QString::fromLatin1("delete from Course where id='%1'").arg(index);
+    qDebug() << "executing:" << queryStr;
+    QSqlQuery query;
+    if (!query.exec(queryStr)) {
+        qDebug() << query.lastError().text();
         return false;
     }
     return true;
