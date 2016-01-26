@@ -8,10 +8,12 @@ include(src/src.pri)
 OTHER_FILES += \
     main.qml \
     content/CalendarPage.qml \
+    content/UserSettings.qml \
     content/DailyLogPage.qml \
-    content/DatePicker.qml \
+    content/MainPage.qml \
     content/MyButton.qml \
     content/ListViewDelegate.qml \
+    content/SimpleDatePicker.qml \
     content/StatisticPage.qml
 
 RESOURCES += \

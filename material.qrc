@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/Material">
+    <qresource prefix="/">
         <file>modules/Material/Extras/images/circle.png</file>
         <file>modules/Material/Extras/js/dateutils.js</file>
         <file>modules/Material/Extras/js/httplib.js</file>
@@ -1003,5 +1003,10 @@
         <file>modules/QtQuick/Controls/Styles/Material/TextFieldStyle.qml</file>
         <file>modules/QtQuick/Controls/Styles/Material/ToolBarStyle.qml</file>
         <file>modules/QtQuick/Controls/Styles/Material/ToolButtonStyle.qml</file>
+        <file>modules/Material/qmldir</file>
+        <file>modules/Material/ListItems/qmldir</file>
+        <file>modules/QtQuick/Controls/Styles/Material/qmldir</file>
+        <file>modules/Material/Extras/qmldir</file>
+        <file>modules/Material/fonts/fontawesome/FontAwesome.otf</file>
     </qresource>
 </RCC>

@@ -70,8 +70,8 @@ Rectangle {
             height: width
             anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
             text: flatConstants.fontAwesome.fa_trash
-            defaultColor: "white"
-            textColor: "black"
+            //defaultColor: "white"
+            //textColor: "black"
             onClicked: root.trashButtonClicked(modelData.index)
           }
       }

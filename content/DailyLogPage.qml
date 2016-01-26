@@ -1,18 +1,84 @@
-import QtQuick 2.4
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.1
-import robbie.calendar 1.0
+import QtQuick 2.5
 import Material 0.2
+import Material.Extras 0.1
+import robbie.calendar 1.0
+import "."
 
-Item {
-    objectName: 'DailyLog'
-    width: parent.width
-    height: parent.height
-
+Page {
     SqlEventModel {
         id: eventModel
     }
 
+    title: "精进修行"
+
+    ActionButton {
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            margins: Units.dp(32)
+        }
+
+        action: Action {
+            id: addContent
+            text: "&Save"
+            shortcut: "Ctrl+S"
+            //onTriggered: eventModel.addCourse()
+        }
+        iconName: "content/save"
+    }
+
+    Flickable {
+        anchors.fill: parent
+
+        Column {
+            anchors.centerIn: parent
+
+            spacing: Units.dp(20)
+
+            SimpleDatePicker {
+                id: datepicker
+                width: Units.dp(300)
+                height: Units.dp(60)
+            }
+
+            Row {
+                spacing: Units.dp(20)
+
+                Label {
+                    style: "title"
+                    text: "大悲咒"
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                TextField {
+                    placeholderText: "输入次数:1-1000000"
+                    floatingLabel: true
+                    characterLimit: 10
+                    validator: IntValidator {bottom: 0; top: 1000000;}
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+            ListView {
+                id: eventsListView
+                spacing: 4
+                clip: true
+                model: eventModel.coursesForDate(datepicker.currentDate)
+
+                delegate: ListViewDelegate {
+                    width: eventsListView.width
+                    onTrashButtonClicked: {
+                        eventModel.delCourse(index)
+                        eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /*
     Rectangle {
         color: flatConstants.concrete
         anchors.fill: parent
@@ -21,38 +87,6 @@ Item {
             id: option
             anchors { top: parent.top; left: parent.left; right: parent.right; margins: 30 }
             spacing: 30
-
-            FlatSelect {
-                id: course_name
-                width: (parent.width - option.spacing) /2
-                height: 60
-                dropdownItemHeight: height
-                dropdownWidth: width
-                dropdownRadius: 0
-
-                model: ListModel {
-                    ListElement {item: "大悲咒";}
-                    ListElement {item: "佛号"; separator: true}
-                    ListElement {item: "心经"; separator: true}
-                    ListElement {item: "六字真言"; separator: true}
-                }
-            }
-
-            FlatSelect {
-                id: course_time
-                width: (parent.width - option.spacing) /2
-                height: 60
-                dropdownItemHeight: height
-                dropdownWidth: width
-                dropdownRadius: 0
-
-                model: ListModel {
-                    ListElement {item: "全天";}
-                    ListElement {item: "早课"; separator: true}
-                    ListElement {item: "午课"; separator: true}
-                    ListElement {item: "晚课"; separator: true}
-                }
-            }
         }
 
 
@@ -74,7 +108,7 @@ Item {
             }
         }
 
-        FlatButton {
+        Button {
             anchors { top: datepicker.bottom; left: parent.left; right: parent.right; margins: 30 }
             id: saveButton
             text: "Save"
@@ -109,25 +143,5 @@ Item {
             }
         }
     }
-
-    Component {
-        id: touchStyle
-
-        TextFieldStyle {
-            textColor: "white"
-            font.pixelSize: 28
-            background: Item {
-                implicitHeight: 50
-                implicitWidth: 480
-                BorderImage {
-                    source: "qrc:/res/images/textinput.png"
-                    border.left: 8
-                    border.right: 8
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                }
-            }
-        }
-    }
+    */
 }
