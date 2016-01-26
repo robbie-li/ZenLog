@@ -51,7 +51,6 @@ class Course : public QObject
 
     Q_PROPERTY(int index READ index WRITE setIndex NOTIFY indexChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString time READ time WRITE setTime NOTIFY timeChanged)
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
     Q_PROPERTY(QDateTime date READ date WRITE setDate NOTIFY dateChanged)
 public:
@@ -63,9 +62,6 @@ public:
     QString name() const;
     void setName(const QString &name);
 
-    QString time() const;
-    void setTime(const QString &time);
-
     int count() const;
     void setCount(const int count);
 
@@ -75,7 +71,6 @@ public:
 signals:
     void indexChanged(const int index);
     void nameChanged(const QString &name);
-    void timeChanged(const QString &name);
     void countChanged(const int count);
     void dateChanged(const QDateTime &date);
 private:

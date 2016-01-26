@@ -71,19 +71,6 @@ void Course::setName(const QString &name)
     }
 }
 
-QString Course::time() const
-{
-    return mTime;
-}
-
-void Course::setTime(const QString &time)
-{
-    if (time != mTime) {
-        mTime = time;
-        emit timeChanged(mTime);
-    }
-}
-
 int Course::count() const
 {
     return mCount;

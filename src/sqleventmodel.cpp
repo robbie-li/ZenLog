@@ -56,6 +56,8 @@ QList<QObject*> SqlEventModel::coursesForDate(const QDate &date)
 {
     const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == date").arg(date.toString("yyyy-MM-dd"));
 
+    //qDebug() << "Executing:" << queryStr;
+
     QSqlQuery query(queryStr);
     if (!query.exec())
         qFatal("Query failed");
@@ -65,7 +67,6 @@ QList<QObject*> SqlEventModel::coursesForDate(const QDate &date)
         Course *course = new Course(this);
         course->setIndex(query.value("id").toInt());
         course->setName(query.value("name").toString());
-        course->setTime(query.value("time").toString());
         course->setCount(query.value("count").toInt());
 
         QDateTime date;
@@ -93,15 +94,15 @@ void SqlEventModel::createConnection()
 
     QSqlQuery query;
     // We store the time as seconds because it's easier to query.
-    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, time TEXT, count INTEGER)")) {
+    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, count INTEGER)")) {
        //qFatal("Failed to create table");
     }
     return;
 }
 
-bool SqlEventModel::addCourse(const QDate &date, const QString& name, const QString& time, const QString& count)
+bool SqlEventModel::addCourse(const QDate &date, const QString& name, const int count)
 {
-    const QString queryStr = QString::fromLatin1("insert into Course (name,date,time,count) values('%1', '%2', '%3','%4')").arg(name, date.toString("yyyy-MM-dd"), time, count);
+    const QString queryStr = QString::fromLatin1("insert into Course (name,date,count) values('%1', '%2', '%3')").arg(name, date.toString("yyyy-MM-dd"), QString::number(count));
     qDebug() << "executing:" << queryStr;
     QSqlQuery query;
     if (!query.exec(queryStr)) {

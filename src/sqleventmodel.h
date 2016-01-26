@@ -56,7 +56,7 @@ public:
 
     Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
 
-    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const QString& time, const QString& count);
+    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
     Q_INVOKABLE bool delCourse(const int index);
 
 private:

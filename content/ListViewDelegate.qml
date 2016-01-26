@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import Material 0.2
 import "."
 
 Rectangle {
@@ -22,7 +22,7 @@ Rectangle {
       spacing: 10
 
       Rectangle {
-          width: (parent.width - parent.spacing) / 4
+          width: (parent.width - parent.spacing) / 3
           height: parent.height
 
           Label {
@@ -34,21 +34,9 @@ Rectangle {
           }
       }
 
-      Rectangle {
-          width: (parent.width - parent.spacing) / 4
-          height: parent.height
-
-          Label {
-              anchors.fill: parent
-              width: parent.width
-              wrapMode: Text.Wrap
-              text: modelData.time
-              verticalAlignment: Text.AlignVCenter
-          }
-      }
 
       Rectangle {
-          width: (parent.width - parent.spacing) / 4
+          width: (parent.width - parent.spacing) / 3
           height: parent.height
 
           Label {
@@ -61,17 +49,15 @@ Rectangle {
       }
 
       Rectangle {
-          width: (parent.width - parent.spacing) / 4
+          width: (parent.width - parent.spacing) / 3
           height: parent.height
 
-          MyButton {
+          IconButton {
             anchors.centerIn: parent
             width: parent.height
             height: width
             anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
-            text: flatConstants.fontAwesome.fa_trash
-            //defaultColor: "white"
-            //textColor: "black"
+            iconName: "action/delete"
             onClicked: root.trashButtonClicked(modelData.index)
           }
       }
