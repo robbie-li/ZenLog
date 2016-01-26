@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     qmlRegisterType<SqlEventModel>("robbie.calendar", 1, 0, "SqlEventModel");
-    engine.addImportPath(QStringLiteral("qrc:/modules/"));
+    //engine.addImportPath(QStringLiteral("qrc:/modules/"));
+    engine.addImportPath(QStringLiteral("qrc:/Material/modules"));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

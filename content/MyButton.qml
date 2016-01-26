@@ -1,7 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.2
-import FlatUI 1.0
+import Material 0.2
 
 FlatIconButton {
     FlatConstants {

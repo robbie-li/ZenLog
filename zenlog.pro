@@ -15,4 +15,5 @@ OTHER_FILES += \
     content/StatisticPage.qml
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    material.qrc

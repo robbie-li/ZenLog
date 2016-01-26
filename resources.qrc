@@ -1,107 +1,15 @@
 <RCC>
     <qresource prefix="/">
+        <file>main.qml</file>
         <file>content/CalendarPage.qml</file>
         <file>content/DailyLogPage.qml</file>
         <file>content/DatePicker.qml</file>
+        <file>content/ListViewDelegate.qml</file>
+        <file>content/MyButton.qml</file>
         <file>content/StatisticPage.qml</file>
         <file>res/images/eventindicator.png</file>
         <file>res/images/textinput.png</file>
         <file>modules/QCharts/QChart.js</file>
         <file>modules/QCharts/QChart.qml</file>
-        <file>main.qml</file>
-        <file>modules/FlatUI/fonts/fontawesome/fontawesome-webfont.ttf</file>
-        <file>modules/FlatUI/fonts/glyphicons/flat-ui-icons-regular.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-black.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-bold.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-bolditalic.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-italic.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-light.ttf</file>
-        <file>modules/FlatUI/fonts/lato/lato-regular.ttf</file>
-        <file>modules/FlatUI/img/icons/png/Book.png</file>
-        <file>modules/FlatUI/img/icons/png/Calendar.png</file>
-        <file>modules/FlatUI/img/icons/png/Chat.png</file>
-        <file>modules/FlatUI/img/icons/png/Clipboard.png</file>
-        <file>modules/FlatUI/img/icons/png/Compas.png</file>
-        <file>modules/FlatUI/img/icons/png/Gift-Box.png</file>
-        <file>modules/FlatUI/img/icons/png/Infinity-Loop.png</file>
-        <file>modules/FlatUI/img/icons/png/Mail.png</file>
-        <file>modules/FlatUI/img/icons/png/Map.png</file>
-        <file>modules/FlatUI/img/icons/png/Pensils.png</file>
-        <file>modules/FlatUI/img/icons/png/Pocket.png</file>
-        <file>modules/FlatUI/img/icons/png/Retina-Ready.png</file>
-        <file>modules/FlatUI/img/icons/png/Toilet-Paper.png</file>
-        <file>modules/FlatUI/img/icons/png/Watches.png</file>
-        <file>modules/FlatUI/img/icons/svg/book.svg</file>
-        <file>modules/FlatUI/img/icons/svg/calendar.svg</file>
-        <file>modules/FlatUI/img/icons/svg/chat.svg</file>
-        <file>modules/FlatUI/img/icons/svg/clipboard.svg</file>
-        <file>modules/FlatUI/img/icons/svg/clocks.svg</file>
-        <file>modules/FlatUI/img/icons/svg/compas.svg</file>
-        <file>modules/FlatUI/img/icons/svg/gift-box.svg</file>
-        <file>modules/FlatUI/img/icons/svg/loop.svg</file>
-        <file>modules/FlatUI/img/icons/svg/mail.svg</file>
-        <file>modules/FlatUI/img/icons/svg/map.svg</file>
-        <file>modules/FlatUI/img/icons/svg/paper-bag.svg</file>
-        <file>modules/FlatUI/img/icons/svg/pencils.svg</file>
-        <file>modules/FlatUI/img/icons/svg/retina.svg</file>
-        <file>modules/FlatUI/img/icons/svg/ribbon.svg</file>
-        <file>modules/FlatUI/img/icons/svg/toilet-paper.svg</file>
-        <file>modules/FlatUI/img/login/icon.png</file>
-        <file>modules/FlatUI/img/login/imac-2x.png</file>
-        <file>modules/FlatUI/img/login/imac.png</file>
-        <file>modules/FlatUI/img/tile/ribbon-2x.png</file>
-        <file>modules/FlatUI/img/tile/ribbon.png</file>
-        <file>modules/FlatUI/img/favicon.ico</file>
-        <file>modules/FlatUI/src/android-clock.png</file>
-        <file>modules/FlatUI/src/android-contact.png</file>
-        <file>modules/FlatUI/src/arrow-down-b.png</file>
-        <file>modules/FlatUI/src/camera.png</file>
-        <file>modules/FlatUI/src/checkmark.png</file>
-        <file>modules/FlatUI/src/chevron-left.png</file>
-        <file>modules/FlatUI/src/chevron-right.png</file>
-        <file>modules/FlatUI/src/close-round.png</file>
-        <file>modules/FlatUI/src/eye.png</file>
-        <file>modules/FlatUI/src/heart.png</file>
-        <file>modules/FlatUI/src/ios7-checkmark-outline.png</file>
-        <file>modules/FlatUI/src/navicon-round.png</file>
-        <file>modules/FlatUI/FlatBoxSwitch.qml</file>
-        <file>modules/FlatUI/FlatButton.qml</file>
-        <file>modules/FlatUI/FlatCheckBox.qml</file>
-        <file>modules/FlatUI/FlatConstants.qml</file>
-        <file>modules/FlatUI/FlatDangerButton.qml</file>
-        <file>modules/FlatUI/FlatDefaultButton.qml</file>
-        <file>modules/FlatUI/FlatDropdown.qml</file>
-        <file>modules/FlatUI/FlatIconButton.qml</file>
-        <file>modules/FlatUI/FlatIconInput.qml</file>
-        <file>modules/FlatUI/FlatIconNavBar.qml</file>
-        <file>modules/FlatUI/FlatImage.qml</file>
-        <file>modules/FlatUI/FlatInfoButton.qml</file>
-        <file>modules/FlatUI/FlatInput.qml</file>
-        <file>modules/FlatUI/FlatInverseButton.qml</file>
-        <file>modules/FlatUI/FlatNavButton.qml</file>
-        <file>modules/FlatUI/FlatNavDropdown.qml</file>
-        <file>modules/FlatUI/FlatNumberNavBar.qml</file>
-        <file>modules/FlatUI/FlatNumberNavButton.qml</file>
-        <file>modules/FlatUI/FlatPillNavBar.qml</file>
-        <file>modules/FlatUI/FlatPrimaryButton.qml</file>
-        <file>modules/FlatUI/FlatProgressBar.qml</file>
-        <file>modules/FlatUI/FlatProgressCircle.qml</file>
-        <file>modules/FlatUI/FlatRadioButton.qml</file>
-        <file>modules/FlatUI/FlatSearchInput.qml</file>
-        <file>modules/FlatUI/FlatSelect.qml</file>
-        <file>modules/FlatUI/FlatSidebar.qml</file>
-        <file>modules/FlatUI/FlatSlider.qml</file>
-        <file>modules/FlatUI/FlatSuccessButton.qml</file>
-        <file>modules/FlatUI/FlatSwitch.qml</file>
-        <file>modules/FlatUI/FlatToolTip.qml</file>
-        <file>modules/FlatUI/FlatTopNavBar.qml</file>
-        <file>modules/FlatUI/FlatWarningButton.qml</file>
-        <file>modules/FlatUI/HorizontalScrollBar.qml</file>
-        <file>modules/FlatUI/Tooltip.qml</file>
-        <file>modules/FlatUI/TooltipCreator.js</file>
-        <file>modules/FlatUI/VerticalScrollBar.qml</file>
-        <file>modules/FlatUI/qmldir</file>
-        <file>content/MyButton.qml</file>
-        <file>content/ListViewDelegate.qml</file>
     </qresource>
 </RCC>

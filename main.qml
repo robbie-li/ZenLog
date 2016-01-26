@@ -1,6 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.2
-import FlatUI 1.0
+import QtQuick 2.5
+import Material 0.2
 import "content"
 
 ApplicationWindow {
