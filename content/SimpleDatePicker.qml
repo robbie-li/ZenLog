@@ -5,13 +5,13 @@ Rectangle {
     property date currentDate: new Date()
 
     function previousDayOf(today) {
-        var dateTime = new Date();
+        var dateTime = today;
         dateTime.setDate(today.getDate() - 1);
         return dateTime;
     }
 
     function nextDayOf(today) {
-        var dateTime = new Date();
+        var dateTime = today;
         dateTime.setDate(today.getDate() + 1);
         return dateTime;
     }
