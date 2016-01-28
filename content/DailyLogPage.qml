@@ -1,4 +1,5 @@
 import QtQuick 2.5
+import QtQuick.Layouts 1.1
 import Material 0.2
 import Material.Extras 0.1
 import Material.ListItems 0.1 as ListItem
@@ -12,18 +13,31 @@ Page {
 
     title: "精进修行"
 
+    actions: [
+        Action {
+            iconName: "action/view_list"
+            text: "History"
+            onTriggered: pageStack.push(Qt.resolvedUrl("CalendarPage.qml"))
+        }
+    ]
+
     Column {
         id: input
         anchors {left: parent.left; right: parent.right; top: parent.top; }
 
         spacing: Units.dp(20)
 
+        function reload() {
+            contentReapter.model = eventModel.coursesForDate(datepicker.currentDate)
+            totalCount.text = eventModel.courseCountForDate(datepicker.currentDate)
+        }
+
         SimpleDatePicker {
             id: datepicker
             width: parent.width
             height: Units.dp(60)
             onCurrentDateChanged: {
-                contentReapter.model = eventModel.coursesForDate(datepicker.currentDate)
+                input.reload()
             }
         }
 
@@ -68,12 +82,14 @@ Page {
             }
 
             TextField {
+                id: totalCount
                 width: parent.width * 0.6
                 height: parent.height
                 floatingLabel: true
-                characterLimit: 10
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
+                text: eventModel.courseCountForDate(datepicker.currentDate)
+                readOnly: true
             }
         }
     }
@@ -90,100 +106,34 @@ Page {
                 width: content.width
                 onTrashButtonClicked: {
                     eventModel.delCourse(index)
-                    contentReapter.model = eventModel.coursesForDate(datepicker.currentDate)
+                    input.reload()
                 }
             }
         }
     }
 
-    ActionButton {
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            margins: Units.dp(32)
-        }
-
-        action: Action {
-            id: saveButton
-            text: "&Save"
-            shortcut: "Ctrl+S"
-            onTriggered: {
-                console.log("save button clicked");
-                if(labelCount.text != '') {
-                    console.log("try to save")
-                    eventModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)
-                    labelCount.text = ''
-                    contentReapter.model = eventModel.coursesForDate(datepicker.currentDate)
-                }
-            }
-        }
-        iconName: "content/save"
-    }
-
-    /*
     Rectangle {
-        color: flatConstants.concrete
-        anchors.fill: parent
-
-        Row {
-            id: option
-            anchors { top: parent.top; left: parent.left; right: parent.right; margins: 30 }
-            spacing: 30
+        anchors {
+            bottom: parent.bottom
         }
-
-
-        TextField {
-            id: course_count
-            height: 60
-            anchors { top: option.bottom; left: parent.left; right: parent.right; margins: 30 }
-            validator: IntValidator {bottom: 0; top: 1000000;}
-            style: touchStyle
-            placeholderText: "输入次数:1-1000000"
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        DatePicker {
-            id: datepicker
-            anchors { top: course_count.bottom; left: parent.left; right: parent.right; margins: 30; }
-            onCurrentDateChanged: {
-                eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
-            }
-        }
+        width: parent.width
+        height: Units.dp(60)
+        color: Theme.primaryColor
 
         Button {
-            anchors { top: datepicker.bottom; left: parent.left; right: parent.right; margins: 30 }
-            id: saveButton
-            text: "Save"
-            height: 60
-
-            Behavior on y {
-                NumberAnimation { duration: 1000 }
+            anchors {
+                centerIn: parent
             }
+
+            text: "保存"
 
             onClicked: {
-                if(course_count.text != '') {
-                    eventModel.addCourse(datepicker.currentDate, course_name.text, course_time.text, course_count.text)
-                    course_count.text = ''
-                    eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
-                }
-            }
-        }
-
-        ListView {
-            anchors { top: saveButton.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; margins: 30 }
-            id: eventsListView
-            spacing: 4
-            clip: true
-            model: eventModel.coursesForDate(datepicker.currentDate)
-
-            delegate: ListViewDelegate {
-                width: eventsListView.width
-                onTrashButtonClicked: {
-                    eventModel.delCourse(index)
-                    eventsListView.model = eventModel.coursesForDate(datepicker.currentDate)
+                if(labelCount.text != '') {
+                    eventModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)
+                    labelCount.text = ''
+                    input.reload();
                 }
             }
         }
     }
-    */
 }

@@ -4,10 +4,11 @@ import "."
 
 Rectangle {
   id: root
-  height: eventItemColumn.height
+  height: eventItemColumn.height + 1
   signal trashButtonClicked(int index)
 
   Rectangle {
+      anchors.bottom: parent.bottom
       width: parent.width
       height: 1
       color: "#eee"
@@ -15,9 +16,8 @@ Rectangle {
 
   Row {
       id: eventItemColumn
-      anchors.left: parent.left
-      anchors.leftMargin: 8
-      anchors.right: parent.right
+      anchors.top: parent.top
+      width: parent.width
       height: 60
       spacing: 10
 
@@ -31,6 +31,7 @@ Rectangle {
               wrapMode: Text.Wrap
               text: modelData.name
               verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: Text.AlignHCenter
           }
       }
 
@@ -45,6 +46,7 @@ Rectangle {
               wrapMode: Text.Wrap
               text: modelData.count
               verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: Text.AlignHCenter
           }
       }
 

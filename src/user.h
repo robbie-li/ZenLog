@@ -38,33 +38,47 @@
 **
 ****************************************************************************/
 
-#ifndef SQLEVENTMODEL_H
-#define SQLEVENTMODEL_H
+#ifndef USER_H
+#define USER_H
 
-#include <QList>
+#include <QDateTime>
 #include <QObject>
-#include <QSqlTableModel>
+#include <QString>
 
-#include "course.h"
-
-class SqlEventModel : public QSqlQueryModel
+class User : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(int index READ index WRITE setIndex NOTIFY indexChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
+    Q_PROPERTY(QDateTime date READ date WRITE setDate NOTIFY dateChanged)
 public:
-    SqlEventModel();
+    explicit User(QObject *parent = 0);
 
-    Q_INVOKABLE QObject* getCurrentUser();
+    int index() const;
+    void setIndex(const int index);
 
+    QString name() const;
+    void setName(const QString &name);
 
-    Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
-    Q_INVOKABLE int courseCountForDate(const QDate &date);
+    int count() const;
+    void setCount(const int count);
 
-    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
-    Q_INVOKABLE bool delCourse(const int index);
+    QDateTime date() const;
+    void setDate(const QDateTime &date);
 
+signals:
+    void indexChanged(const int index);
+    void nameChanged(const QString &name);
+    void countChanged(const int count);
+    void dateChanged(const QDateTime &date);
 private:
-    static void createConnection();
+    int mIndex;
+    int mCount;
+    QString mName;
+    QString mTime;
+    QDateTime mDate;
 };
 
-#endif
+#endif  // USER_H

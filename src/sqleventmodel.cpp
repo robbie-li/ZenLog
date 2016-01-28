@@ -45,12 +45,57 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include "user.h"
 
 SqlEventModel::SqlEventModel() :
     QSqlQueryModel()
 {
     createConnection();
 }
+
+QObject* SqlEventModel::getCurrentUser()
+{
+    const QString queryStr = QString::fromLatin1("SELECT * FROM User");
+
+    //qDebug() << "Executing:" << queryStr;
+
+    QSqlQuery query(queryStr);
+    if (!query.exec())
+        qFatal("Query failed");
+
+    if(query.first()) {
+        User *course = new User(this);
+        course->setIndex(query.value("id").toInt());
+        course->setName(query.value("name").toString());
+        course->setCount(query.value("count").toInt());
+
+        QDateTime date;
+        date.setDate(query.value("date").toDate());
+        course->setDate(date);
+
+        return course;
+    }
+
+    return NULL;
+}
+
+int SqlEventModel::courseCountForDate(const QDate &date)
+{
+    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == date").arg(date.toString("yyyy-MM-dd"));
+
+    QSqlQuery query(queryStr);
+    if (!query.exec())
+        qFatal("Query failed");
+
+    int totalCount = 0;
+
+    while (query.next()) {
+        totalCount += query.value("count").toInt();
+    }
+
+    return totalCount;
+}
+
 
 QList<QObject*> SqlEventModel::coursesForDate(const QDate &date)
 {
@@ -95,7 +140,10 @@ void SqlEventModel::createConnection()
     QSqlQuery query;
     // We store the time as seconds because it's easier to query.
     if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, count INTEGER)")) {
-       //qFatal("Failed to create table");
+        //qFatal("Failed to create table");
+    }
+    if(!query.exec("create table User (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, count INTEGER)")) {
+        //qFatal("Failed to create table");
     }
     return;
 }

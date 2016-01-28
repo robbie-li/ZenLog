@@ -7,6 +7,7 @@ include(src/src.pri)
 
 OTHER_FILES += \
     main.qml \
+    content/Calendar.qml \
     content/CalendarPage.qml \
     content/UserSettings.qml \
     content/DailyLogPage.qml \

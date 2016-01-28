@@ -25,7 +25,7 @@
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO User SHALL THE COPYRIGHT
 ** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 ** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 ** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
@@ -38,33 +38,62 @@
 **
 ****************************************************************************/
 
-#ifndef SQLEVENTMODEL_H
-#define SQLEVENTMODEL_H
+#include "user.h"
 
-#include <QList>
-#include <QObject>
-#include <QSqlTableModel>
-
-#include "course.h"
-
-class SqlEventModel : public QSqlQueryModel
+User::User(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    SqlEventModel();
+int User::index() const
+{
+    return mIndex;
+}
 
-    Q_INVOKABLE QObject* getCurrentUser();
+void User::setIndex(const int index)
+{
+    if (index != mIndex) {
+        mIndex = index;
+        emit indexChanged(mIndex);
+    }
+}
 
+QString User::name() const
+{
+    return mName;
+}
 
-    Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
-    Q_INVOKABLE int courseCountForDate(const QDate &date);
+void User::setName(const QString &name)
+{
+    if (name != mName) {
+        mName = name;
+        emit nameChanged(mName);
+    }
+}
 
-    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
-    Q_INVOKABLE bool delCourse(const int index);
+int User::count() const
+{
+    return mCount;
+}
 
-private:
-    static void createConnection();
-};
+void User::setCount(const int count)
+{
+    if (count != mCount) {
+        mCount = count;
+        emit countChanged(mCount);
+    }
+}
 
-#endif
+QDateTime User::date() const
+{
+    return mDate;
+}
+
+void User::setDate(const QDateTime &date)
+{
+    if (date != mDate) {
+        mDate = date;
+        emit dateChanged(mDate);
+    }
+}
+

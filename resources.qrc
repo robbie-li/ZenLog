@@ -13,5 +13,6 @@
         <file>content/MainPage.qml</file>
         <file>content/UserSettings.qml</file>
         <file>content/SimpleDatePicker.qml</file>
+        <file>content/Calendar.qml</file>
     </qresource>
 </RCC>
