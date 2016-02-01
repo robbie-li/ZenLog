@@ -4,8 +4,12 @@ import "."
 
 NavigationDrawerPage {
     navDrawer: UserSettings {
+        onUserSettingsChanged: {
+            dailyLog.reloadUserSetting();
+        }
     }
 
     page: DailyLogPage {
+        id: dailyLog
     }
 }

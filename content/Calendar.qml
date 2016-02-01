@@ -37,6 +37,8 @@ Controls.Calendar {
         id: sqlModel
     }
 
+    signal daySelected(date selectedDate)
+
     /*!
        Set to \c true if the picker should lay itself in landscape mode
      */
@@ -116,11 +118,11 @@ Controls.Calendar {
             Label {
                 id: dayText
                 text: styleData.date.getDate()
-                anchors.centerIn: parent
+                anchors { top: parent.top; horizontalCenter: parent.horizontalCenter; topMargin: Units.dp(20) }
                 style: "title"
                 color: styleData.selected
                        ? "white" : styleData.today
-						 ? Theme.accentColor : "black"
+                         ? Theme.accentColor : "black"
             }
 
             Label {
@@ -135,6 +137,7 @@ Controls.Calendar {
                     top: dayText.bottom
                     bottom:parent.bottom
                     horizontalCenter: parent.horizontalCenter
+                    topMargin: Units.dp(5)
                 }
                 color: "black"
             }

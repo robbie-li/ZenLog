@@ -1,22 +1,30 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
+
 import Material 0.2
 import Material.Extras 0.1
-import Material.ListItems 0.1 as ListItem
+
 import zenlog.sqlmodel 1.0
 import "."
 
 Page {
+    id: root
+
     SqlModel {
         id: sqlModel
     }
 
     title: "精进修行"
 
+    function reloadUserSetting() {
+        var user = sqlModel.getCurrentUser();
+        labelName.text = user.courseName
+    }
+
     actions: [
         Action {
-            iconName: "action/view_list"
-            text: "History"
+            iconName: "awesome/calendar"
+            text: "统计"
             onTriggered: pageStack.push(Qt.resolvedUrl("CalendarPage.qml"))
         }
     ]
@@ -24,8 +32,7 @@ Page {
     Column {
         id: input
         anchors {left: parent.left; right: parent.right; top: parent.top; }
-
-        spacing: Units.dp(20)
+        spacing: Units.dp(40)
 
         function reload() {
             contentReapter.model = sqlModel.coursesForDate(datepicker.currentDate)
@@ -42,6 +49,7 @@ Page {
         }
 
         Row {
+            id: input_row
             width: parent.width
             spacing: Units.dp(20)
 
@@ -66,7 +74,34 @@ Page {
             }
         }
 
+        RowLayout {
+            width: parent.width
+
+            Button {
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: Units.dp(40)
+                width: Units.dp(100)
+                backgroundColor: Theme.primaryColor
+                elevation: 1
+                enabled: labelCount.text != ''
+
+                text: "保存"
+
+                onClicked: {
+                    if(sqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
+                        labelCount.text = ''
+                        input.reload();
+                    }
+                }
+            }
+        }
+    }
+
+    Column {
+        anchors { left: parent.left; right: parent.right; top: input.bottom; bottom: parent.bottom; topMargin: Units.dp(40) }
+
         Row {
+            id: row_total
             width: parent.width
             height: Units.dp(60)
             spacing: Units.dp(20)
@@ -80,64 +115,35 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
             }
 
-            TextField {
+            Label {
                 id: totalCount
                 width: parent.width * 0.6
                 height: parent.height
-                floatingLabel: true
+                style: "title"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: sqlModel.courseCountForDate(datepicker.currentDate)
-                readOnly: true
             }
         }
-    }
 
-    Column {
-        id: content
-        anchors {left: parent.left; right: parent.right; top: input.bottom; bottom: parent.bottom; topMargin: Units.dp(40) }
-
-        Repeater {
+        ListView {
+            width: parent.width
+            height: root.height - input.height - row_total.height
             id: contentReapter
-            model:  sqlModel.coursesForDate(datepicker.currentDate)
+            model: sqlModel.coursesForDate(datepicker.currentDate)
+            clip: true
 
             delegate: ListViewDelegate {
-                width: content.width
+                width: parent.width
                 onTrashButtonClicked: {
-                    eventModel.delCourse(index)
+                    sqlModel.delCourse(index)
                     input.reload()
                 }
             }
         }
     }
 
-    Rectangle {
-        anchors {
-            bottom: parent.bottom
-        }
-        width: parent.width
-        height: Units.dp(60)
-        color: Theme.primaryColor
-
-        Button {
-            anchors {
-                centerIn: parent
-            }
-
-            text: "保存"
-
-            onClicked: {
-                if(labelCount.text != '') {
-                    sqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)
-                    labelCount.text = ''
-                    input.reload();
-                }
-            }
-        }
-    }
-
     Component.onCompleted: {
-        var user = sqlModel.getCurrentUser();
-        labelName.text = user.courseName
+         reloadUserSetting();
     }
 }

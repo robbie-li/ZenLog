@@ -8,9 +8,13 @@ import Material.Extras 0.1
 import zenlog.sqlmodel 1.0
 
 NavigationDrawer {
+    id: root
+
     SqlModel {
         id: sqlModel
     }
+
+    signal userSettingsChanged()
 
     View {
         anchors.top: parent.top
@@ -65,7 +69,7 @@ NavigationDrawer {
             ListItem.Standard {
                 action: Icon {
                     anchors.centerIn: parent
-                    name: "action/account_circle"
+                    name: "awesome/anchor"
                 }
 
                 content:  RowLayout {
@@ -167,7 +171,7 @@ NavigationDrawer {
             ListItem.Standard {
                 action: Icon {
                     anchors.centerIn: parent
-                    name: "communication/business"
+                    name: "awesome/graduation_cap"
                 }
 
                 content: RowLayout {
@@ -249,6 +253,7 @@ NavigationDrawer {
                         if( group_text.text != '' && index_text != '') {
                             var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
                             sqlModel.saveUser(group_text.text, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
+                            root.userSettingsChanged()
                         }
                     }
                 }
