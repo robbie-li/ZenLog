@@ -1,4 +1,4 @@
-QT += qml quick sql
+QT += qml quick sql xml svg core gui
 TARGET = ZenLog
 !no_desktop: QT += widgets
 !contains(sql-drivers, sqlite): QTPLUGIN += qsqlite
@@ -15,7 +15,8 @@ OTHER_FILES += \
     content/MyButton.qml \
     content/ListViewDelegate.qml \
     content/SimpleDatePicker.qml \
-    content/StatisticPage.qml
+    content/StatisticPage.qml \
+    content/TumblerDatePicker.qml
 
 RESOURCES += \
     resources.qrc \

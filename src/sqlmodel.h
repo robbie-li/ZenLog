@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-#ifndef SQLEVENTMODEL_H
-#define SQLEVENTMODEL_H
+#ifndef SQL_MODEL_H
+#define SQL_MODEL_H
 
 #include <QList>
 #include <QObject>
@@ -47,15 +47,17 @@
 
 #include "course.h"
 
-class SqlEventModel : public QSqlQueryModel
+class SqlModel : public QSqlQueryModel
 {
     Q_OBJECT
 
 public:
-    SqlEventModel();
+    SqlModel();
 
     Q_INVOKABLE QObject* getCurrentUser();
-
+    Q_INVOKABLE bool saveUser(int group, int index, const QString& name,
+                              const QString& address, const QString& city, const QString& email,
+                              int targetCount, const QString& courseName);
 
     Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
     Q_INVOKABLE int courseCountForDate(const QDate &date);
@@ -64,7 +66,8 @@ public:
     Q_INVOKABLE bool delCourse(const int index);
 
 private:
-    static void createConnection();
+    static bool createConnection();
+    static bool createTables();
 };
 
 #endif

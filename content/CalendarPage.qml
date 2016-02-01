@@ -1,6 +1,6 @@
 import QtQuick 2.4
 import Material 0.2
-import robbie.calendar 1.0
+import zenlog.sqlmodel 1.0
 import "."
 
 Page {

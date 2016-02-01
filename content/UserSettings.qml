@@ -1,11 +1,17 @@
 import QtQuick 2.5
+import QtQuick.Controls 1.3 as QuickControls
 import QtQuick.Layouts 1.1
 
 import Material 0.2
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
+import zenlog.sqlmodel 1.0
 
 NavigationDrawer {
+    SqlModel {
+        id: sqlModel
+    }
+
     View {
         anchors.top: parent.top
 
@@ -49,10 +55,50 @@ NavigationDrawer {
                 }
 
                 content: TextField {
+                    id: name_text
                     anchors.centerIn: parent
                     width: parent.width
                     placeholderText: "姓名"
-                    //text: "Alex Nelson"
+                }
+            }
+
+            ListItem.Standard {
+                action: Icon {
+                    anchors.centerIn: parent
+                    name: "action/account_circle"
+                }
+
+                content:  RowLayout {
+                    anchors.centerIn: parent
+                    width: parent.width
+
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.1 * parent.width
+                        text: "群"
+                    }
+
+                    TextField {
+                        id: group_text
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.35 * parent.width
+                        placeholderText: "群号"
+                    }
+
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.1 * parent.width
+                        text: "组"
+                    }
+
+                    TextField {
+                        id: index_text
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.35 * parent.width
+                        placeholderText: "编号"
+                        characterLimit: 6
+                        validator: IntValidator {bottom: 0; top: 999999;}
+                    }
                 }
             }
 
@@ -63,10 +109,10 @@ NavigationDrawer {
                 }
 
                 content: TextField {
+                    id: address_text
                     anchors.centerIn: parent
                     width: parent.width
                     placeholderText: "地址"
-                    //text: "100 Main Street"
                 }
             }
 
@@ -78,10 +124,10 @@ NavigationDrawer {
                     width: parent.width
 
                     TextField {
+                        id: city_text
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.6 * parent.width
+                        Layout.preferredWidth: 0.45 * parent.width
                         placeholderText: "城市"
-                        //text: "New York"
                     }
 
                     /*
@@ -94,12 +140,12 @@ NavigationDrawer {
                     */
 
                     TextField {
+                        id: postcode_text
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.3 * parent.width
+                        Layout.preferredWidth: 0.5 * parent.width
                         placeholderText: "邮编"
                         characterLimit: 6
                         validator: IntValidator {bottom: 0; top: 999999;}
-                        //text: "10011"
                     }
                 }
             }
@@ -111,9 +157,9 @@ NavigationDrawer {
                 }
 
                 content: TextField {
+                    id: email_text
                     anchors.centerIn: parent
                     width: parent.width
-
                     placeholderText: "Email"
                 }
             }
@@ -128,16 +174,30 @@ NavigationDrawer {
                     anchors.centerIn: parent
                     width: parent.width
 
+                    QuickControls.ExclusiveGroup { id: optionGroup }
+
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.3 * parent.width
+                        Layout.preferredWidth: 0.24 * parent.width
                         text: "主修功课"
                     }
 
-                    MenuField {
+                    RadioButton {
+                        id: radio_dabeizhou
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.6 * parent.width
-                        model: ["大悲咒", "佛号"]
+                        Layout.preferredWidth: 0.36 * parent.width
+                        text: "大悲咒"
+                        canToggle: true
+                        exclusiveGroup: optionGroup
+                    }
+
+                    RadioButton {
+                        id: radio_fohao
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.36 * parent.width
+                        text: "佛号"
+                        canToggle: true
+                        exclusiveGroup: optionGroup
                     }
                 }
             }
@@ -154,16 +214,16 @@ NavigationDrawer {
 
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.3 * parent.width
+                        Layout.preferredWidth: 0.24 * parent.width
                         text: "今年目标"
                     }
 
                     TextField {
+                        id: targetcount_text
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.6 * parent.width
+                        Layout.preferredWidth: 0.7 * parent.width
                         placeholderText: "目标"
                         characterLimit: 20
-                        //validator: IntValidator {bottom: 0; top: 99999999999999;}
                     }
                 }
             }
@@ -182,18 +242,39 @@ NavigationDrawer {
                     margins: Units.dp(16)
                 }
 
-                /*
-                Button {
-                    text: "Cancel"
-                    textColor: Theme.primaryColor
-                }
-                */
-
                 Button {
                     text: "保存"
                     textColor: Theme.primaryColor
+                    onClicked: {
+                        if( group_text.text != '' && index_text != '') {
+                            var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
+                            sqlModel.saveUser(group_text.text, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
+                        }
+                    }
                 }
             }
         }
+    }
+
+    function reload() {
+        var user = sqlModel.getCurrentUser();
+        if( user !== null) {
+            group_text.text = user.group
+            index_text.text = user.index
+            name_text.text = user.name
+            address_text.text = user.address
+            city_text.text = user.city
+            email_text.text = user.email
+            targetcount_text.text = user.targetCount
+            if (user.courseName === radio_dabeizhou.text) {
+                radio_dabeizhou.checked = true;
+            } else {
+                radio_fohao.checked = true;
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        reload();
     }
 }

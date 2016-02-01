@@ -127,8 +127,8 @@ Controls.ApplicationWindow {
         id: overlayLayer
     }
 
-    width: Units.dp(800)
-    height: Units.dp(600)
+    width: Units.dp(720)
+    height: Units.dp(480)
 
     Dialog {
         id: errorDialog

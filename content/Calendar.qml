@@ -23,7 +23,7 @@ import QtQuick.Controls.Styles.Material 0.1 as MaterialStyle
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Controls.Private 1.0
 import Material 0.2
-import robbie.calendar 1.0
+import zenlog.sqlmodel 1.0
 
 /*!
    \qmltype DatePicker
@@ -33,8 +33,8 @@ import robbie.calendar 1.0
  */
 Controls.Calendar {
     id: calendar
-    SqlEventModel {
-        id: eventModel
+    SqlModel {
+        id: sqlModel
     }
 
     /*!
@@ -126,7 +126,7 @@ Controls.Calendar {
             Label {
                 id: dayCount
                 function getText(date) {
-                    var value = eventModel.courseCountForDate(date);
+                    var value = sqlModel.courseCountForDate(date);
                     if( value == 0) return ""
                     else return value
                 }

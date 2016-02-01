@@ -1,17 +1,18 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-#include "sqleventmodel.h"
+#include "sqlmodel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    qmlRegisterType<SqlEventModel>("robbie.calendar", 1, 0, "SqlEventModel");
+    qmlRegisterType<SqlModel>("zenlog.sqlmodel", 1, 0, "SqlModel");
     engine.addImportPath(QStringLiteral("qrc:/modules/"));
     //engine.addImportPath(QStringLiteral("qrc:/Material/modules/"));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    //engine.set
 
     return app.exec();
 }

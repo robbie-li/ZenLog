@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Private 1.0
 import QtQuick.Controls.Styles 1.2
-import robbie.calendar 1.0
+import zenlog.sqlmodel 1.0
 import "../modules/QCharts"
 import "../modules/QCharts/QChart.js"        as Charts
 
@@ -14,8 +14,8 @@ Rectangle {
 
     color: "#f4f4f4"
 
-    SqlEventModel {
-        id: eventModel
+    SqlModel {
+        id: sqlModel
     }
 
     property int chart_width: 300

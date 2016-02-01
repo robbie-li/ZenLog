@@ -74,16 +74,18 @@ Rectangle {
             id: datePickerDialog
             hasActions: true
             contentMargins: 0
-            floatingActions: true
+            floatingActions: false
+            positiveButtonText: "确定"
+            negativeButtonText: "取消"
 
-            DatePicker {
+            TumblerDatePicker {
+                height: Units.dp(200)
+                columnWidth: (parent.width - 32) / 3
                 id: datepicker
-                frameVisible: false
-                dayAreaBottomMargin : Units.dp(48)
             }
 
             onAccepted: {
-                currentDate = datepicker.selectedDate
+                currentDate = datepicker.getSelectedDate()
             }
         }
 

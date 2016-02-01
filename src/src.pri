@@ -1,12 +1,13 @@
 SOURCES += \
     $$PWD/main.cpp \
-    $$PWD/sqleventmodel.cpp \
+    $$PWD/sqlmodel.cpp \
     $$PWD/course.cpp \
     $$PWD/user.cpp
 
 
 HEADERS += \
-    $$PWD/sqleventmodel.h \
+    $$PWD/sqlmodel.h \
     $$PWD/course.h \
+    $$PWD/macros.h \
     $$PWD/user.h
 

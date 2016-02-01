@@ -7,8 +7,13 @@ ApplicationWindow {
     id: root
 
     visible: true
-    width: Units.dp(720)
-    height: Units.dp(1208)
+    height: 960
+    width: 540
+    //width: Screen.desktopAvailableWidth
+    //height: Screen.desktopAvailableHeight
+    //visibility: "AutomaticVisibility"
+    //visibility: "FullScreen"
+
     title: "精进修行"
 
     theme {

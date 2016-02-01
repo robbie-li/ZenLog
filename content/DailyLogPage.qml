@@ -3,12 +3,12 @@ import QtQuick.Layouts 1.1
 import Material 0.2
 import Material.Extras 0.1
 import Material.ListItems 0.1 as ListItem
-import robbie.calendar 1.0
+import zenlog.sqlmodel 1.0
 import "."
 
 Page {
-    SqlEventModel {
-        id: eventModel
+    SqlModel {
+        id: sqlModel
     }
 
     title: "精进修行"
@@ -28,8 +28,8 @@ Page {
         spacing: Units.dp(20)
 
         function reload() {
-            contentReapter.model = eventModel.coursesForDate(datepicker.currentDate)
-            totalCount.text = eventModel.courseCountForDate(datepicker.currentDate)
+            contentReapter.model = sqlModel.coursesForDate(datepicker.currentDate)
+            totalCount.text = sqlModel.courseCountForDate(datepicker.currentDate)
         }
 
         SimpleDatePicker {
@@ -46,17 +46,16 @@ Page {
             spacing: Units.dp(20)
 
             Label {
-                width: parent.width * 0.3
                 id: labelName
+                width: parent.width * 0.3
                 style: "title"
-                text: "大悲咒"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
 
             TextField {
-                width: parent.width * 0.6
                 id: labelCount
+                width: parent.width * 0.6
                 placeholderText: "输入次数:1-1000000"
                 floatingLabel: true
                 characterLimit: 10
@@ -88,7 +87,7 @@ Page {
                 floatingLabel: true
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: eventModel.courseCountForDate(datepicker.currentDate)
+                text: sqlModel.courseCountForDate(datepicker.currentDate)
                 readOnly: true
             }
         }
@@ -100,7 +99,7 @@ Page {
 
         Repeater {
             id: contentReapter
-            model:  eventModel.coursesForDate(datepicker.currentDate)
+            model:  sqlModel.coursesForDate(datepicker.currentDate)
 
             delegate: ListViewDelegate {
                 width: content.width
@@ -129,11 +128,16 @@ Page {
 
             onClicked: {
                 if(labelCount.text != '') {
-                    eventModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)
+                    sqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)
                     labelCount.text = ''
                     input.reload();
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        var user = sqlModel.getCurrentUser();
+        labelName.text = user.courseName
     }
 }

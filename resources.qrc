@@ -14,5 +14,6 @@
         <file>content/UserSettings.qml</file>
         <file>content/SimpleDatePicker.qml</file>
         <file>content/Calendar.qml</file>
+        <file>content/TumblerDatePicker.qml</file>
     </qresource>
 </RCC>
