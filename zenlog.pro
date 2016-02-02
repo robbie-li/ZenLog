@@ -12,7 +12,6 @@ OTHER_FILES += \
     content/UserSettings.qml \
     content/DailyLogPage.qml \
     content/MainPage.qml \
-    content/MyButton.qml \
     content/ListViewDelegate.qml \
     content/SimpleDatePicker.qml \
     content/StatisticPage.qml \

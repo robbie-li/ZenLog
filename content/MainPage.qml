@@ -4,6 +4,7 @@ import "."
 
 NavigationDrawerPage {
     navDrawer: UserSettings {
+        width: Units.gu(8)
         onUserSettingsChanged: {
             dailyLog.reloadUserSetting();
         }

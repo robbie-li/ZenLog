@@ -1,17 +1,17 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+//import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Dialogs 1.2
 import QtQuick.Extras 1.4
+import Material 0.2
 
 Tumbler {
   id: root
-  height: 200
-  width: columnWidth * 3 + 20
+  height: Units.dp(200)
 
-  property int columnWidth: 100
-  property int minYear: 1900
-  property int maxYear: 2100
+  property int columnWidth: Units.dp(80)
+  property int minYear: 2000
+  property int maxYear: 2050
 
   property alias year: yearColumn.currentIndex
   property alias month: monthColumn.currentIndex

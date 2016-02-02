@@ -4,7 +4,6 @@
         <file>content/CalendarPage.qml</file>
         <file>content/DailyLogPage.qml</file>
         <file>content/ListViewDelegate.qml</file>
-        <file>content/MyButton.qml</file>
         <file>content/StatisticPage.qml</file>
         <file>res/images/eventindicator.png</file>
         <file>res/images/textinput.png</file>

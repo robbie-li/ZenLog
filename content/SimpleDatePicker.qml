@@ -79,8 +79,7 @@ Rectangle {
             negativeButtonText: "取消"
 
             TumblerDatePicker {
-                height: Units.dp(200)
-                columnWidth: (parent.width - 32) / 3
+                height: Units.dp(250)
                 id: datepicker
             }
 

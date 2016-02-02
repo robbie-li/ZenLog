@@ -21,11 +21,20 @@ Page {
         labelName.text = user.courseName
     }
 
+    CalendarPage {
+        id: calendar
+        visible: false
+        onDaySelected: {
+            datepicker.currentDate = selectedDate;
+            input.reload()
+        }
+    }
+
     actions: [
         Action {
             iconName: "awesome/calendar"
             text: "统计"
-            onTriggered: pageStack.push(Qt.resolvedUrl("CalendarPage.qml"))
+            onTriggered: pageStack.push(calendar)
         }
     ]
 
@@ -77,13 +86,19 @@ Page {
         RowLayout {
             width: parent.width
 
+            Label {
+                Layout.alignment: Qt.AlignLeft
+                text:"请在左边的个人信息里先设定你的功课！"
+                visible: labelName.text == ''
+            }
+
             Button {
                 Layout.alignment: Qt.AlignRight
                 Layout.rightMargin: Units.dp(40)
                 width: Units.dp(100)
                 backgroundColor: Theme.primaryColor
                 elevation: 1
-                enabled: labelCount.text != ''
+                enabled: labelCount.text != '' && labelName.text != ''
 
                 text: "保存"
 

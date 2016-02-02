@@ -33,6 +33,7 @@ import zenlog.sqlmodel 1.0
  */
 Controls.Calendar {
     id: calendar
+
     SqlModel {
         id: sqlModel
     }
@@ -96,7 +97,7 @@ Controls.Calendar {
             color: "transparent"
             implicitHeight: Units.dp(30)
             Label {
-                text: control.__locale.dayName(styleData.dayOfWeek, Locale.NarrowFormat).substring(0, 1)
+                text: control.__locale.dayName(styleData.dayOfWeek, Locale.NarrowFormat)
                 color: Theme.light.subTextColor
                 anchors.centerIn: parent
             }
@@ -104,42 +105,48 @@ Controls.Calendar {
 
         dayDelegate: Rectangle {
             visible: styleData.visibleMonth
-            //border {width: 2; color:"red"}
 
             Rectangle {
-                anchors.centerIn: parent
-                width: 1 * Math.min(parent.width, parent.height)
-                height: width
-
+                anchors.fill: parent
                 color: styleData.selected ? Theme.accentColor : "transparent"
-                radius: height/2
             }
 
             Label {
                 id: dayText
+                anchors {
+                    top: parent.top;
+                    horizontalCenter: parent.horizontalCenter
+                }
                 text: styleData.date.getDate()
-                anchors { top: parent.top; horizontalCenter: parent.horizontalCenter; topMargin: Units.dp(20) }
-                style: "title"
-                color: styleData.selected
-                       ? "white" : styleData.today
-                         ? Theme.accentColor : "black"
+                color: styleData.selected? "white" : styleData.today? Theme.accentColor : "black"
             }
 
             Label {
                 id: dayCount
+                width: parent.width
+                anchors {
+                    top: dayText.bottom
+                    bottom:parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                style: "caption"
                 function getText(date) {
                     var value = sqlModel.courseCountForDate(date);
                     if( value == 0) return ""
                     else return value
                 }
                 text:  getText(styleData.date)
-                anchors {
-                    top: dayText.bottom
-                    bottom:parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    topMargin: Units.dp(5)
+                elide: Text.ElideMiddle
+                horizontalAlignment: Text.AlignHCenter
+                color: styleData.selected? "white" : "black"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    calendar.daySelected(styleData.date);
                 }
-                color: "black"
             }
         }
 

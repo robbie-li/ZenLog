@@ -18,8 +18,8 @@ Rectangle {
       id: eventItemColumn
       anchors.top: parent.top
       width: parent.width
-      height: 60
-      spacing: 10
+      height: Units.dp(60)
+      spacing: Units.dp(5)
 
       Rectangle {
           width: (parent.width - parent.spacing) / 3

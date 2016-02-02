@@ -34,18 +34,35 @@ NavigationDrawer {
                 bottomMargin: Units.dp(16)
             }
 
-            Label {
-                id: titleLabel
+            ListItem.Standard {
+                content:  RowLayout {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    spacing: Units.dp(2)
 
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    margins: Units.dp(16)
+                    Label {
+                        Layout.alignment: Qt.AlignLeft
+                        text: "个人信息"
+                        style: "title"
+                    }
+
+                    Button {
+                        Layout.alignment: Qt.AlignRight
+                        Layout.preferredWidth: 0.2 * parent.width
+                        text: "保存"
+                        textColor: "black"
+                        backgroundColor: Theme.primaryColor
+                        onClicked: {
+                            if( group_text.text != '' && index_text != '') {
+                                var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
+                                sqlModel.saveUser(group_text.text, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
+                                root.userSettingsChanged()
+                            }
+                        }
+                    }
                 }
-
-                style: "title"
-                text: "个人信息"
             }
+
 
             Item {
                 Layout.fillWidth: true
@@ -75,33 +92,38 @@ NavigationDrawer {
                 content:  RowLayout {
                     anchors.centerIn: parent
                     width: parent.width
+                    spacing: Units.dp(2)
 
                     Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.1 * parent.width
-                        text: "群"
+                        Layout.alignment: Qt.AlignRight
+                        text: "精进"
                     }
 
                     TextField {
                         id: group_text
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.35 * parent.width
+                        Layout.preferredWidth: 0.1 * parent.width
                         placeholderText: "群号"
+                        validator: IntValidator {bottom: 0; top: 30;}
                     }
 
                     Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.1 * parent.width
-                        text: "组"
+                        Layout.alignment: Qt.AlignLeft
+                        text: "群"
+                    }
+
+                    Label {
+                        Layout.alignment: Qt.AlignLeft
+                        text: "群内编号:"
                     }
 
                     TextField {
                         id: index_text
+                        width: Units.dp(50)
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.35 * parent.width
+                        Layout.preferredWidth: 0.5 * parent.width
                         placeholderText: "编号"
-                        characterLimit: 6
-                        validator: IntValidator {bottom: 0; top: 999999;}
+                        validator: IntValidator {bottom: 0; top: 10000;}
                     }
                 }
             }
@@ -121,6 +143,8 @@ NavigationDrawer {
             }
 
             ListItem.Standard {
+                height: Units.dp(72)
+
                 action: Item {}
 
                 content: RowLayout {
@@ -134,21 +158,12 @@ NavigationDrawer {
                         placeholderText: "城市"
                     }
 
-                    /*
-                    MenuField {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.2 * parent.width
-
-                        model: ["NY", "NC", "ND"]
-                    }
-                    */
-
                     TextField {
                         id: postcode_text
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
                         placeholderText: "邮编"
-                        characterLimit: 6
+                        inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator {bottom: 0; top: 999999;}
                     }
                 }
@@ -207,6 +222,8 @@ NavigationDrawer {
             }
 
             ListItem.Standard {
+                height: Units.dp(72)
+
                 action: Icon {
                     anchors.centerIn: parent
                     name: "action/assignment"
@@ -227,34 +244,7 @@ NavigationDrawer {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.7 * parent.width
                         placeholderText: "目标"
-                        characterLimit: 20
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Units.dp(8)
-            }
-
-            RowLayout {
-                Layout.alignment: Qt.AlignRight
-                spacing: Units.dp(8)
-
-                anchors {
-                    right: parent.right
-                    margins: Units.dp(16)
-                }
-
-                Button {
-                    text: "保存"
-                    textColor: Theme.primaryColor
-                    onClicked: {
-                        if( group_text.text != '' && index_text != '') {
-                            var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
-                            sqlModel.saveUser(group_text.text, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
-                            root.userSettingsChanged()
-                        }
+                        inputMethodHints: Qt.ImhDigitsOnly
                     }
                 }
             }
