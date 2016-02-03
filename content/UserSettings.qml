@@ -16,6 +16,8 @@ NavigationDrawer {
 
     signal userSettingsChanged()
 
+    globalMouseAreaEnabled: false
+
     View {
         anchors.top: parent.top
 
@@ -53,20 +55,47 @@ NavigationDrawer {
                         textColor: "black"
                         backgroundColor: Theme.primaryColor
                         onClicked: {
-                            if( group_text.text != '' && index_text != '') {
+                            if( qq_text.text != '' ) {
                                 var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
-                                sqlModel.saveUser(group_text.text, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
+                                sqlModel.saveUser(qq_text.text, group_index.selectedIndex+1, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
                                 root.userSettingsChanged()
+                                root.toggle()
                             }
                         }
                     }
                 }
             }
 
-
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Units.dp(8)
+            }
+
+            ListItem.Standard {
+                action: Icon {
+                    anchors.centerIn: parent
+                    name: "awesome/qq"
+                }
+
+                content:  RowLayout {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    spacing: Units.dp(2)
+
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        text: "QQ"
+                    }
+
+                    TextField {
+                        id: qq_text
+                        width: Units.dp(50)
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.5 * parent.width
+                        placeholderText: "QQ"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                    }
+                }
             }
 
             ListItem.Standard {
@@ -96,25 +125,19 @@ NavigationDrawer {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: "精进"
+                        text: "精进群"
                     }
 
-                    TextField {
-                        id: group_text
+                    MenuField {
+                        id: group_index
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.1 * parent.width
-                        placeholderText: "群号"
-                        validator: IntValidator {bottom: 0; top: 30;}
+                        Layout.preferredWidth: 0.2 * parent.width
+                        model: ["一组", "二组", "三组"]
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignLeft
-                        text: "群"
-                    }
-
-                    Label {
-                        Layout.alignment: Qt.AlignLeft
-                        text: "群内编号:"
+                        text: "组内编号:"
                     }
 
                     TextField {
@@ -123,6 +146,7 @@ NavigationDrawer {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
                         placeholderText: "编号"
+                        inputMethodHints: Qt.ImhDigitsOnly
                         validator: IntValidator {bottom: 0; top: 10000;}
                     }
                 }
@@ -254,7 +278,8 @@ NavigationDrawer {
     function reload() {
         var user = sqlModel.getCurrentUser();
         if( user !== null) {
-            group_text.text = user.group
+            qq_text.text = user.qq
+            group_index.selectedIndex = user.group - 1
             index_text.text = user.index
             name_text.text = user.name
             address_text.text = user.address

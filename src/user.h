@@ -13,6 +13,7 @@ class User : public QObject
 
     DEFINE_Q_PROPERTY(int, group);
     DEFINE_Q_PROPERTY(int, index);
+    DEFINE_Q_PROPERTY(int, qq);
     DEFINE_Q_PROPERTY(QString, name);
     DEFINE_Q_PROPERTY(QString, address);
     DEFINE_Q_PROPERTY(QString, city);
@@ -23,6 +24,7 @@ public:
     explicit User(QObject* parent = 0);
 signals:
     void groupChanged(const int group);
+    void qqChanged(const int group);
     void indexChanged(const int index);
     void addressChanged(const QString &address);
     void nameChanged(const QString &name);

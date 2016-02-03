@@ -34,6 +34,7 @@ QObject* SqlModel::getCurrentUser()
 
     if(query.first()) {
         User *user = new User(this);
+        user->set_qq(query.value("qq").toInt());
         user->set_group(query.value("group_num").toInt());
         user->set_index(query.value("group_idx").toInt());
         user->set_name(query.value("name").toString());
@@ -49,7 +50,7 @@ QObject* SqlModel::getCurrentUser()
 }
 
 
-bool SqlModel::saveUser(int group, int index, const QString& name,
+bool SqlModel::saveUser(int qq, int group, int index, const QString& name,
                         const QString& address, const QString& city, const QString& email,
                         int targetCount, const QString& courseName) {
     const QString queryStr = QString::fromLatin1("SELECT * FROM User");
@@ -63,17 +64,19 @@ bool SqlModel::saveUser(int group, int index, const QString& name,
     QString sql;
     if(query.first()) {
         sql  = QString::fromLatin1("update User set "
-                                   "name='%3',"
-                                   "address='%4',"
-                                   "city='%5',"
-                                   "email='%6',"
-                                   "target_count='%7',"
-                                   "course_name='%8'"
-                                   " where group_num='%1' and group_idx='%2'")
-                .arg(QString::number(group), QString::number(index), name, address, city, email, QString::number(targetCount), courseName);
+                                   "group_num='%2'"
+                                   "group_idx='%3'"
+                                   "name='%4',"
+                                   "address='%5',"
+                                   "city='%6',"
+                                   "email='%7',"
+                                   "target_count='%8',"
+                                   "course_name='%9'"
+                                   " where qq='%1'")
+                .arg(QString::number(qq), QString::number(group), QString::number(index), name, address, city, email, QString::number(targetCount), courseName);
     } else {
-        sql = QString::fromLatin1("insert into User (group_num, group_idx, name, address, city, email, target_count, course_name) values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8')")
-                .arg(QString::number(group), QString::number(index), name, address, city, email, QString::number(targetCount), courseName);
+        sql = QString::fromLatin1("insert into User (qq, group_num, group_idx, name, address, city, email, target_count, course_name) values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9')")
+                .arg(QString::number(qq), QString::number(group), QString::number(index), name, address, city, email, QString::number(targetCount), courseName);
     }
 
     QSqlQuery queryUpdate(sql);
@@ -82,7 +85,7 @@ bool SqlModel::saveUser(int group, int index, const QString& name,
 
 int SqlModel::courseCountForDate(const QDate &date)
 {
-    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == date").arg(date.toString("yyyy-MM-dd"));
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM Course WHERE '%1' == course_date").arg(date.toString("yyyy-MM-dd"));
 
     QSqlQuery query(queryStr);
     if (!query.exec())
@@ -90,17 +93,16 @@ int SqlModel::courseCountForDate(const QDate &date)
 
     int totalCount = 0;
 
-    while (query.next()) {
-        totalCount += query.value("count").toInt();
+    if (query.first()) {
+        totalCount = query.value(0).toInt();
     }
 
     return totalCount;
 }
 
-
 QList<QObject*> SqlModel::coursesForDate(const QDate &date)
 {
-    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == date").arg(date.toString("yyyy-MM-dd"));
+    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == course_date").arg(date.toString("yyyy-MM-dd"));
 
     //qDebug() << "Executing:" << queryStr;
 
@@ -112,11 +114,11 @@ QList<QObject*> SqlModel::coursesForDate(const QDate &date)
     while (query.next()) {
         Course *course = new Course(this);
         course->set_index(query.value("id").toInt());
-        course->set_name(query.value("name").toString());
-        course->set_count(query.value("count").toInt());
+        course->set_name(query.value("course_name").toString());
+        course->set_count(query.value("course_count").toInt());
 
         QDateTime date;
-        date.setDate(query.value("date").toDate());
+        date.setDate(query.value("course_date").toDate());
         course->set_date(date);
         courses.append(course);
     }
@@ -135,12 +137,12 @@ bool SqlModel::createTables()
 {
     QSqlQuery query;
 
-    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date DATE, count INTEGER)")) {
+    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER)")) {
         qDebug() << "Failed to create course table";
     }
 
     if(!query.exec(
-                "create table User (group_num INTEGER, group_idx INTEGER, name TEXT, city TEXT, address TEXT, email TEXT, course_name TEXT, target_count INTEGER)")) {
+                "create table User (qq INTEGER, group_num INTEGER, group_idx INTEGER, name TEXT, city TEXT, address TEXT, email TEXT, course_name TEXT, target_count INTEGER)")) {
        qDebug() << "Failed to create user table:" << query.lastError();
     }
 
@@ -149,7 +151,7 @@ bool SqlModel::createTables()
 
 bool SqlModel::addCourse(const QDate &date, const QString& name, const int count)
 {
-    const QString queryStr = QString::fromLatin1("insert into Course (name,date,count) values('%1', '%2', '%3')").arg(name, date.toString("yyyy-MM-dd"), QString::number(count));
+    const QString queryStr = QString::fromLatin1("insert into Course (course_name,course_date,course_count) values('%1', '%2', '%3')").arg(name, date.toString("yyyy-MM-dd"), QString::number(count));
     qDebug() << "executing:" << queryStr;
     QSqlQuery query;
     if (!query.exec(queryStr)) {

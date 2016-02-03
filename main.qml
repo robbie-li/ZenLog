@@ -8,18 +8,18 @@ ApplicationWindow {
     id: root
 
     visible: true
-    //height: 960
-    //width: 540
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
+    height: 960
+    width: 540
+    //width: Screen.desktopAvailableWidth
+    //height: Screen.desktopAvailableHeight
     //visibility: "AutomaticVisibility"
     //visibility: "FullScreen"
 
     title: "精进修行"
 
     theme {
-        primaryColor: "blue"
-        accentColor: "red"
+        primaryColor: "#3498db"
+        accentColor: "#e74c3c"
         tabHighlightColor: "white"
     }
 

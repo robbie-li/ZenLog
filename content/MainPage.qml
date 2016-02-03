@@ -3,6 +3,10 @@ import Material 0.2
 import "."
 
 NavigationDrawerPage {
+    function selectDate(selectedDate) {
+        dailyLog.selectDate(selectedDate)
+    }
+
     navDrawer: UserSettings {
         width: Units.gu(8)
         onUserSettingsChanged: {
