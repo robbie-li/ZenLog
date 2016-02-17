@@ -21,20 +21,18 @@ Page {
         labelName.text = user.courseName
     }
 
-    CalendarPage {
-        id: calendar
-        visible: false
-        onDaySelected: {
-            datepicker.currentDate = selectedDate;
-            input.reload()
-        }
+    function selectDate(selectedDate) {
+        datepicker.currentDate = selectedDate;
+        input.reload()
     }
 
     actions: [
         Action {
             iconName: "awesome/calendar"
             text: "统计"
-            onTriggered: pageStack.push(calendar)
+            onTriggered: {
+                pageStack.push(Qt.resolvedUrl("CalendarPage.qml"))
+            }
         }
     ]
 

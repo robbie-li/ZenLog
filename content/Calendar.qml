@@ -40,6 +40,9 @@ Controls.Calendar {
 
     signal daySelected(date selectedDate)
 
+    function reload(date) {
+    }
+
     /*!
        Set to \c true if the picker should lay itself in landscape mode
      */
@@ -133,8 +136,8 @@ Controls.Calendar {
                 style: "caption"
                 function getText(date) {
                     var value = sqlModel.courseCountForDate(date);
-                    if( value == 0) return ""
-                    else return value
+                    if( value === 0) return ""
+                    else return value.toString()
                 }
                 text:  getText(styleData.date)
                 elide: Text.ElideMiddle
@@ -145,6 +148,7 @@ Controls.Calendar {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    console.log("Calendar, clicked:"+styleData.date)
                     calendar.daySelected(styleData.date);
                 }
             }

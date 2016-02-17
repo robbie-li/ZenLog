@@ -7,13 +7,14 @@ Page {
     id: root
     title: "每月视图"
 
-    signal daySelected(date selectedDate)
     Calendar {
+        id: calendar
+
         width: parent.width
         height: parent.height /2
         onDaySelected: {
-            root.daySelected(selectedDate);
             pageStack.pop();
+            pageStack.currentItem.selectDate(selectedDate)
         }
     }
 }

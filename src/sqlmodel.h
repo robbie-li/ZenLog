@@ -55,7 +55,7 @@ public:
     SqlModel();
 
     Q_INVOKABLE QObject* getCurrentUser();
-    Q_INVOKABLE bool saveUser(int group, int index, const QString& name,
+    Q_INVOKABLE bool saveUser(int qq, int group, int index, const QString& name,
                               const QString& address, const QString& city, const QString& email,
                               int targetCount, const QString& courseName);
 
