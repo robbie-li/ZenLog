@@ -19,7 +19,11 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc \
-    material.qrc
+    modules/FontAwesome.qrc \
+    modules/FontRoboto.qrc \
+    modules/Icons.qrc \
+    modules/Material.qrc \
+    modules/MaterialQtQuick.qrc
 
 DISTFILES += \
     android/AndroidManifest.xml \
