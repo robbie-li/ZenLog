@@ -79,6 +79,7 @@ Rectangle {
             negativeButtonText: "取消"
 
             TumblerDatePicker {
+                anchors.horizontalCenter: parent.horizontalCenter
                 height: Units.dp(250)
                 id: datepicker
             }

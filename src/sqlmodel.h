@@ -61,6 +61,9 @@ public:
 
     Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
     Q_INVOKABLE int courseCountForDate(const QDate &date);
+    Q_INVOKABLE int courseCountForMonth(const QDate &date);
+    Q_INVOKABLE int courseCountForYear(const QDate &date);
+    Q_INVOKABLE QList<int> monthlyCourseCountForYear(const QDate &date);
 
     Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
     Q_INVOKABLE bool delCourse(const int index);

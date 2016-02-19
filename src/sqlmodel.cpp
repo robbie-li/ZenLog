@@ -89,7 +89,7 @@ int SqlModel::courseCountForDate(const QDate &date)
 
     QSqlQuery query(queryStr);
     if (!query.exec())
-        qFatal("Query failed");
+        qDebug("Query failed");
 
     int totalCount = 0;
 
@@ -100,6 +100,63 @@ int SqlModel::courseCountForDate(const QDate &date)
     return totalCount;
 }
 
+int SqlModel::courseCountForMonth(const QDate &date)
+{
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime(\"%Y-%m\", course_date) as cd from Course) WHERE '%1' == cd").arg(date.toString("yyyy-MM"));
+
+    QSqlQuery query(queryStr);
+    if (!query.exec())
+        qDebug()<<"Query failed: "<<query.lastError();
+
+    int totalCount = 0;
+
+    if (query.first()) {
+        totalCount = query.value(0).toInt();
+    }
+
+    return totalCount;
+}
+
+int SqlModel::courseCountForYear(const QDate &date)
+{
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime(\"%Y\", course_date) as cd from Course) WHERE '%1' == cd").arg(date.toString("yyyy"));
+
+    QSqlQuery query(queryStr);
+    if (!query.exec())
+        qDebug("Query failed");
+
+    int totalCount = 0;
+
+    if (query.first()) {
+        totalCount = query.value(0).toInt();
+    }
+
+    return totalCount;
+}
+
+QList<int> SqlModel::monthlyCourseCountForYear(const QDate &date)
+{
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime(\"%Y-%m\", course_date) as cd,strftime(\"%Y\", course_date) as cy from Course WHERE '%1' == cy group by cd ").arg(date.toString("yyyy"));
+
+    QSqlQuery query(queryStr);
+    if (!query.exec())
+        qDebug("Query failed");
+
+    QList<int> courses;
+    for(int i = 0; i < 12; ++i ) {
+        courses.append(0);
+    }
+
+    while (query.next()) {
+        QString month = query.value("cd").toString();
+        int m = month.right(2).toInt();
+        int c = query.value("sm").toInt();
+        courses[m-1] = c;
+    }
+
+    return courses;
+}
+
 QList<QObject*> SqlModel::coursesForDate(const QDate &date)
 {
     const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE '%1' == course_date").arg(date.toString("yyyy-MM-dd"));
@@ -108,7 +165,7 @@ QList<QObject*> SqlModel::coursesForDate(const QDate &date)
 
     QSqlQuery query(queryStr);
     if (!query.exec())
-        qFatal("failed to query for load course");
+        qDebug("failed to query for load course");
 
     QList<QObject*> courses;
     while (query.next()) {
@@ -137,12 +194,12 @@ bool SqlModel::createTables()
 {
     QSqlQuery query;
 
-    if(!query.exec("create table Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER)")) {
+    if(!query.exec("CREATE TABLE IF NOT EXISTS Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER)")) {
         qDebug() << "Failed to create course table";
     }
 
     if(!query.exec(
-                "create table User (qq INTEGER, group_num INTEGER, group_idx INTEGER, name TEXT, city TEXT, address TEXT, email TEXT, course_name TEXT, target_count INTEGER)")) {
+                "CREATE TABLE IF NOT EXISTS User (qq INTEGER, group_num INTEGER, group_idx INTEGER, name TEXT, city TEXT, address TEXT, email TEXT, course_name TEXT, target_count INTEGER)")) {
        qDebug() << "Failed to create user table:" << query.lastError();
     }
 

@@ -8,10 +8,10 @@ ApplicationWindow {
     id: root
 
     visible: true
-    height: 960
-    width: 540
-    //width: Screen.desktopAvailableWidth
-    //height: Screen.desktopAvailableHeight
+    //height: 960
+    //width: 540
+    width: Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight
     //visibility: "AutomaticVisibility"
     //visibility: "FullScreen"
 

@@ -14,5 +14,7 @@
         <file>content/SimpleDatePicker.qml</file>
         <file>content/Calendar.qml</file>
         <file>content/TumblerDatePicker.qml</file>
+        <file>modules/QCharts/qmldir</file>
+        <file>content/Calendar.js</file>
     </qresource>
 </RCC>

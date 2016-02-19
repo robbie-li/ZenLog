@@ -16,7 +16,7 @@ NavigationDrawer {
 
     signal userSettingsChanged()
 
-    globalMouseAreaEnabled: false
+    globalMouseAreaEnabled: true
 
     View {
         anchors.top: parent.top

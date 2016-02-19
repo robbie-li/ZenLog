@@ -5,7 +5,6 @@ import Material 0.2
 import Material.Extras 0.1
 
 import zenlog.sqlmodel 1.0
-import "."
 
 Page {
     id: root
@@ -18,7 +17,8 @@ Page {
 
     function reloadUserSetting() {
         var user = sqlModel.getCurrentUser();
-        labelName.text = user.courseName
+        if(user)
+            labelName.text = user.courseName
     }
 
     function selectDate(selectedDate) {
@@ -28,7 +28,7 @@ Page {
 
     actions: [
         Action {
-            iconName: "awesome/calendar"
+            iconName: "awesome/bar_chart"
             text: "统计"
             onTriggered: {
                 pageStack.push(Qt.resolvedUrl("CalendarPage.qml"))
@@ -102,7 +102,8 @@ Page {
 
                 onClicked: {
                     if(sqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
-                        labelCount.text = ''
+                        labelCount.text = '';
+                        labelCount.focus = false;
                         input.reload();
                     }
                 }
