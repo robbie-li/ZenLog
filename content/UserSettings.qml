@@ -1,14 +1,11 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.3 as QuickControls
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-
-import Material 0.2
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
 import zenlog.sqlmodel 1.0
 
-NavigationDrawer {
+Frame {
     id: root
+    anchors { fill: parent; margins: 5 }
 
     SqlModel {
         id: sqlModel
@@ -16,262 +13,149 @@ NavigationDrawer {
 
     signal userSettingsChanged()
 
-    globalMouseAreaEnabled: true
-
-    View {
-        anchors.top: parent.top
-
+    RowLayout {
+        id: title
         width: parent.width
-        height: column.implicitHeight + Units.dp(32)
+        Label {
+            id: titleLabel
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            text: "个人信息"
+            horizontalAlignment: Qt.AlignHCenter
+        }
 
-        elevation: 1
-        radius: Units.dp(2)
-
-        ColumnLayout {
-            id: column
-
+        Button {
+            width: 20
             anchors {
-                fill: parent
-                topMargin: Units.dp(16)
-                bottomMargin: Units.dp(16)
+                verticalCenter: parent.verticalCenter
+                right: parent.right
             }
-
-            ListItem.Standard {
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
-
-                    Label {
-                        Layout.alignment: Qt.AlignLeft
-                        text: "个人信息"
-                        style: "title"
-                    }
-
-                    Button {
-                        Layout.alignment: Qt.AlignRight
-                        Layout.preferredWidth: 0.2 * parent.width
-                        text: "保存"
-                        textColor: "black"
-                        backgroundColor: Theme.primaryColor
-                        onClicked: {
-                            if( qq_text.text != '' ) {
-                                var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
-                                sqlModel.saveUser(qq_text.text, group_index.selectedIndex+1, index_text.text, name_text.text, address_text.text, city_text.text, email_text.text, targetcount_text.text, course);
-                                root.userSettingsChanged()
-                                root.toggle()
-                            }
-                        }
-                    }
+            text: "保存"
+            onClicked: {
+                if( qq_text.text != '' ) {
+                    var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
+                    sqlModel.saveUser(qq_text.text, group_index.currentIndex+1, index_text.text, name_text.text, email_text.text, targetcount_text.text, course);
+                    root.userSettingsChanged()
                 }
             }
+        }
+    }
 
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Units.dp(8)
+    ButtonGroup {
+        buttons: subject_group.children
+    }
+
+    GridLayout {
+        columns: 2
+        width: parent.width
+        anchors.top: title.bottom
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        rowSpacing: 10
+        columnSpacing: 10
+
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.24 * parent.width
+            text: "主修功课"
+        }
+
+        Row {
+            id: subject_group
+
+            RadioButton {
+                id: radio_dabeizhou
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: 0.36 * parent.width
+                text: "大悲咒"
             }
 
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "awesome/qq"
-                }
-
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
-
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        text: "QQ"
-                    }
-
-                    TextField {
-                        id: qq_text
-                        width: Units.dp(50)
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.5 * parent.width
-                        placeholderText: "QQ"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                    }
-                }
+            RadioButton {
+                id: radio_fohao
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: 0.36 * parent.width
+                text: "佛号"
             }
+        }
 
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "action/account_circle"
-                }
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            text: "QQ"
+        }
 
-                content: TextField {
-                    id: name_text
-                    anchors.centerIn: parent
-                    width: parent.width
-                    placeholderText: "姓名"
-                }
-            }
+        TextField {
+            id: qq_text
+            width: 50
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.5 * parent.width
+            placeholderText: "QQ"
+            inputMethodHints: Qt.ImhDigitsOnly
+        }
 
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "awesome/anchor"
-                }
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            text: "姓名"
+        }
 
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
+        TextField {
+            id: name_text
+            width: 50
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.5 * parent.width
+            placeholderText: "姓名"
+            inputMethodHints: Qt.ImhNone
+        }
 
-                    Label {
-                        Layout.alignment: Qt.AlignRight
-                        text: "精进群"
-                    }
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            text: "精进群"
+        }
 
-                    MenuField {
-                        id: group_index
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.2 * parent.width
-                        model: ["一组", "二组", "三组"]
-                    }
+        ComboBox {
+            id: group_index
+            width: 50
+            model: ["一组", "二组", "三组"]
+        }
 
-                    Label {
-                        Layout.alignment: Qt.AlignLeft
-                        text: "组内编号:"
-                    }
+        Label {
+            Layout.alignment: Qt.AlignLeft
+            text: "组内编号:"
+        }
 
-                    TextField {
-                        id: index_text
-                        width: Units.dp(50)
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.5 * parent.width
-                        placeholderText: "编号"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        validator: IntValidator {bottom: 0; top: 10000;}
-                    }
-                }
-            }
+        TextField {
+            id: index_text
+            width: 50
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.5 * parent.width
+            placeholderText: "编号"
+            inputMethodHints: Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: 0; top: 10000; }
+        }
 
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "maps/place"
-                }
+        Label {
+            Layout.alignment: Qt.AlignLeft
+            text: "Email"
+        }
 
-                content: TextField {
-                    id: address_text
-                    anchors.centerIn: parent
-                    width: parent.width
-                    placeholderText: "地址"
-                }
-            }
+        TextField {
+            id: email_text
+            width: parent.width
+            placeholderText: "Email"
+            inputMethodHints: Qt.ImhEmailCharactersOnly
+        }
 
-            ListItem.Standard {
-                height: Units.dp(72)
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.24 * parent.width
+            text: "今年目标"
+        }
 
-                action: Item {}
-
-                content: RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-
-                    TextField {
-                        id: city_text
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.45 * parent.width
-                        placeholderText: "城市"
-                    }
-
-                    TextField {
-                        id: postcode_text
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.5 * parent.width
-                        placeholderText: "邮编"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        validator: IntValidator {bottom: 0; top: 999999;}
-                    }
-                }
-            }
-
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "communication/email"
-                }
-
-                content: TextField {
-                    id: email_text
-                    anchors.centerIn: parent
-                    width: parent.width
-                    placeholderText: "Email"
-                }
-            }
-
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "awesome/graduation_cap"
-                }
-
-                content: RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-
-                    QuickControls.ExclusiveGroup { id: optionGroup }
-
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.24 * parent.width
-                        text: "主修功课"
-                    }
-
-                    RadioButton {
-                        id: radio_dabeizhou
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.36 * parent.width
-                        text: "大悲咒"
-                        canToggle: true
-                        exclusiveGroup: optionGroup
-                    }
-
-                    RadioButton {
-                        id: radio_fohao
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.36 * parent.width
-                        text: "佛号"
-                        canToggle: true
-                        exclusiveGroup: optionGroup
-                    }
-                }
-            }
-
-            ListItem.Standard {
-                height: Units.dp(72)
-
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "action/assignment"
-                }
-
-                content: RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.24 * parent.width
-                        text: "今年目标"
-                    }
-
-                    TextField {
-                        id: targetcount_text
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.7 * parent.width
-                        placeholderText: "目标"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                    }
-                }
-            }
+        TextField {
+            id: targetcount_text
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.7 * parent.width
+            placeholderText: "目标"
+            inputMethodHints: Qt.ImhDigitsOnly
         }
     }
 
@@ -279,11 +163,9 @@ NavigationDrawer {
         var user = sqlModel.getCurrentUser();
         if( user !== null) {
             qq_text.text = user.qq
-            group_index.selectedIndex = user.group - 1
+            group_index.currentIndex = user.group - 1
             index_text.text = user.index
             name_text.text = user.name
-            address_text.text = user.address
-            city_text.text = user.city
             email_text.text = user.email
             targetcount_text.text = user.targetCount
             if (user.courseName === radio_dabeizhou.text) {

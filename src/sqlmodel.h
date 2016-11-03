@@ -56,8 +56,7 @@ public:
 
     Q_INVOKABLE QObject* getCurrentUser();
     Q_INVOKABLE bool saveUser(int qq, int group, int index, const QString& name,
-                              const QString& address, const QString& city, const QString& email,
-                              int targetCount, const QString& courseName);
+                              const QString& email, int targetCount, const QString& courseName);
 
     Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
     Q_INVOKABLE int courseCountForDate(const QDate &date);

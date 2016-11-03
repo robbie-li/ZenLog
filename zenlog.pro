@@ -1,4 +1,4 @@
-QT += qml quick sql xml svg core gui
+QT += qml quick sql xml svg core gui quickcontrols2
 TARGET = ZenLog
 !no_desktop: QT += widgets
 !contains(sql-drivers, sqlite): QTPLUGIN += qsqlite
@@ -11,7 +11,6 @@ OTHER_FILES += \
     content/CalendarPage.qml \
     content/UserSettings.qml \
     content/DailyLogPage.qml \
-    content/MainPage.qml \
     content/ListViewDelegate.qml \
     content/SimpleDatePicker.qml \
     content/StatisticPage.qml \
@@ -32,6 +31,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    qtquickcontrols2.conf
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

@@ -1,28 +1,106 @@
-import QtQuick 2.5
-import QtQuick.Window 2.2
-import Material 0.2
-import Material.ListItems 0.1 as ListItem
+import QtQuick 2.7
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.0
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Universal 2.0
+import Qt.labs.settings 1.0
 import "content"
 
 ApplicationWindow {
-    id: root
+    id: window
 
     visible: true
-    //height: 960
-    //width: 540
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
-    //visibility: "AutomaticVisibility"
-    //visibility: "FullScreen"
+    height: 960
+    width: 540
+    //width: Screen.desktopAvailableWidth
+    //height: Screen.desktopAvailableHeight
 
     title: "精进修行"
 
-    theme {
-        primaryColor: "#3498db"
-        accentColor: "#e74c3c"
-        tabHighlightColor: "white"
+    header: ToolBar {
+        Material.foreground: "white"
+
+        RowLayout {
+            spacing: 20
+            anchors.fill: parent
+
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/Material/icons/navigation/menu.svg"
+                }
+                onClicked: drawer.open()
+            }
+
+            Label {
+                id: titleLabel
+                text: "精进修行"
+                font.pixelSize: 20
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/Material/icons/navigation/more_vert.svg"
+                }
+                onClicked: optionsMenu.open()
+
+                Menu {
+                    id: optionsMenu
+                    x: parent.width - width
+                    transformOrigin: Menu.TopRight
+
+                    MenuItem {
+                        text: "设置"
+                        onTriggered: settingsPopup.open()
+                    }
+                    MenuItem {
+                        text: "关于"
+                        onTriggered: aboutDialog.open()
+                    }
+                }
+            }
+        }
     }
 
-    initialPage: MainPage {
+    Drawer {
+        id: drawer
+        width: Math.min(window.width, window.height) / 3 * 2
+        height: window.height
+
+        UserSettings {
+        }
+    }
+
+    SwipeView {
+        id: swipeView
+        anchors.fill: parent
+        currentIndex: tabBar.currentIndex
+
+        CalendarPage {
+            id: calendar
+        }
+        DailyLogPage {
+            id: daily
+        }
+    }
+
+    footer: TabBar {
+        id: tabBar
+        currentIndex: swipeView.currentIndex
+        TabButton {
+            text: qsTr("日历")
+        }
+        TabButton {
+            text: qsTr("日志")
+        }
     }
 }

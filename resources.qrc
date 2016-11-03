@@ -9,12 +9,13 @@
         <file>res/images/textinput.png</file>
         <file>modules/QCharts/QChart.js</file>
         <file>modules/QCharts/QChart.qml</file>
-        <file>content/MainPage.qml</file>
         <file>content/UserSettings.qml</file>
         <file>content/SimpleDatePicker.qml</file>
         <file>content/Calendar.qml</file>
         <file>content/TumblerDatePicker.qml</file>
         <file>modules/QCharts/qmldir</file>
         <file>content/Calendar.js</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>content/ImageButton.qml</file>
     </qresource>
 </RCC>

@@ -1,8 +1,13 @@
-import QtQuick 2.5
-import Material 0.2
+import QtQuick 2.7
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Universal 2.0
+import QtQuick.Layouts 1.3
+import Qt.labs.settings 1.0
 
 Rectangle {
     property date currentDate: new Date()
+    height: 60
 
     function previousDayOf(today) {
         var dateTime = today;
@@ -16,11 +21,12 @@ Rectangle {
         return dateTime;
     }
 
-    IconButton {
+    ImageButton {
         id: buttonPrevious
         anchors.left: parent.left
-        size: Units.dp(60)
-        iconName: "navigation/chevron_left"
+        height: parent.height
+        text: "前一日"
+        source: "qrc:/Material/icons/navigation/chevron_left.svg"
         onClicked: {
             currentDate = previousDayOf(currentDate)
             move_left.start();
@@ -67,41 +73,81 @@ Rectangle {
             text: Qt.formatDate(currentDate, "yyyy-MM-dd")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            style: "headline"
         }
 
-        Dialog {
+        Popup {
             id: datePickerDialog
-            hasActions: true
-            contentMargins: 0
-            floatingActions: false
-            positiveButtonText: "确定"
-            negativeButtonText: "取消"
+            width: 300
+            height: 300
+            modal: true
+            focus: true
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-            TumblerDatePicker {
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: Units.dp(250)
-                id: datepicker
-            }
+            contentItem: ColumnLayout {
+                id: settingsColumn
+                spacing: 20
 
-            onAccepted: {
-                currentDate = datepicker.getSelectedDate()
+                Label {
+                    text: "请选择日期"
+                    font.bold: true
+                }
+
+                TumblerDatePicker {
+                    id: datepicker
+                    width: parent.width
+                }
+
+                RowLayout {
+                    spacing: 10
+                    height: 20
+
+                    Button {
+                        id: okButton
+                        text: "确定"
+                        onClicked: {
+                            currentDate = datepicker.getSelectedDate()
+                            datePickerDialog.close()
+                        }
+
+                        Material.foreground: Material.primary
+                        Material.background: "transparent"
+                        Material.elevation: 0
+
+                        Layout.preferredWidth: 0
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        id: cancelButton
+                        text: "取消"
+                        onClicked: {
+                            datePickerDialog.close()
+                        }
+
+                        Material.background: "transparent"
+                        Material.elevation: 0
+
+                        Layout.preferredWidth: 0
+                        Layout.fillWidth: true
+                    }
+                }
             }
         }
 
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                datePickerDialog.show()
+                datePickerDialog.open()
             }
         }
     }
 
-    IconButton {
+    ImageButton {
         id: buttonNext
+        height: parent.height
         anchors.right: parent.right
-        size: Units.dp(60)
-        iconName: "navigation/chevron_right"
+        text: "后一日"
+        source: "qrc:/Material/icons/navigation/chevron_right.svg"
         onClicked: {
             currentDate = nextDayOf(currentDate)
             move_right.start()
