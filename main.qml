@@ -77,6 +77,9 @@ ApplicationWindow {
         height: window.height
 
         UserSettings {
+            onUserSettingsChanged: {
+                daily.reloadUserSetting()
+            }
         }
     }
 

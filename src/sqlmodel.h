@@ -67,6 +67,9 @@ public:
     Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
     Q_INVOKABLE bool delCourse(const int index);
 
+signals:
+    void userSaved();
+
 private:
     static bool createConnection();
     static bool createTables();

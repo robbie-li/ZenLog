@@ -17,8 +17,10 @@ Page {
 
     function reloadUserSetting() {
         var user = sqlModel.getCurrentUser();
-        if(user)
+        if(user) {
             labelName.text = user.courseName
+            console.log(labelName.text)
+        }
     }
 
     function selectDate(selectedDate) {
@@ -158,6 +160,6 @@ Page {
     }
 
     Component.onCompleted: {
-         reloadUserSetting();
+        reloadUserSetting();
     }
 }
