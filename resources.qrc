@@ -1,21 +1,22 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>content/Calendar.js</file>
         <file>content/CalendarPage.qml</file>
         <file>content/DailyLogPage.qml</file>
+        <file>content/ImageButton.qml</file>
         <file>content/ListViewDelegate.qml</file>
+		<file>content/MyCalendar.qml</file>
+        <file>content/SimpleDatePicker.qml</file>
         <file>content/StatisticPage.qml</file>
-        <file>res/images/eventindicator.png</file>
-        <file>res/images/textinput.png</file>
+        <file>content/TumblerDatePicker.qml</file>
+        <file>content/UserSettings.qml</file>
+        <file>modules/QCharts/qmldir</file>
         <file>modules/QCharts/QChart.js</file>
         <file>modules/QCharts/QChart.qml</file>
-        <file>content/UserSettings.qml</file>
-        <file>content/SimpleDatePicker.qml</file>
-        <file>content/Calendar.qml</file>
-        <file>content/TumblerDatePicker.qml</file>
-        <file>modules/QCharts/qmldir</file>
-        <file>content/Calendar.js</file>
-        <file>qtquickcontrols2.conf</file>
-        <file>content/ImageButton.qml</file>
+        <file>res/images/eventindicator.png</file>
+        <file>res/images/textinput.png</file>
+        <file>+android/qtquickcontrols2.conf</file>
+        <file>+windows/qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

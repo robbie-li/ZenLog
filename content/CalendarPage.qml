@@ -1,16 +1,7 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0 as QuickControls
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-
-import Material 0.2
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
-
 import zenlog.sqlmodel 1.0
-
-import "../modules/QCharts"
-import "../modules/QCharts/QChart.js" as Charts
-import "Calendar.js" as Data
 
 Page {
     id: root
@@ -20,68 +11,42 @@ Page {
         id: sqlModel
     }
 
-    Calendar {
+    MyCalendar {
         id: calendar
 
         width: parent.width
         height: parent.height /2
+        anchors { top: parent.top }
+
         onDaySelected: {
             swipeView.setCurrentIndex(1)
             daily.selectDate(selectedDate)
         }
+
         onMonthSelected: {
             mounth_count.text = sqlModel.courseCountForMonth(selectedMonth)
             year_count.text = sqlModel.courseCountForYear(selectedMonth)
         }
     }
 
-    View {
-        anchors.top: calendar.bottom
+    Pane {
+        anchors { top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right; }
 
-        width: parent.width
-        height: column.implicitHeight * 2
+        Column {
+            anchors.fill: parent
+            spacing: 10
 
-        elevation: 1
-        radius: Units.dp(2)
+            GroupBox {
+                id: statistic
+                width: parent.width
+                title: "统计"
 
-        ColumnLayout {
-            id: column
-            width: parent.width
+                GridLayout {
+                    anchors { fill: parent }
 
-            anchors {
-                topMargin: Units.dp(16)
-                bottomMargin: Units.dp(16)
-            }
-
-            ListItem.Standard {
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
-
-                    Label {
-                        Layout.alignment: Qt.AlignLeft
-                        text: "统计"
-                        style: "title"
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Units.dp(8)
-            }
-
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "awesome/calendar"
-                }
-
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
+                    columns: 2
+                    rowSpacing: 10
+                    columnSpacing: 10
 
                     Label {
                         Layout.alignment: Qt.AlignVCenter
@@ -95,19 +60,6 @@ Page {
                         Layout.preferredWidth: 0.5 * parent.width
                         text: sqlModel.courseCountForMonth(calendar.selectedDate)
                     }
-                }
-            }
-
-            ListItem.Standard {
-                action: Icon {
-                    anchors.centerIn: parent
-                    name: "awesome/calendar"
-                }
-
-                content:  RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width
-                    spacing: Units.dp(2)
 
                     Label {
                         Layout.alignment: Qt.AlignVCenter
@@ -123,42 +75,20 @@ Page {
                     }
                 }
             }
-        }
 
-        ColumnLayout {
-            id: column_tool
-            width: parent.width
+            GroupBox {
+                id: column_tool
+                width: parent.width
 
-            anchors {
-                top: column.bottom
-                topMargin: Units.dp(16)
-                bottomMargin: Units.dp(16)
-            }
+                title: "工具"
 
-            ListItem.Standard {
-                Layout.fillWidth: true
-                content:  RowLayout {
-                    anchors.centerIn: parent
+                Button {
                     width: parent.width
-                    spacing: Units.dp(2)
-
-                    Label {
-                        Layout.alignment: Qt.AlignLeft
-                        text: "工具"
-                        style: "title"
-                    }
+                    Layout.fillWidth: true
+                    text: "上传日志"
                 }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Units.dp(8)
-            }
-
-            QuickControls.Button {
-                Layout.fillWidth: true
-                text: "上传日志"
             }
         }
     }
 }
+

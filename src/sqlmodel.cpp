@@ -47,33 +47,33 @@ QObject* SqlModel::getCurrentUser()
     return NULL;
 }
 
-
 bool SqlModel::saveUser(int qq, int group, int index, const QString& name,
                         const QString& email,
                         int targetCount, const QString& courseName) {
-    const QString queryStr = QString::fromLatin1("SELECT * FROM User");
+    const QString sqlSelect = QString::fromLatin1("SELECT * FROM User");
 
-    QSqlQuery query(queryStr);
-    if (!query.exec())
+    QSqlQuery querySelect(sqlSelect);
+    if (!querySelect.exec())
         qFatal("failed to query user for save");
 
-    QString sql;
-    if(query.first()) {
-        sql  = QString::fromLatin1("update User set "
-                                   "group_num='%2',"
-                                   "group_idx='%3',"
-                                   "name='%4',"
-                                   "address='%5',"
-                                   "target_count='%6',"
-                                   "course_name='%7'"
-                                   " where qq='%1'")
+    QString sqlSave;
+    if(querySelect.first()) {
+        sqlSave  = QString::fromLatin1("update User set "
+                                       "group_num='%2',"
+                                       "group_idx='%3',"
+                                       "name='%4',"
+                                       "address='%5',"
+                                       "target_count='%6',"
+                                       "course_name='%7'"
+                                       " where qq='%1'")
                 .arg(QString::number(qq), QString::number(group), QString::number(index), name, email, QString::number(targetCount), courseName);
     } else {
-        sql = QString::fromLatin1("insert into User (qq, group_num, group_idx, name, email, target_count, course_name) values('%1', '%2', '%3', '%4', '%5', '%6', '%7')")
+        sqlSave = QString::fromLatin1("insert into User (qq, group_num, group_idx, name, email, target_count, course_name) values('%1', '%2', '%3', '%4', '%5', '%6', '%7')")
                 .arg(QString::number(qq), QString::number(group), QString::number(index), name, email, QString::number(targetCount), courseName);
     }
 
-    QSqlQuery queryUpdate(sql);
+    QSqlQuery queryUpdate(sqlSave);
+    qDebug() << "Executing:" << sqlSave;
     bool success = queryUpdate.exec();
     if(success) {
         qDebug("user saved.");
@@ -217,6 +217,39 @@ bool SqlModel::addCourse(const QDate &date, const QString& name, const int count
         return false;
     }
     return true;
+}
+
+bool SqlModel::updateCourse(const QDate &date, const QString& name, const int count)
+{
+    const QString sqlSelect = QString::fromLatin1("select * from Course where course_date = '%2' and course_name = '%1'").arg(name, date.toString("yyyy-MM-dd"));
+
+    QSqlQuery querySelect(sqlSelect);
+    qDebug() << "executing:" << sqlSelect;
+
+    if (!querySelect.exec())
+        qFatal("failed to query course for update");
+
+    QString sqlUpdate;
+    if(querySelect.first()) {
+        QString id = querySelect.value("id").toString();
+        sqlUpdate  = QString::fromLatin1("update Course set course_count='%2' where id='%1'")
+                .arg(id, QString::number(count));
+    } else {
+        sqlUpdate = QString::fromLatin1("insert into Course (course_date, course_name, course_count) values('%1', '%2', '%3')")
+                .arg(date.toString("yyyy-MM-dd"), name, QString::number(count));
+    }
+
+    QSqlQuery queryUpdate(sqlUpdate);
+    qDebug() << "executing:" << sqlUpdate;
+
+    bool success = queryUpdate.exec();
+    if(success) {
+        qDebug("course updated saved.");
+    } else {
+        qDebug() << "Failed to execute SQL:" << queryUpdate.lastError();
+    }
+
+    return success;
 }
 
 bool SqlModel::delCourse(const int index)

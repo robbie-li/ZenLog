@@ -25,6 +25,7 @@ Rectangle {
         id: buttonPrevious
         anchors.left: parent.left
         height: parent.height
+        width: 60
         text: "前一日"
         source: "qrc:/Material/icons/navigation/chevron_left.svg"
         onClicked: {
@@ -64,13 +65,14 @@ Rectangle {
     Rectangle {
         anchors { left: buttonPrevious.right; right: buttonNext.left }
         height: parent.height
-        color: "transparent"
+        color: "lightgrey"
 
         Label {
             id: dateLabel
             width: parent.width
             height: parent.height
             text: Qt.formatDate(currentDate, "yyyy-MM-dd")
+            font.pixelSize: 36
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -145,6 +147,7 @@ Rectangle {
     ImageButton {
         id: buttonNext
         height: parent.height
+        width: 60
         anchors.right: parent.right
         text: "后一日"
         source: "qrc:/Material/icons/navigation/chevron_right.svg"

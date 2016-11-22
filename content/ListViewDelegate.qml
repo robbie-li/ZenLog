@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import Material 0.2
+import QtQuick.Controls 2.0
 
 Rectangle {
   id: root
@@ -17,8 +17,8 @@ Rectangle {
       id: eventItemColumn
       anchors.top: parent.top
       width: parent.width
-      height: Units.dp(60)
-      spacing: Units.dp(5)
+      height: 60
+      spacing: 5
 
       Rectangle {
           width: (parent.width - parent.spacing) / 3
@@ -53,12 +53,12 @@ Rectangle {
           width: (parent.width - parent.spacing) / 3
           height: parent.height
 
-          IconButton {
+          ImageButton {
             anchors.centerIn: parent
             width: parent.height
             height: width
             anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
-            iconName: "action/delete"
+            source: "qrc:/Material/icons/action/delete.svg"
             onClicked: root.trashButtonClicked(modelData.index)
           }
       }

@@ -7,22 +7,21 @@ include(src/src.pri)
 
 OTHER_FILES += \
     main.qml \
-    content/Calendar.qml \
+    content/Calendar.js \
     content/CalendarPage.qml \
-    content/UserSettings.qml \
     content/DailyLogPage.qml \
+    content/ImageButton.qml \
     content/ListViewDelegate.qml \
+    content/MyCalendar.qml \
     content/SimpleDatePicker.qml \
     content/StatisticPage.qml \
-    content/TumblerDatePicker.qml
+    content/TumblerDatePicker.qml\
+    content/UserSettings.qml
 
 RESOURCES += \
-    resources.qrc \
-    modules/FontAwesome.qrc \
     modules/FontRoboto.qrc \
     modules/Icons.qrc \
-    modules/Material.qrc \
-    modules/MaterialQtQuick.qrc
+    resources.qrc
 
 DISTFILES += \
     android/AndroidManifest.xml \
@@ -32,6 +31,7 @@ DISTFILES += \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
-    qtquickcontrols2.conf
+    +android/qtquickcontrols2.conf
+    +windows/qtquickcontrols2.conf
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

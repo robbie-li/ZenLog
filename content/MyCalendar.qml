@@ -18,15 +18,23 @@
 
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.3 as Controls
-import QtQuick.Controls.Styles.Material 0.1 as MaterialStyle
-import QtQuick.Controls.Styles 1.3
-import QtQuick.Controls.Private 1.0
-import Material 0.2
+import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Styles 1.4
+
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Universal 2.0
+
 import zenlog.sqlmodel 1.0
 
-Controls.Calendar {
+Calendar {
     id: calendar
+
+    Material.theme: Material.Dark
+    Material.accent: Material.Purple
+
+    Universal.theme: Universal.Dark
+    Universal.accent: Universal.Pink
 
     SqlModel {
         id: sqlModel
@@ -44,21 +52,21 @@ Controls.Calendar {
         property int calendarHeight: calendar.height
 
         background: Rectangle {
-            color: "white"
+            color: "lightblue"
             implicitWidth: calendarWidth
             implicitHeight: calendarHeight
         }
 
         navigationBar: Rectangle {
-            height: Units.dp(60)
+            height: 60
             width: calendarWidth
-            color: Theme.accentColor
+            color: "lightgrey"
 
-            IconButton {
+            ImageButton {
                 id: previousMonth
-                anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: Units.dp(16) }
-                size: Units.dp(48)
-                iconName: "navigation/chevron_left"
+                width: 60
+                anchors { verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: 0 }
+                source: "qrc:/Material/icons/navigation/chevron_left.svg"
                 onClicked: {
                     control.showPreviousMonth();
                     control.monthSelected(new Date(control.visibleYear, control.visibleMonth, 1));
@@ -69,19 +77,18 @@ Controls.Calendar {
                 anchors.centerIn: parent
                 id: dayTitle
                 font.weight: Font.DemiBold
-                font.pixelSize: Units.dp(36)
+                font.pixelSize: 36
                 Layout.fillWidth: true
                 lineHeight: 0.9
                 wrapMode: Text.Wrap
-                color: Theme.dark.textColor
                 text: styleData.title
             }
 
-            IconButton {
+            ImageButton {
                 id: nextMonth
-                anchors { verticalCenter: parent.verticalCenter; right: parent.right; rightMargin: Units.dp(16) }
-                size: Units.dp(48)
-                iconName: "navigation/chevron_right"
+                width: 60
+                anchors { verticalCenter: parent.verticalCenter; right: parent.right; rightMargin: 0 }
+                source: "qrc:/Material/icons/navigation/chevron_right.svg"
                 onClicked: {
                     control.showNextMonth();
                     control.monthSelected(new Date(control.visibleYear, control.visibleMonth, 1))
@@ -91,21 +98,22 @@ Controls.Calendar {
 
         dayOfWeekDelegate: Rectangle {
             color: "transparent"
-            implicitHeight: Units.dp(30)
+            implicitHeight: 30
             Label {
                 text: control.__locale.dayName(styleData.dayOfWeek, Locale.NarrowFormat)
-                color: Theme.light.subTextColor
+                color: "blue"
                 anchors.centerIn: parent
             }
         }
 
         dayDelegate: Rectangle {
             visible: styleData.visibleMonth
-            height: Units.dp(60)
+            height: 60
+            color: "transparent"
 
             Rectangle {
                 anchors.fill: parent
-                color: styleData.selected ? Theme.accentColor : "transparent"
+                color: styleData.selected ? "red" : "transparent"
             }
 
             Label {
@@ -116,6 +124,7 @@ Controls.Calendar {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: styleData.date.getDate()
+                font.pixelSize: 22
                 color: styleData.selected? "white" : styleData.today? Theme.accentColor : "black"
             }
 
@@ -127,15 +136,12 @@ Controls.Calendar {
                     bottom:parent.bottom
                     horizontalCenter: parent.horizontalCenter
                 }
-                style: "caption"
                 function getText(date) {
                     var value = sqlModel.courseCountForDate(date);
-                    //console.log("query date:"+date, "got:"+value);
                     if( value === 0) return ""
                     else return value.toString()
                 }
                 text:  getText(styleData.date)
-                //elide: Text.ElideRight
                 horizontalAlignment: Text.AlignHCenter
                 color: styleData.selected? "white" : "black"
             }
