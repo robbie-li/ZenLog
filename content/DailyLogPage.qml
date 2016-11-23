@@ -6,8 +6,14 @@ import zenlog.sqlmodel 1.0
 Page {
     id: root
 
+    signal courseChanged()
+
     SqlModel {
         id: sqlModel
+        onCourseChanged: {
+            console.log("course changed")
+            root.courseChanged();
+        }
     }
 
     title: "精进修行"

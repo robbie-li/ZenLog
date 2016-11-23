@@ -93,6 +93,9 @@ ApplicationWindow {
         }
         DailyLogPage {
             id: daily
+            onCourseChanged: {
+                calendar.reload()
+            }
         }
     }
 

@@ -11,6 +11,13 @@ Page {
         id: sqlModel
     }
 
+    function reload() {
+        console.log("reload CalendarPage")
+        mounth_count.text = sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+        year_count.text = sqlModel.courseTotalForYear(calendar.visibleYear)
+        calendar.reload()
+    }
+
     MyCalendar {
         id: calendar
 
@@ -24,8 +31,8 @@ Page {
         }
 
         onMonthSelected: {
-            mounth_count.text = sqlModel.courseCountForMonth(selectedMonth)
-            year_count.text = sqlModel.courseCountForYear(selectedMonth)
+            mounth_count.text = sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+            year_count.text = sqlModel.courseTotalForYear(calendar.visibleYear)
         }
     }
 
@@ -91,4 +98,3 @@ Page {
         }
     }
 }
-

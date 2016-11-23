@@ -40,13 +40,19 @@ Calendar {
         id: sqlModel
     }
 
+    function reload() {
+        dataArr = sqlModel.courseCountForMonth(calendar.visibleYear, calendar.visibleMonth);
+    }
+
+    property var dataArr
+
     signal daySelected(date selectedDate)
     signal monthSelected(date selectedMonth)
 
     property int dayAreaBottomMargin : 0
 
     style: CalendarStyle {
-        gridVisible: false
+        gridVisible: true
 
         property int calendarWidth: calendar.width
         property int calendarHeight: calendar.height
@@ -70,6 +76,7 @@ Calendar {
                 onClicked: {
                     control.showPreviousMonth();
                     control.monthSelected(new Date(control.visibleYear, control.visibleMonth, 1));
+                    reload()
                 }
             }
 
@@ -92,6 +99,7 @@ Calendar {
                 onClicked: {
                     control.showNextMonth();
                     control.monthSelected(new Date(control.visibleYear, control.visibleMonth, 1))
+                    reload()
                 }
             }
         }
@@ -125,23 +133,18 @@ Calendar {
                 }
                 text: styleData.date.getDate()
                 font.pixelSize: 22
-                color: styleData.selected? "white" : styleData.today? Theme.accentColor : "black"
+                color: styleData.selected? "white" : styleData.today? "blue" : "black"
             }
 
             Label {
                 id: dayCount
-                width: parent.width
                 anchors {
                     top: dayText.bottom
+                    right: parent.right
                     bottom:parent.bottom
-                    horizontalCenter: parent.horizontalCenter
                 }
-                function getText(date) {
-                    var value = sqlModel.courseCountForDate(date);
-                    if( value === 0) return ""
-                    else return value.toString()
-                }
-                text:  getText(styleData.date)
+                text: calendar.dataArr[styleData.date.getDate()] ? calendar.dataArr[styleData.date.getDate()] : ""
+                font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 color: styleData.selected? "white" : "black"
             }
@@ -153,5 +156,9 @@ Calendar {
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        reload()
     }
 }

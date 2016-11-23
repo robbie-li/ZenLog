@@ -42,6 +42,7 @@
 #define SQL_MODEL_H
 
 #include <QList>
+#include <QMap>
 #include <QObject>
 #include <QSqlTableModel>
 
@@ -59,9 +60,10 @@ public:
                               const QString& email, int targetCount, const QString& courseName);
 
     Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
+    Q_INVOKABLE QVariantMap courseCountForMonth(const int year, const int month);
     Q_INVOKABLE int courseCountForDate(const QDate &date);
-    Q_INVOKABLE int courseCountForMonth(const QDate &date);
-    Q_INVOKABLE int courseCountForYear(const QDate &date);
+    Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
+    Q_INVOKABLE int courseTotalForYear(const int year);
     Q_INVOKABLE QList<int> monthlyCourseCountForYear(const QDate &date);
 
     Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
@@ -70,6 +72,7 @@ public:
 
 signals:
     void userSaved();
+    void courseChanged();
 
 private:
     static bool createConnection();

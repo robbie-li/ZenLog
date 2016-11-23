@@ -16,6 +16,9 @@ Rectangle {
 
     SqlModel {
         id: sqlModel
+        onCourseStatusChanged: {
+            console.log("onCourseStatusChanged StatisticPage");
+        }
     }
 
     property int chart_width: 300
