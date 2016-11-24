@@ -1,9 +1,10 @@
-QT += qml quick sql xml svg core gui quickcontrols2
+QT += qml quick sql xml svg core gui quickcontrols2 network
 TARGET = ZenLog
 !no_desktop: QT += widgets
 !contains(sql-drivers, sqlite): QTPLUGIN += qsqlite
 
 include(src/src.pri)
+include(smtpclient/smtpclient.pri)
 
 OTHER_FILES += \
     main.qml \

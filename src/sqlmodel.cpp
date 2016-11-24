@@ -4,7 +4,7 @@
 #include <QFileInfo>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDebug>
+
 #include "user.h"
 
 namespace {
@@ -210,7 +210,7 @@ QVariantMap SqlModel::courseCountForMonth(const int year, const int month)
         int course_day = query.value(1).toInt();
         int course_count = query.value(0).toInt();
         qDebug() << "Course Day:" << course_day << ", Sum:" << course_count;
-        courses.insert(QString::number(course_day), QVariant::fromValue(course_count));
+        courses.insert(QString::fromLatin1("%1").arg(course_day,2,10,QLatin1Char('0')), QVariant::fromValue(course_count));
     }
 
     return courses;

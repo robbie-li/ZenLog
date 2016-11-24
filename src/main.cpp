@@ -3,6 +3,7 @@
 #include <QtQml>
 #include <QQuickStyle>
 #include <QDebug>
+#include "mailclient.h"
 #include "sqlmodel.h"
 #include "user.h"
 
@@ -13,6 +14,8 @@ int main(int argc, char *argv[])
   //QQuickStyle::setStyle("material");
 
   qmlRegisterType<SqlModel>("zenlog.sqlmodel", 1, 0, "SqlModel");
+
+  qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
 
   /*
   User* user = (User*)(new SqlModel())->getCurrentUser();

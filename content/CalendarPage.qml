@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import zenlog.sqlmodel 1.0
+import zenlog.mailclient 1.0
 
 Page {
     id: root
@@ -9,6 +10,50 @@ Page {
 
     SqlModel {
         id: sqlModel
+    }
+
+    MailClient {
+        id: mailclient
+        onMailSent: {
+            popup.status = status
+            popup.open();
+        }
+    }
+
+    Popup {
+        id: popup
+
+        property bool status
+
+        x: 100
+        y: 100
+
+        width: 300
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        contentItem: Rectangle {
+            id: content
+            color: "white"
+
+            Label {
+                anchors.centerIn: content
+                text: popup.status ? "邮件发送成功" : "邮件发送失败"
+                font.bold: true
+                font.pixelSize: 30
+                color: "blue"
+            }
+
+            Button {
+                text: "确定"
+                anchors { bottom: content.bottom; bottomMargin: 4; horizontalCenter: content.horizontalCenter }
+                onClicked: {
+                    popup.close()
+                }
+            }
+        }
     }
 
     function reload() {
@@ -93,6 +138,9 @@ Page {
                     width: parent.width
                     Layout.fillWidth: true
                     text: "上传日志"
+                    onClicked: {
+                        mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
+                    }
                 }
             }
         }

@@ -143,7 +143,10 @@ Calendar {
                     right: parent.right
                     bottom:parent.bottom
                 }
-                text: calendar.dataArr[styleData.date.getDate()] ? calendar.dataArr[styleData.date.getDate()] : ""
+                function toDateString(day) {
+                    return ("00" + day).slice(-2);
+                }
+                text: calendar.dataArr[toDateString(styleData.date.getDate())] ? calendar.dataArr[toDateString(styleData.date.getDate())] : ""
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 color: styleData.selected? "white" : "black"
