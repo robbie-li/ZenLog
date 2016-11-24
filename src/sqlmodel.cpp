@@ -107,7 +107,9 @@ int SqlModel::courseCountForDate(const QDate &date)
 
 int SqlModel::courseTotalForMonth(const int year, const int month)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime(\"%Y-%m\", course_date) as cd from Course) WHERE '%1-%2' == cd").arg(year, 4).arg(month, 2);
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime('%Y-%m', course_date) as cd from Course) WHERE '%1-%2' == cd").arg(year, 4, 10).arg((month+1), 2, 10, QLatin1Char('0'));
+
+    qDebug() << "Executing:" << queryStr;
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
@@ -125,7 +127,7 @@ int SqlModel::courseTotalForMonth(const int year, const int month)
 
 int SqlModel::courseTotalForYear(const int year)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime(\"%Y\", course_date) as cd from Course) WHERE '%1' == cd").arg(year, 4);
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime('%Y', course_date) as cd from Course) WHERE '%1' == cd").arg(year, 4);
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
@@ -143,7 +145,7 @@ int SqlModel::courseTotalForYear(const int year)
 
 QList<int> SqlModel::monthlyCourseCountForYear(const QDate &date)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime(\"%Y-%m\", course_date) as cd,strftime(\"%Y\", course_date) as cy from Course WHERE '%1' = cy group by cd ").arg(date.toString("yyyy"));
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime('%Y-%m', course_date) as cd,strftime('%Y', course_date) as cy from Course WHERE '%1' = cy group by cd ").arg(date.toString("yyyy"));
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
@@ -194,7 +196,7 @@ QList<QObject*> SqlModel::coursesForDate(const QDate &date)
 
 QVariantMap SqlModel::courseCountForMonth(const int year, const int month)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' group by cd").arg(year, 4).arg(month + 1, 2);
+    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' group by cd").arg(year, 4).arg(month + 1, 2, 10, QLatin1Char('0'));
 
     qDebug() << "Executing:" << queryStr;
 

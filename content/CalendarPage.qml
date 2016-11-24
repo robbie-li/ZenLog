@@ -65,7 +65,7 @@ Page {
                         id: mounth_count
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
-                        text: sqlModel.courseCountForMonth(calendar.selectedDate)
+                        text: sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
                     }
 
                     Label {
@@ -78,7 +78,7 @@ Page {
                         id: year_count
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
-                        text: sqlModel.courseCountForYear(calendar.selectedDate)
+                        text: sqlModel.courseTotalForYear(calendar.visibleYear)
                     }
                 }
             }
