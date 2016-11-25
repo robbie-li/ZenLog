@@ -10,20 +10,13 @@
 int main(int argc, char *argv[])
 {
   QGuiApplication app(argc, argv);
+  app.setAttribute(Qt::AA_EnableHighDpiScaling);
+
   QQmlApplicationEngine engine;
-  //QQuickStyle::setStyle("material");
+  QQuickStyle::setStyle("Material");
 
   qmlRegisterType<SqlModel>("zenlog.sqlmodel", 1, 0, "SqlModel");
-
   qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
-
-  /*
-  User* user = (User*)(new SqlModel())->getCurrentUser();
-  if(user) {
-      qDebug() << "Course Name" << user->courseName();
-      engine.rootContext()->setContextProperty("currentUser", user);
-  }
-  */
 
   engine.addImportPath(QStringLiteral("qrc:/modules/"));
   engine.addImportPath(QStringLiteral(":/"));

@@ -1,12 +1,13 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
+
 import zenlog.sqlmodel 1.0
 import zenlog.mailclient 1.0
 
 Page {
     id: root
-    title: "每月视图"
+    title: qsTr("每月视图")
 
     SqlModel {
         id: sqlModel

@@ -1,9 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
-import QtQuick.Controls.Universal 2.0
 import QtQuick.Layouts 1.3
-import Qt.labs.settings 1.0
 
 Rectangle {
     property date currentDate: new Date()
@@ -111,10 +108,6 @@ Rectangle {
                             datePickerDialog.close()
                         }
 
-                        Material.foreground: Material.primary
-                        Material.background: "transparent"
-                        Material.elevation: 0
-
                         Layout.preferredWidth: 0
                         Layout.fillWidth: true
                     }
@@ -125,9 +118,6 @@ Rectangle {
                         onClicked: {
                             datePickerDialog.close()
                         }
-
-                        Material.background: "transparent"
-                        Material.elevation: 0
 
                         Layout.preferredWidth: 0
                         Layout.fillWidth: true

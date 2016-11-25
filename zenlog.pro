@@ -8,15 +8,15 @@ include(smtpclient/smtpclient.pri)
 
 OTHER_FILES += \
     main.qml \
-    content/Calendar.js \
+    content/qmldir \
     content/CalendarPage.qml \
     content/DailyLogPage.qml \
     content/ImageButton.qml \
     content/ListViewDelegate.qml \
     content/MyCalendar.qml \
     content/SimpleDatePicker.qml \
-    content/StatisticPage.qml \
     content/TumblerDatePicker.qml\
+    content/Units.qml\
     content/UserSettings.qml
 
 RESOURCES += \
