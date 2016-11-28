@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 
@@ -25,13 +26,13 @@ Calendar {
     property int dayAreaBottomMargin : 0
 
     style: CalendarStyle {
-        gridVisible: true
+        gridVisible: false
 
         property int calendarWidth: calendar.width
         property int calendarHeight: calendar.height
 
         background: Rectangle {
-            color: "lightblue"
+            color: "transparent"
             implicitWidth: calendarWidth
             implicitHeight: calendarHeight
         }
@@ -39,7 +40,7 @@ Calendar {
         navigationBar: Rectangle {
             height: 60
             width: calendarWidth
-            color: "lightgrey"
+            color: "transparent"
 
             ImageButton {
                 id: previousMonth
@@ -57,7 +58,7 @@ Calendar {
                 anchors.centerIn: parent
                 id: dayTitle
                 font.weight: Font.DemiBold
-                font.pixelSize: 36
+                font.pixelSize: 32
                 Layout.fillWidth: true
                 lineHeight: 0.9
                 wrapMode: Text.Wrap
@@ -82,7 +83,6 @@ Calendar {
             implicitHeight: 30
             Label {
                 text: control.__locale.dayName(styleData.dayOfWeek, Locale.NarrowFormat)
-                color: "blue"
                 anchors.centerIn: parent
             }
         }
@@ -94,7 +94,7 @@ Calendar {
 
             Rectangle {
                 anchors.fill: parent
-                color: styleData.selected ? "red" : "transparent"
+                color: styleData.selected ? Material.accent : "transparent"
             }
 
             Label {
@@ -105,8 +105,8 @@ Calendar {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: styleData.date.getDate()
-                font.pixelSize: 22
-                color: styleData.selected? "white" : styleData.today? "blue" : "black"
+                font.pixelSize: 20
+                //color: styleData.selected? "white" : styleData.today? "blue" : "black"
             }
 
             Label {
@@ -120,9 +120,9 @@ Calendar {
                     return ("00" + day).slice(-2);
                 }
                 text: calendar.dataArr[toDateString(styleData.date.getDate())] ? calendar.dataArr[toDateString(styleData.date.getDate())] : ""
-                font.pixelSize: 16
+                font.pixelSize: 12
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected? "white" : "black"
+                //color: styleData.selected? "white" : "black"
             }
 
             MouseArea {

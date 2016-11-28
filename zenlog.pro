@@ -16,7 +16,6 @@ OTHER_FILES += \
     content/MyCalendar.qml \
     content/SimpleDatePicker.qml \
     content/TumblerDatePicker.qml\
-    content/Units.qml\
     content/UserSettings.qml
 
 RESOURCES += \
@@ -32,7 +31,7 @@ DISTFILES += \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
-    +android/qtquickcontrols2.conf
+    +android/qtquickcontrols2.conf \
     +windows/qtquickcontrols2.conf
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

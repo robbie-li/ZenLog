@@ -5,12 +5,14 @@ Rectangle {
   id: root
   height: eventItemColumn.height + 1
   signal trashButtonClicked(int index)
+  color: "transparent"
+  border.color: "#21be2b"
 
   Rectangle {
       anchors.bottom: parent.bottom
       width: parent.width
       height: 1
-      color: "#eee"
+      color: "transparent"
   }
 
   Row {
@@ -23,6 +25,7 @@ Rectangle {
       Rectangle {
           width: (parent.width - parent.spacing) / 3
           height: parent.height
+          color: "transparent"
 
           Label {
               anchors.fill: parent
@@ -34,10 +37,10 @@ Rectangle {
           }
       }
 
-
       Rectangle {
           width: (parent.width - parent.spacing) / 3
           height: parent.height
+          color: "transparent"
 
           Label {
               anchors.fill: parent
@@ -52,6 +55,7 @@ Rectangle {
       Rectangle {
           width: (parent.width - parent.spacing) / 3
           height: parent.height
+          color: "transparent"
 
           ImageButton {
             anchors.centerIn: parent

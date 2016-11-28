@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-		<file>content/qmldir</file>
+        <file>content/qmldir</file>
         <file>content/CalendarPage.qml</file>
         <file>content/DailyLogPage.qml</file>
         <file>content/ImageButton.qml</file>
@@ -9,7 +9,6 @@
         <file>content/MyCalendar.qml</file>
         <file>content/SimpleDatePicker.qml</file>
         <file>content/TumblerDatePicker.qml</file>
-		<file>content/Units.qml</file>
         <file>content/UserSettings.qml</file>
         <file>+android/qtquickcontrols2.conf</file>
         <file>+windows/qtquickcontrols2.conf</file>

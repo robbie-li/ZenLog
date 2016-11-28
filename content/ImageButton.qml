@@ -1,17 +1,22 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
-import "."
-
 Button {
     id: control
     property var source
-    property var size: Units.dp(32)
+    property int size: 48
 
-    width: size
-    height: size
+    implicitHeight: size
+    implicitWidth: size
+
+    background: Rectangle {
+        color: "transparent"
+        anchors.fill: parent
+        opacity: enabled ? 1 : 0.3
+    }
 
     contentItem: Image {
+        anchors.fill: parent
         opacity: enabled ? 1.0 : 0.3
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter

@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Rectangle {
     property date currentDate: new Date()
     height: 60
+    color: "transparent"
 
     function previousDayOf(today) {
         var dateTime = today;
@@ -62,7 +63,7 @@ Rectangle {
     Rectangle {
         anchors { left: buttonPrevious.right; right: buttonNext.left }
         height: parent.height
-        color: "lightgrey"
+        color: "transparent"
 
         Label {
             id: dateLabel

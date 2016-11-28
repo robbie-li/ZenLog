@@ -1,30 +1,36 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Universal 2.0
 import QtQuick.Layouts 1.3
-import QtQuick.Window 2.2
 
 import "content"
 
 ApplicationWindow {
     id: window
 
-    width: 540
-    height: 960
+    width: 450
+    height: 800
     visible: true
 
-    Component.onCompleted: {
-        console.log("Screen Pixel Density:" + Screen.pixelDensity)
-        Units.pixelDensity = Screen.pixelDensity
-    }
+    Universal.theme: Universal.Dark
+
+    Material.theme: Material.Light
+    Material.accent: Material.Red
+    Material.primary: Material.BlueGrey
 
     title: qsTr("精进修行")
 
     header: ToolBar {
+        id: toolbar
+        contentHeight: 48
+
         RowLayout {
-            spacing: Units.dp(20)
+            spacing: 20
             anchors.fill: parent
 
             ImageButton {
+                //size: 36
                 source: "qrc:/Material/icons/navigation/menu.svg"
                 onClicked: drawer.open()
             }
@@ -32,7 +38,7 @@ ApplicationWindow {
             Label {
                 id: titleLabel
                 text: qsTr("精进修行")
-                font.pixelSize: Units.dp(20)
+                font.pixelSize: 18
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -40,6 +46,7 @@ ApplicationWindow {
             }
 
             ImageButton {
+                //size: 36
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
 

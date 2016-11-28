@@ -6,6 +6,7 @@ Rectangle {
     height: 200
     width: columnWidth*3 + 20
     border.width: 1
+    color: "transparent"
 
     property int columnWidth: 80
     property int minYear: 2000

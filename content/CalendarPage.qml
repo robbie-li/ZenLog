@@ -37,14 +37,12 @@ Page {
 
         contentItem: Rectangle {
             id: content
-            color: "white"
 
             Label {
                 anchors.centerIn: content
                 text: popup.status ? "邮件发送成功" : "邮件发送失败"
                 font.bold: true
                 font.pixelSize: 30
-                color: "blue"
             }
 
             Button {

@@ -14,6 +14,15 @@ Frame {
 
     signal userSettingsChanged()
 
+    background: Rectangle {
+        y: root.topPadding - root.padding
+        width: parent.width
+        height: parent.height - root.topPadding + root.padding
+        color: "transparent"
+        border.color: "#21be2b"
+        radius: 2
+    }
+
     RowLayout {
         id: title
         width: parent.width
@@ -61,7 +70,7 @@ Frame {
             text: "主修功课"
         }
 
-        Row {
+        Column {
             id: subject_group
 
             RadioButton {
