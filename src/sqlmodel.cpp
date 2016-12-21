@@ -87,27 +87,76 @@ bool SqlModel::saveUser(int qq, int group, int index, const QString& name,
     return success;
 }
 
-int SqlModel::courseCountForDate(const QDate &date)
+QList<QObject*> SqlModel::courseDetailsForDate(const QDate &date)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM Course WHERE '%1' == course_date").arg(date.toString("yyyy-MM-dd"));
+    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE course_date = '%1' order by course_input_time desc")
+            .arg(date.toString("yyyy-MM-dd"));
+
+    qDebug() << "Executing:" << queryStr;
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
-        qDebug("Query failed");
+        qDebug() << "Failed to load course" << query.lastError();
     }
 
-    int totalCount = 0;
-
-    if (query.first()) {
-        totalCount = query.value(0).toInt();
+    QList<QObject*> courses;
+    while (query.next()) {
+        Course *course = new Course(this);
+        course->set_index(query.value("id").toInt());
+        course->set_name(query.value("course_name").toString());
+        course->set_count(query.value("course_count").toInt());
+        course->set_date(query.value("course_date").toDate());
+        course->set_inputTime(query.value("course_input_time").toDateTime());
+        qDebug() << course->inputTime();
+        courses.append(course);
     }
 
-    return totalCount;
+    return courses;
+}
+
+bool SqlModel::addCourse(const QDate &date, const QString& name, const int count)
+{
+    const QString queryStr = QString::fromLatin1
+            ("insert into Course (course_name,course_date,course_count) values('%1', '%2', '%3')")
+            .arg(name)
+            .arg(date.toString("yyyy-MM-dd"))
+            .arg(QString::number(count));
+    qDebug() << "Executing:" << queryStr;
+    QSqlQuery query;
+    if (!query.exec(queryStr)) {
+        qDebug() << query.lastError().text();
+        return false;
+    }
+
+    emit courseChanged();
+    return true;
+}
+
+bool SqlModel::delCourse(const int index)
+{
+    const QString queryStr = QString::fromLatin1("delete from Course where id='%1'").arg(index);
+    qDebug() << "executing:" << queryStr;
+    QSqlQuery query;
+    if (!query.exec(queryStr)) {
+        qDebug() << query.lastError().text();
+        return false;
+    }
+
+    emit courseChanged();
+    return true;
 }
 
 int SqlModel::courseTotalForMonth(const int year, const int month)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime('%Y-%m', course_date) as cd from Course) WHERE '%1-%2' == cd").arg(year, 4, 10).arg((month+1), 2, 10, QLatin1Char('0'));
+    const QString queryStr = QString::fromLatin1
+            ("SELECT sum(max_course_count) FROM "
+             "(SELECT "
+             "max(course_count) as max_course_count, "
+             "strftime('%Y-%m', course_date) as month, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course WHERE '%1-%2' = month group by day)")
+            .arg(year, 4, 10)
+            .arg((month+1), 2, 10, QLatin1Char('0'));
 
     qDebug() << "Executing:" << queryStr;
 
@@ -127,7 +176,14 @@ int SqlModel::courseTotalForMonth(const int year, const int month)
 
 int SqlModel::courseTotalForYear(const int year)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) FROM (SELECT course_count, strftime('%Y', course_date) as cd from Course) WHERE '%1' == cd").arg(year, 4);
+    const QString queryStr = QString::fromLatin1
+            ("SELECT sum(max_course_count) FROM "
+             "(SELECT "
+             "max(course_count) as max_course_count, "
+             "strftime('%Y', course_date) as year, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course WHERE '%1' = year group by day)")
+            .arg(year, 4);
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
@@ -143,60 +199,12 @@ int SqlModel::courseTotalForYear(const int year)
     return totalCount;
 }
 
-QList<int> SqlModel::monthlyCourseCountForYear(const QDate &date)
+QVariantMap SqlModel::dailyCourseCountForMonth(const int year, const int month)
 {
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime('%Y-%m', course_date) as cd,strftime('%Y', course_date) as cy from Course WHERE '%1' = cy group by cd ").arg(date.toString("yyyy"));
-
-    QSqlQuery query;
-    if (!query.exec(queryStr)) {
-        qDebug() << "Query failed" << query.lastError();
-    }
-
-    QList<int> courses;
-    for(int i = 0; i < 12; ++i ) {
-        courses.append(0);
-    }
-
-    while (query.next()) {
-        QString month = query.value("cd").toString();
-        int m = month.right(2).toInt();
-        int c = query.value("sm").toInt();
-        courses[m-1] = c;
-    }
-
-    return courses;
-}
-
-QList<QObject*> SqlModel::coursesForDate(const QDate &date)
-{
-    const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE course_date = '%1'").arg(date.toString("yyyy-MM-dd"));
-
-    //qDebug() << "Executing:" << queryStr;
-
-    QSqlQuery query;
-    if (!query.exec(queryStr)) {
-        qDebug() << "Failed to load course" << query.lastError();
-    }
-
-    QList<QObject*> courses;
-    while (query.next()) {
-        Course *course = new Course(this);
-        course->set_index(query.value("id").toInt());
-        course->set_name(query.value("course_name").toString());
-        course->set_count(query.value("course_count").toInt());
-
-        QDateTime date;
-        date.setDate(query.value("course_date").toDate());
-        course->set_date(date);
-        courses.append(course);
-    }
-
-    return courses;
-}
-
-QVariantMap SqlModel::courseCountForMonth(const int year, const int month)
-{
-    const QString queryStr = QString::fromLatin1("SELECT sum(course_count) as sm, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' group by cd").arg(year, 4).arg(month + 1, 2, 10, QLatin1Char('0'));
+    const QString queryStr =QString::fromLatin1
+            ("SELECT max(course_count) as sm, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' group by cd")
+            .arg(year, 4)
+            .arg(month + 1, 2, 10, QLatin1Char('0'));
 
     qDebug() << "Executing:" << queryStr;
 
@@ -227,68 +235,15 @@ bool SqlModel::createTables()
 {
     QSqlQuery query;
 
-    if(!query.exec("CREATE TABLE IF NOT EXISTS Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER)")) {
+    if(!query.exec("CREATE TABLE IF NOT EXISTS Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER, course_input_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")) {
         qDebug() << "Failed to create course table" << query.lastError();
+    } else if(!query.exec("ALTER TABLE Course ADD course_input_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP")) {
+        qDebug() << "Failed to update course table" << query.lastError();
     }
 
     if(!query.exec("CREATE TABLE IF NOT EXISTS User (qq INTEGER, group_num INTEGER, group_idx INTEGER, name TEXT, city TEXT, address TEXT, email TEXT, course_name TEXT, target_count INTEGER)")) {
         qDebug() << "Failed to create user table:" << query.lastError();
     }
 
-    return true;
-}
-
-bool SqlModel::addCourse(const QDate &date, const QString& name, const int count)
-{
-    const QString queryStr = QString::fromLatin1("insert into Course (course_name,course_date,course_count) values('%1', '%2', '%3')").arg(name, date.toString("yyyy-MM-dd"), QString::number(count));
-    qDebug() << "Executing:" << queryStr;
-    QSqlQuery query;
-    if (!query.exec(queryStr)) {
-        qDebug() << query.lastError().text();
-        return false;
-    }
-
-    emit courseChanged();
-    return true;
-}
-
-bool SqlModel::updateCourse(const QDate &date, const QString& name, const int count)
-{
-    const QString sqlDelete = QString::fromLatin1("delete from Course where course_date = '%2' and course_name = '%1'").arg(name, date.toString("yyyy-MM-dd"));
-
-    QSqlQuery query;
-    qDebug() << "Executing:" << sqlDelete;
-
-    if (!query.exec(sqlDelete)) {
-        qDebug() << "Failed to execute SQL:" << query.lastError();
-        return false;
-    }
-
-    const QString sqlUpdate = QString::fromLatin1("insert into Course (course_date, course_name, course_count) values('%1', '%2', '%3')")
-            .arg(date.toString("yyyy-MM-dd"), name, QString::number(count));
-
-    qDebug() << "Executing:" << sqlUpdate;
-
-    if(!query.exec(sqlUpdate)) {
-        qDebug() << "Failed to execute SQL:" << query.lastError();
-        return false;
-    }
-
-    emit courseChanged();
-
-    return true;
-}
-
-bool SqlModel::delCourse(const int index)
-{
-    const QString queryStr = QString::fromLatin1("delete from Course where id='%1'").arg(index);
-    qDebug() << "executing:" << queryStr;
-    QSqlQuery query;
-    if (!query.exec(queryStr)) {
-        qDebug() << query.lastError().text();
-        return false;
-    }
-
-    emit courseChanged();
     return true;
 }

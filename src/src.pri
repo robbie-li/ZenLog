@@ -1,4 +1,5 @@
 SOURCES += \
+    $$PWD/clipboard.cpp \
     $$PWD/course.cpp \
     $$PWD/mailclient.cpp \
     $$PWD/main.cpp \
@@ -6,6 +7,7 @@ SOURCES += \
     $$PWD/user.cpp
 
 HEADERS += \
+    $$PWD/clipboard.h \
     $$PWD/course.h \
     $$PWD/macros.h \
     $$PWD/mailclient.h \

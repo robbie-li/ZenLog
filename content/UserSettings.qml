@@ -8,10 +8,6 @@ Frame {
     id: root
     anchors { fill: parent; margins: 5 }
 
-    SqlModel {
-        id: sqlModel
-    }
-
     signal userSettingsChanged()
 
     background: Rectangle {
@@ -44,7 +40,7 @@ Frame {
             onClicked: {
                 if( qq_text.text != '' ) {
                     var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
-                    sqlModel.saveUser(qq_text.text, group_index.currentIndex+1, index_text.text, name_text.text, email_text.text, targetcount_text.text, course);
+                    SqlModel.saveUser(qq_text.text, group_index.currentIndex+1, index_text.text, name_text.text, email_text.text, targetcount_text.text, course);
                     root.userSettingsChanged()
                 }
             }
@@ -170,7 +166,7 @@ Frame {
     }
 
     function reload() {
-        var user = sqlModel.getCurrentUser();
+        var user = SqlModel.getCurrentUser();
         if( user !== null) {
             qq_text.text = user.qq
             group_index.currentIndex = user.group - 1

@@ -4,14 +4,11 @@ import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
 import zenlog.mailclient 1.0
+import zenlog.clipboard 1.0
 
 Page {
     id: root
     title: qsTr("每月视图")
-
-    SqlModel {
-        id: sqlModel
-    }
 
     MailClient {
         id: mailclient
@@ -40,13 +37,13 @@ Page {
 
             Label {
                 anchors.centerIn: content
-                text: popup.status ? "邮件发送成功" : "邮件发送失败"
+                text: popup.status ? qsTr("邮件发送成功") : qsTr("邮件发送失败")
                 font.bold: true
                 font.pixelSize: 30
             }
 
             Button {
-                text: "确定"
+                text: qsTr("确定")
                 anchors { bottom: content.bottom; bottomMargin: 4; horizontalCenter: content.horizontalCenter }
                 onClicked: {
                     popup.close()
@@ -57,8 +54,8 @@ Page {
 
     function reload() {
         console.log("reload CalendarPage")
-        mounth_count.text = sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-        year_count.text = sqlModel.courseTotalForYear(calendar.visibleYear)
+        mounth_count.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+        year_count.text = SqlModel.courseTotalForYear(calendar.visibleYear)
         calendar.reload()
     }
 
@@ -75,8 +72,8 @@ Page {
         }
 
         onMonthSelected: {
-            mounth_count.text = sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-            year_count.text = sqlModel.courseTotalForYear(calendar.visibleYear)
+            mounth_count.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+            year_count.text = SqlModel.courseTotalForYear(calendar.visibleYear)
         }
     }
 
@@ -109,7 +106,7 @@ Page {
                         id: mounth_count
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
-                        text: sqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+                        text: SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
                     }
 
                     Label {
@@ -122,7 +119,7 @@ Page {
                         id: year_count
                         Layout.alignment: Qt.AlignVCenter
                         Layout.preferredWidth: 0.5 * parent.width
-                        text: sqlModel.courseTotalForYear(calendar.visibleYear)
+                        text: SqlModel.courseTotalForYear(calendar.visibleYear)
                     }
                 }
             }
@@ -133,12 +130,24 @@ Page {
 
                 title: "工具"
 
-                Button {
-                    width: parent.width
-                    Layout.fillWidth: true
-                    text: "上传日志"
-                    onClicked: {
-                        mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
+                Column {
+                    anchors.fill: parent
+                    Button {
+                        width: parent.width
+                        Layout.fillWidth: true
+                        text: "上传日志"
+                        onClicked: {
+                            mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
+                        }
+                    }
+
+                    Button {
+                        width: parent.width
+                        Layout.fillWidth: true
+                        text: qsTr("复制当月记录")
+                        onClicked: {
+                            ClipBoard.copyMonthlyCourse(calendar.visibleYear, calendar.visibleMonth)
+                        }
                     }
                 }
             }

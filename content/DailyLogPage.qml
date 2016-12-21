@@ -9,8 +9,8 @@ Page {
 
     signal courseChanged()
 
-    SqlModel {
-        id: sqlModel
+    Connections {
+        target: SqlModel
         onCourseChanged: {
             console.log("course changed")
             root.courseChanged();
@@ -20,7 +20,7 @@ Page {
     title: "精进修行"
 
     function reloadUserSetting() {
-        var user = sqlModel.getCurrentUser();
+        var user = SqlModel.getCurrentUser();
         if(user) {
             labelName.text = user.courseName
             console.log(labelName.text)
@@ -33,8 +33,7 @@ Page {
     }
 
     function reload() {
-        contentReapter.model = sqlModel.coursesForDate(datepicker.currentDate)
-        totalCount.text = sqlModel.courseCountForDate(datepicker.currentDate)
+        contentReapter.model = SqlModel.courseDetailsForDate(datepicker.currentDate)
     }
 
     Column {
@@ -91,23 +90,6 @@ Page {
                 width: prompt.visible ? (parent.width - prompt.width) : parent.width
 
                 Button {
-                    anchors.left: parent.left
-                    anchors.leftMargin: 40
-                    width: 100
-                    enabled: labelCount.text != '' && labelName.text != ''
-
-                    text: "更新"
-
-                    onClicked: {
-                        if(sqlModel.updateCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
-                            labelCount.text = '';
-                            labelCount.focus = false;
-                            root.reload();
-                        }
-                    }
-                }
-
-                Button {
                     anchors.right: parent.right
                     anchors.rightMargin: 40
                     width: 100
@@ -116,7 +98,7 @@ Page {
                     text: "保存"
 
                     onClicked: {
-                        if(sqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
+                        if(SqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
                             labelCount.text = '';
                             labelCount.focus = false;
                             root.reload();
@@ -127,46 +109,18 @@ Page {
         }
     }
 
-    Column {
+    ListView {
         anchors { left: parent.left; right: parent.right; top: input.bottom; bottom: parent.bottom; topMargin: 20 }
 
-        Row {
-            id: row_total
+        id: contentReapter
+        model: SqlModel.courseDetailsForDate(datepicker.currentDate)
+        clip: true
+
+        delegate: ListViewDelegate {
             width: parent.width
-            height: 60
-            spacing: 20
-
-            Label {
-                width: parent.width * 0.3
-                height: parent.height
-                text: "今日总计"
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Label {
-                id: totalCount
-                width: parent.width * 0.6
-                height: parent.height
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: sqlModel.courseCountForDate(datepicker.currentDate)
-            }
-        }
-
-        ListView {
-            width: parent.width
-            height: root.height - input.height - row_total.height
-            id: contentReapter
-            model: sqlModel.coursesForDate(datepicker.currentDate)
-            clip: true
-
-            delegate: ListViewDelegate {
-                width: parent.width
-                onTrashButtonClicked: {
-                    sqlModel.delCourse(index)
-                    root.reload()
-                }
+            onTrashButtonClicked: {
+                SqlModel.delCourse(index)
+                root.reload()
             }
         }
     }

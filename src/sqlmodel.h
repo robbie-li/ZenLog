@@ -58,16 +58,15 @@ public:
     Q_INVOKABLE bool saveUser(int qq, int group, int index, const QString& name,
                               const QString& email, int targetCount, const QString& courseName);
 
-    Q_INVOKABLE QList<QObject*> coursesForDate(const QDate &date);
-    Q_INVOKABLE QVariantMap courseCountForMonth(const int year, const int month);
-    Q_INVOKABLE int courseCountForDate(const QDate &date);
+    // FOR DAILY LOG PAGE.
+    Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate &date);
+    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
+    Q_INVOKABLE bool delCourse(const int index);
+
+    // FOR CALENDAR PAGE
+    Q_INVOKABLE QVariantMap dailyCourseCountForMonth(const int year, const int month);
     Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
     Q_INVOKABLE int courseTotalForYear(const int year);
-    Q_INVOKABLE QList<int> monthlyCourseCountForYear(const QDate &date);
-
-    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
-    Q_INVOKABLE bool updateCourse(const QDate &date, const QString& name, const int count);
-    Q_INVOKABLE bool delCourse(const int index);
 
 signals:
     void userSaved();

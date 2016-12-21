@@ -10,12 +10,8 @@ import zenlog.sqlmodel 1.0
 Calendar {
     id: calendar
 
-    SqlModel {
-        id: sqlModel
-    }
-
     function reload() {
-        dataArr = sqlModel.courseCountForMonth(calendar.visibleYear, calendar.visibleMonth);
+        dataArr = SqlModel.dailyCourseCountForMonth(calendar.visibleYear, calendar.visibleMonth);
     }
 
     property var dataArr
@@ -25,8 +21,17 @@ Calendar {
 
     property int dayAreaBottomMargin : 0
 
+    onVisibleYearChanged : {
+        reload()
+    }
+
+    onVisibleMonthChanged : {
+        reload()
+    }
+
     style: CalendarStyle {
         gridVisible: false
+
 
         property int calendarWidth: calendar.width
         property int calendarHeight: calendar.height
@@ -106,7 +111,6 @@ Calendar {
                 }
                 text: styleData.date.getDate()
                 font.pixelSize: 20
-                //color: styleData.selected? "white" : styleData.today? "blue" : "black"
             }
 
             Label {
@@ -116,13 +120,28 @@ Calendar {
                     right: parent.right
                     bottom:parent.bottom
                 }
+
                 function toDateString(day) {
                     return ("00" + day).slice(-2);
                 }
+
+                function getColor(count, selected) {
+                    if (count) {
+                        var user = SqlModel.getCurrentUser();
+                        if(user.courseName == "大悲咒" && count < 108) {
+                            return selected? "yellow" : "red";
+                        }
+                        if(user.courseName == "佛号" && count < 10000) {
+                            return selected? "yellow" : "red";
+                        }
+                    }
+                    return "black";
+                }
+
                 text: calendar.dataArr[toDateString(styleData.date.getDate())] ? calendar.dataArr[toDateString(styleData.date.getDate())] : ""
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignHCenter
-                //color: styleData.selected? "white" : "black"
+                color: getColor(calendar.dataArr[toDateString(styleData.date.getDate())], styleData.selected)
             }
 
             MouseArea {

@@ -3,9 +3,29 @@
 #include <QtQml>
 #include <QQuickStyle>
 #include <QDebug>
+#include "clipboard.h"
 #include "mailclient.h"
 #include "sqlmodel.h"
 #include "user.h"
+
+// First, define the singleton type provider function (callback).
+static QObject* sqlmodel_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    SqlModel* model = new SqlModel;
+    return model;
+}
+
+static QObject* clipboard_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    Clipboard* clipboard = new Clipboard;
+    return clipboard;
+}
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +38,8 @@ int main(int argc, char *argv[])
   QQmlApplicationEngine engine;
   QQuickStyle::setStyle("Material");
 
-  qmlRegisterType<SqlModel>("zenlog.sqlmodel", 1, 0, "SqlModel");
+  qmlRegisterSingletonType<SqlModel> ("zenlog.sqlmodel",  1, 0, "SqlModel",  sqlmodel_singletontype_provider);
+  qmlRegisterSingletonType<Clipboard>("zenlog.clipboard", 1, 0, "ClipBoard", clipboard_singletontype_provider);
   qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
 
   engine.addImportPath(QStringLiteral("qrc:/modules/"));

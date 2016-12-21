@@ -1,7 +1,7 @@
 #include "mailclient.h"
 
 #include <QDebug>
-#include "user.h"
+
 #include "smtpclient/SmtpMime"
 #include "sqlmodel.h"
 #include "user.h"
@@ -12,7 +12,6 @@ MailClient::MailClient()
 
 void MailClient::sendMail(const int year, const int month)
 {
-
     qDebug() << "Begin to send mail";
 
     SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
@@ -56,18 +55,18 @@ void MailClient::sendMail(const int year, const int month)
     QString html = "<h1>" + user->name()  + "</h1>"
             "<h2>" + date  + "</h2>";
 
-    QVariantMap data = db.courseCountForMonth(year, month);
+    QVariantMap data = db.dailyCourseCountForMonth(year, month);
 
     html += "<table border='1'>"
-     "<tr>"
+     "<td>"
         "<th>day</th>"
         "<th>count</th>"
-      "</tr>";
+      "</td>";
     for(QVariantMap::iterator itr = data.begin(); itr != data.end(); ++itr) {
-        html += "<tr>";
-        html += "<td>"+ itr.key() +"</th>";
-        html += "<td>"+ itr.value().toString()+"</th>";
-        html += "</tr>";
+        html += "<td>";
+        html += "<tr>"+ itr.key() +"</tr>";
+        html += "<tr>"+ itr.value().toString()+"</tr>";
+        html += "</td>";
     }
     html += "</tr></table>";
     content.setHtml(html);
