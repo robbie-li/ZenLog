@@ -23,22 +23,7 @@ Rectangle {
         spacing: 5
 
         Rectangle {
-            width: (parent.width - parent.spacing) / 4
-            height: parent.height
-            color: "transparent"
-
-            Label {
-                anchors.fill: parent
-                width: parent.width
-                wrapMode: Text.Wrap
-                text: modelData.name
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-        }
-
-        Rectangle {
-            width: (parent.width - parent.spacing) / 4
+            width: (parent.width - parent.spacing) / 3
             height: parent.height
             color: "transparent"
 
@@ -53,7 +38,7 @@ Rectangle {
         }
 
         Rectangle {
-            width: (parent.width - parent.spacing) / 4
+            width: (parent.width - parent.spacing) / 3
             height: parent.height
             color: "transparent"
 
@@ -68,7 +53,7 @@ Rectangle {
         }
 
         Rectangle {
-            width: (parent.width - parent.spacing) / 4
+            width: (parent.width - parent.spacing) / 3
             height: parent.height
             color: "transparent"
 

@@ -82,7 +82,7 @@ Page {
 
             Label {
                 id: prompt
-                text:"请在左边的个人信息里先设定你的功课！"
+                text: qsTr("请在个人信息里先设定你的功课！")
                 visible: labelName.text == ''
             }
 

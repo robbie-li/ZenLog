@@ -55,8 +55,7 @@ public:
     SqlModel();
 
     Q_INVOKABLE QObject* getCurrentUser();
-    Q_INVOKABLE bool saveUser(int qq, int group, int index, const QString& name,
-                              const QString& email, int targetCount, const QString& courseName);
+    Q_INVOKABLE bool saveUser(const QString& course_name, int qq, const QString& name, int class_num, int group_num, int group_idx, int target_count);
 
     // FOR DAILY LOG PAGE.
     Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate &date);

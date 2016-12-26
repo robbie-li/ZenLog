@@ -4,6 +4,8 @@ import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Universal 2.0
 import QtQuick.Layouts 1.3
 
+import zenlog.sqlmodel 1.0
+
 import "content"
 
 ApplicationWindow {
@@ -30,7 +32,6 @@ ApplicationWindow {
             anchors.fill: parent
 
             ImageButton {
-                //size: 36
                 source: "qrc:/Material/icons/navigation/menu.svg"
                 onClicked: drawer.open()
             }
@@ -46,7 +47,6 @@ ApplicationWindow {
             }
 
             ImageButton {
-                //size: 36
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
 
@@ -102,8 +102,20 @@ ApplicationWindow {
         height: window.height
         UserSettings {
             onUserSettingsChanged: {
+                console.log("user setting saved")
                 daily.reloadUserSetting()
+                drawer.close()
+                reloadTitle()
             }
         }
+    }
+
+    function reloadTitle() {
+        var user = SqlModel.getCurrentUser()
+        titleLabel.text = user.name + "的" + user.courseName + "日志"
+    }
+
+    Component.onCompleted: {
+        reloadTitle()
     }
 }

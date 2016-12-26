@@ -77,6 +77,49 @@ Page {
         }
     }
 
+    Popup {
+        id: clipboard_status
+
+        property bool status
+
+        x: 50
+        y: 50
+
+        width: parent.width - 100
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        Timer {
+            id: clipboard_timer
+            interval: 2000
+            running: false
+            repeat: false
+            onTriggered: {
+                console.log("timer: close popup")
+                clipboard_status.close()
+            }
+        }
+
+        contentItem: Rectangle {
+            Label {
+                anchors.centerIn: parent
+                text: clipboard_status.status ? qsTr("复制成功") : qsTr("复制失败")
+                font.bold: true
+                font.pixelSize: 30
+            }
+
+            Button {
+                text: qsTr("确定")
+                anchors { bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
+                onClicked: {
+                    clipboard_status.close()
+                }
+            }
+        }
+    }
+
     Pane {
         anchors { top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right; }
 
@@ -136,6 +179,7 @@ Page {
                         width: parent.width
                         Layout.fillWidth: true
                         text: "上传日志"
+                        visible: false
                         onClicked: {
                             mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
                         }
@@ -147,6 +191,9 @@ Page {
                         text: qsTr("复制当月记录")
                         onClicked: {
                             ClipBoard.copyMonthlyCourse(calendar.visibleYear, calendar.visibleMonth)
+                            clipboard_status.status = true
+                            clipboard_timer.start()
+                            clipboard_status.open()
                         }
                     }
                 }
