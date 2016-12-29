@@ -65,7 +65,9 @@ public:
     // FOR CALENDAR PAGE
     Q_INVOKABLE QVariantMap dailyCourseCountForMonth(const int year, const int month);
     Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
+    Q_INVOKABLE QString courseAverageForMonth(const int year, const int month);
     Q_INVOKABLE int courseTotalForYear(const int year);
+    Q_INVOKABLE QString courseAverageForYear(const int year);
 
 signals:
     void userSaved();

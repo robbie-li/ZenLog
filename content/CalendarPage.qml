@@ -54,8 +54,10 @@ Page {
 
     function reload() {
         console.log("reload CalendarPage")
-        mounth_count.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-        year_count.text = SqlModel.courseTotalForYear(calendar.visibleYear)
+        monthly_total.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+        monthly_average.text = SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
+        yearly_total.text = SqlModel.courseTotalForYear(calendar.visibleYear)
+        yearly_average.text = SqlModel.courseAverageForYear(calendar.visibleYear)
         calendar.reload()
     }
 
@@ -63,7 +65,7 @@ Page {
         id: calendar
 
         width: parent.width
-        height: parent.height /2
+        height: parent.height / 2
         anchors { top: parent.top }
 
         onDaySelected: {
@@ -72,8 +74,10 @@ Page {
         }
 
         onMonthSelected: {
-            mounth_count.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-            year_count.text = SqlModel.courseTotalForYear(calendar.visibleYear)
+            monthly_total.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+            monthly_average.text = SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
+            yearly_total.text = SqlModel.courseTotalForYear(calendar.visibleYear)
+            yearly_average.text = SqlModel.courseAverageForYear(calendar.visibleYear)
         }
     }
 
@@ -135,34 +139,60 @@ Page {
                 GridLayout {
                     anchors { fill: parent }
 
-                    columns: 2
-                    rowSpacing: 10
-                    columnSpacing: 10
+                    columns: 4
+                    rowSpacing: 2
+                    columnSpacing: 4
 
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.2 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
                         text: "当月总计"
                     }
 
                     Label {
-                        id: mounth_count
+                        id: monthly_total
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.5 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
                         text: SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.2 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
+                        text: "当月日均"
+                    }
+
+                    Label {
+                        id: monthly_average
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.25 * parent.width
+                        text: SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
+                    }
+
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.25 * parent.width
                         text: "年度总计"
                     }
 
                     Label {
-                        id: year_count
+                        id: yearly_total
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.5 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
                         text: SqlModel.courseTotalForYear(calendar.visibleYear)
+                    }
+
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.25 * parent.width
+                        text: "年度平均"
+                    }
+
+                    Label {
+                        id: yearly_average
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredWidth: 0.25 * parent.width
+                        text: SqlModel.courseAverageForYear(calendar.visibleYear)
                     }
                 }
             }

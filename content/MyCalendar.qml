@@ -32,7 +32,6 @@ Calendar {
     style: CalendarStyle {
         gridVisible: false
 
-
         property int calendarWidth: calendar.width
         property int calendarHeight: calendar.height
 
@@ -128,11 +127,17 @@ Calendar {
                 function getColor(count, selected) {
                     if (count) {
                         var user = SqlModel.getCurrentUser();
-                        if(user.courseName == "大悲咒" && count < 108) {
-                            return selected? "yellow" : "red";
+                        if(user.courseName == "大悲咒") {
+                            if (count < 108)
+                                return selected? "yellow" : "red";
+                            if (count > user.targetCount)
+                                return selected? "yellow" : "blue";
                         }
-                        if(user.courseName == "佛号" && count < 10000) {
-                            return selected? "yellow" : "red";
+                        if(user.courseName == "佛号" ) {
+                            if(count < 10000)
+                                return selected? "yellow" : "red";
+                            if(count > targetCount)
+                                return selected? "yellow" : "blue";
                         }
                     }
                     return "black";

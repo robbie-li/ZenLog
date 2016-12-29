@@ -11,8 +11,8 @@ import "content"
 ApplicationWindow {
     id: window
 
-    width: 450
-    height: 800
+    width: 540
+    height: 960
     visible: true
 
     Universal.theme: Universal.Dark
@@ -25,13 +25,15 @@ ApplicationWindow {
 
     header: ToolBar {
         id: toolbar
-        contentHeight: 48
+        contentHeight: 32
 
         RowLayout {
             spacing: 20
             anchors.fill: parent
 
             ImageButton {
+                height: 28
+                width: 28
                 source: "qrc:/Material/icons/navigation/menu.svg"
                 onClicked: drawer.open()
             }
@@ -47,6 +49,8 @@ ApplicationWindow {
             }
 
             ImageButton {
+                height: 28
+                width: 28
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
 
@@ -98,7 +102,7 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: Math.min(window.width, window.height) / 3 * 2
+        width: window.width * 3 / 4
         height: window.height
         UserSettings {
             onUserSettingsChanged: {

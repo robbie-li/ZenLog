@@ -196,6 +196,20 @@ int SqlModel::courseTotalForMonth(const int year, const int month)
     return totalCount;
 }
 
+QString SqlModel::courseAverageForMonth(const int year, const int month)
+{
+    int total= courseTotalForMonth(year, month);
+    int daysInMonth = QDate(year, month, 1).daysInMonth();
+    if( total != 0)
+    {
+        return QString::asprintf("%.02f", ((double)total) / daysInMonth);
+    }
+    else
+    {
+        return QLatin1String("0.00");
+    }
+}
+
 int SqlModel::courseTotalForYear(const int year)
 {
     const QString queryStr = QString::fromLatin1
@@ -223,6 +237,20 @@ int SqlModel::courseTotalForYear(const int year)
     }
 
     return totalCount;
+}
+
+QString SqlModel::courseAverageForYear(const int year)
+{
+    int total= courseTotalForYear(year);
+    int daysInYear = QDate(year, 1, 1).daysInYear();
+    if( total != 0)
+    {
+        return QString::asprintf("%.02f", ((double)total) / daysInYear);
+    }
+    else
+    {
+        return QLatin1String("0.00");
+    }
 }
 
 QVariantMap SqlModel::dailyCourseCountForMonth(const int year, const int month)
