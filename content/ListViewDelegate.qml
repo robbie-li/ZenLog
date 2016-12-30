@@ -6,13 +6,12 @@ Rectangle {
     height: eventItemColumn.height + 1
     signal trashButtonClicked(int index)
     color: "transparent"
-    border.color: "#21be2b"
 
     Rectangle {
-        anchors.bottom: parent.bottom
         width: parent.width
         height: 1
-        color: "transparent"
+        anchors.bottom: parent.bottom
+        color: "#CCCCCC"
     }
 
     Row {
@@ -58,6 +57,7 @@ Rectangle {
             color: "transparent"
 
             ImageButton {
+                size: 28
                 anchors.centerIn: parent
                 anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
                 source: "qrc:/Material/icons/action/delete.svg"

@@ -90,12 +90,26 @@ Page {
                 width: prompt.visible ? (parent.width - prompt.width) : parent.width
 
                 Button {
+                    background: Rectangle {
+                        color: "#B2E0E0"
+                        anchors.fill: parent
+                        opacity: enabled ? 1 : 0.3
+                    }
+
                     anchors.right: parent.right
                     anchors.rightMargin: 40
                     width: 100
                     enabled: labelCount.text != '' && labelName.text != ''
 
-                    text: "保存"
+                    contentItem: Label {
+                        anchors.fill: parent
+                        opacity: enabled ? 1.0 : 0.3
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: qsTr("保存")
+                        color: "#287B7B"
+                        font.pixelSize: 22
+                    }
 
                     onClicked: {
                         if(SqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {

@@ -18,8 +18,9 @@ ApplicationWindow {
     Universal.theme: Universal.Dark
 
     Material.theme: Material.Light
-    Material.accent: Material.Red
-    Material.primary: Material.BlueGrey
+    Material.accent:     "#66BAB7"
+    Material.primary:    "#66BAB7"
+    Material.background: "white"
 
     title: qsTr("精进修行")
 
@@ -32,8 +33,8 @@ ApplicationWindow {
             anchors.fill: parent
 
             ImageButton {
-                height: 28
-                width: 28
+                Layout.leftMargin: 4
+                size: 28
                 source: "qrc:/Material/icons/navigation/menu.svg"
                 onClicked: drawer.open()
             }
@@ -42,15 +43,17 @@ ApplicationWindow {
                 id: titleLabel
                 text: qsTr("精进修行")
                 font.pixelSize: 18
+                font.bold: true
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
+                color: "white"
             }
 
             ImageButton {
-                height: 28
-                width: 28
+                Layout.rightMargin: 4
+                size: 28
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
 

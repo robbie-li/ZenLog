@@ -125,106 +125,128 @@ Page {
     }
 
     Pane {
-        anchors { top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right; }
+        anchors {
+            topMargin: 0
+            top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right;
+        }
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: "#F0F0F0"
+        }
 
         Column {
             anchors.fill: parent
-            spacing: 10
+            anchors.topMargin: 60
+            spacing: 60
 
-            GroupBox {
-                id: statistic
+            GridLayout {
                 width: parent.width
-                title: "统计"
 
-                GridLayout {
-                    anchors { fill: parent }
+                columns: 4
+                rowSpacing: 20
+                columnSpacing: 10
 
-                    columns: 4
-                    rowSpacing: 2
-                    columnSpacing: 4
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "当月总计"
+                    color: "#696969"
+                }
 
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: "当月总计"
-                    }
+                Label {
+                    id: monthly_total
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
+                    color: "#696969"
+                }
 
-                    Label {
-                        id: monthly_total
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-                    }
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "当月日均"
+                    color: "#696969"
+                }
 
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: "当月日均"
-                    }
+                Label {
+                    id: monthly_average
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
+                    color: "#696969"
+                }
 
-                    Label {
-                        id: monthly_average
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
-                    }
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "年度总计"
+                    color: "#696969"
+                }
 
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: "年度总计"
-                    }
+                Label {
+                    id: yearly_total
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseTotalForYear(calendar.visibleYear)
+                    color: "#696969"
+                }
 
-                    Label {
-                        id: yearly_total
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: SqlModel.courseTotalForYear(calendar.visibleYear)
-                    }
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "年度平均"
+                }
 
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: "年度平均"
-                    }
-
-                    Label {
-                        id: yearly_average
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.preferredWidth: 0.25 * parent.width
-                        text: SqlModel.courseAverageForYear(calendar.visibleYear)
-                    }
+                Label {
+                    id: yearly_average
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseAverageForYear(calendar.visibleYear)
+                    color: "#696969"
                 }
             }
 
-            GroupBox {
-                id: column_tool
+            ColumnLayout {
                 width: parent.width
 
-                title: "工具"
+                Button {
+                    width: parent.width
+                    Layout.fillWidth: true
+                    text: "上传日志"
+                    visible: false
+                    onClicked: {
+                        mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
+                    }
+                }
 
-                Column {
-                    anchors.fill: parent
-                    Button {
-                        width: parent.width
-                        Layout.fillWidth: true
-                        text: "上传日志"
-                        visible: false
-                        onClicked: {
-                            mailclient.sendMail(calendar.visibleYear, calendar.visibleMonth)
-                        }
+                Button {
+                    background: Rectangle {
+                        color: "#B2E0E0"
+                        anchors.fill: parent
+                        opacity: enabled ? 1 : 0.3
                     }
 
-                    Button {
-                        width: parent.width
-                        Layout.fillWidth: true
+                    implicitHeight: 50
+                    width: parent.width
+                    Layout.margins: 4
+                    Layout.fillWidth: true
+
+                    contentItem: Label {
+                        anchors.fill: parent
+                        opacity: enabled ? 1.0 : 0.3
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         text: qsTr("复制当月记录")
-                        onClicked: {
-                            ClipBoard.copyMonthlyCourse(calendar.visibleYear, calendar.visibleMonth)
-                            clipboard_status.status = true
-                            clipboard_timer.start()
-                            clipboard_status.open()
-                        }
+                        color: "#287B7B"
+                        font.pixelSize: 22
+                    }
+
+                    onClicked: {
+                        ClipBoard.copyMonthlyCourse(calendar.visibleYear, calendar.visibleMonth)
+                        clipboard_status.status = true
+                        clipboard_timer.start()
+                        clipboard_status.open()
                     }
                 }
             }

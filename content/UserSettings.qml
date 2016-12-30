@@ -14,9 +14,7 @@ Frame {
         y: root.topPadding - root.padding
         width: parent.width
         height: parent.height - root.topPadding + root.padding
-        color: "transparent"
-        border.color: "#21be2b"
-        radius: 2
+        color: "white"
     }
 
     RowLayout {
@@ -36,7 +34,18 @@ Frame {
                 verticalCenter: parent.verticalCenter
                 right: parent.right
             }
-            text: "保存"
+
+            background: Rectangle {
+                color: "#B2E0E0"
+                anchors.fill: parent
+                opacity: enabled ? 1 : 0.3
+            }
+
+            contentItem: Label {
+                text: qsTr("保存")
+                color: "#287B7B"
+            }
+
             onClicked: {
                 if( qq.text != '' ) {
                     var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text

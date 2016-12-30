@@ -19,8 +19,6 @@ Calendar {
     signal daySelected(date selectedDate)
     signal monthSelected(date selectedMonth)
 
-    property int dayAreaBottomMargin : 0
-
     onVisibleYearChanged : {
         reload()
     }
@@ -29,6 +27,9 @@ Calendar {
         reload()
     }
 
+
+    frameVisible: false
+
     style: CalendarStyle {
         gridVisible: false
 
@@ -36,9 +37,8 @@ Calendar {
         property int calendarHeight: calendar.height
 
         background: Rectangle {
-            color: "transparent"
-            implicitWidth: calendarWidth
-            implicitHeight: calendarHeight
+            color: "white"
+            anchors.fill: parent
         }
 
         navigationBar: Rectangle {
@@ -62,11 +62,12 @@ Calendar {
                 anchors.centerIn: parent
                 id: dayTitle
                 font.weight: Font.DemiBold
-                font.pixelSize: 32
+                font.pixelSize: 28
                 Layout.fillWidth: true
                 lineHeight: 0.9
                 wrapMode: Text.Wrap
                 text: styleData.title
+                color: "#323232"
             }
 
             ImageButton {
@@ -88,6 +89,7 @@ Calendar {
             Label {
                 text: control.__locale.dayName(styleData.dayOfWeek, Locale.NarrowFormat)
                 anchors.centerIn: parent
+                color: "#696969"
             }
         }
 
@@ -110,13 +112,14 @@ Calendar {
                 }
                 text: styleData.date.getDate()
                 font.pixelSize: 20
+                color: styleData.selected ? "white" : "#696969"
             }
 
             Label {
                 id: dayCount
                 anchors {
                     top: dayText.bottom
-                    right: parent.right
+                    horizontalCenter: parent.horizontalCenter
                     bottom:parent.bottom
                 }
 
@@ -129,22 +132,23 @@ Calendar {
                         var user = SqlModel.getCurrentUser();
                         if(user.courseName == "大悲咒") {
                             if (count < 108)
-                                return selected? "yellow" : "red";
+                                return selected? "white" : "#EB7A77";
                             if (count > user.targetCount)
-                                return selected? "yellow" : "blue";
+                                return selected? "white" : "#2EA9DF";
                         }
                         if(user.courseName == "佛号" ) {
                             if(count < 10000)
-                                return selected? "yellow" : "red";
+                                return selected? "white" : "#EB7A77";
                             if(count > targetCount)
-                                return selected? "yellow" : "blue";
+                                return selected? "white" : "#2EA9DF";
                         }
                     }
-                    return "black";
+                    return "#323232";
                 }
 
                 text: calendar.dataArr[toDateString(styleData.date.getDate())] ? calendar.dataArr[toDateString(styleData.date.getDate())] : ""
-                font.pixelSize: 12
+                font.pixelSize: 10
+                font.bold: true
                 horizontalAlignment: Text.AlignHCenter
                 color: getColor(calendar.dataArr[toDateString(styleData.date.getDate())], styleData.selected)
             }
