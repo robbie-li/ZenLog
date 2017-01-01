@@ -143,6 +143,7 @@ Frame {
         }
 
         Row {
+            spacing: 10
             ComboBox {
                 id: class_num
                 width: 80

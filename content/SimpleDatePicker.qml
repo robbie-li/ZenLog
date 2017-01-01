@@ -70,7 +70,8 @@ Rectangle {
             width: parent.width
             height: parent.height
             text: Qt.formatDate(currentDate, "yyyy-MM-dd")
-            font.pixelSize: 36
+            font.pixelSize: 28
+            font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
