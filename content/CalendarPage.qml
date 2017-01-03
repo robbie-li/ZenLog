@@ -196,6 +196,7 @@ Page {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 0.25 * parent.width
                     text: "年度平均"
+                    color: "#696969"
                 }
 
                 Label {
@@ -238,6 +239,7 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: qsTr("复制当月记录")
+                        height: 40
                         color: "#287B7B"
                         font.pixelSize: 22
                     }

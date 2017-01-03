@@ -99,6 +99,7 @@ Page {
                     anchors.right: parent.right
                     anchors.rightMargin: 40
                     width: 100
+                    height: 40
                     enabled: labelCount.text != '' && labelName.text != ''
 
                     contentItem: Label {

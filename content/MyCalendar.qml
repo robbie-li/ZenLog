@@ -95,7 +95,7 @@ Calendar {
 
         dayDelegate: Rectangle {
             visible: styleData.visibleMonth
-            height: 60
+            height: 64
             color: "transparent"
 
             Rectangle {
@@ -111,7 +111,7 @@ Calendar {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: styleData.date.getDate()
-                font.pixelSize: 20
+                font.pixelSize: 18
                 color: styleData.selected ? "white" : "#696969"
             }
 
@@ -128,10 +128,8 @@ Calendar {
                 }
 
                 function getColor(count, selected) {
-
                     if (count) {
                         var user = SqlModel.getCurrentUser();
-                        console.log("course name:" + user.courseName)
                         if(user.courseName == "大悲咒") {
                             if (count < 108)
                                 return selected? "white" : "#EB7A77";
