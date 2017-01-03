@@ -143,7 +143,11 @@ Calendar {
                                 return selected? "white" : "#2EA9DF";
                         }
                     }
-                    return "#323232";
+                    if(selected) {
+                        return "white"
+                    } else {
+                        return "#323232";
+                    }
                 }
 
                 text: calendar.dataArr[toDateString(styleData.date.getDate())] ? calendar.dataArr[toDateString(styleData.date.getDate())] : ""

@@ -198,17 +198,32 @@ int SqlModel::courseTotalForMonth(const int year, const int month)
 
 QString SqlModel::courseAverageForMonth(const int year, const int month)
 {
-    int total= courseTotalForMonth(year, month);
-    int daysInMonth = QDate(year, month+1, 1).daysInMonth();
-    qDebug() << daysInMonth;
-    if( total != 0)
+    const QString queryStr = QString::fromLatin1
+            ("SELECT avg(course_count) FROM "
+             "(SELECT "
+             "course_count, "
+             "strftime('%Y-%m', course_date) as month, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course WHERE '%1-%2' = month group by day ORDER BY course_input_time DESC)")
+            .arg(year, 4, 10)
+            .arg((month+1), 2, 10, QLatin1Char('0'));
+
+    qDebug() << "Executing:" << queryStr;
+
+    QSqlQuery query;
+    if (!query.exec(queryStr))
     {
-        return QString::asprintf("%.02f", ((double)total) / daysInMonth);
+        qDebug() << "Query failed: " << query.lastError();
     }
-    else
+
+    int totalCount = 0;
+
+    if (query.first())
     {
-        return QLatin1String("0.00");
+        totalCount = query.value(0).toInt();
     }
+
+    return QString::number(totalCount);
 }
 
 int SqlModel::courseTotalForYear(const int year)
@@ -242,16 +257,85 @@ int SqlModel::courseTotalForYear(const int year)
 
 QString SqlModel::courseAverageForYear(const int year)
 {
-    int total= courseTotalForYear(year);
-    int daysInYear = QDate(year, 1, 1).daysInYear();
-    if( total != 0)
+    const QString queryStr = QString::fromLatin1
+            ("SELECT avg(course_count) FROM "
+             "(SELECT "
+             "course_count, "
+             "strftime('%Y', course_date) as year, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course WHERE '%1' = year group by day ORDER BY course_input_time DESC)")
+            .arg(year, 4);
+
+    qDebug() << "Executing:" << queryStr;
+
+    QSqlQuery query;
+    if (!query.exec(queryStr))
     {
-        return QString::asprintf("%.02f", ((double)total) / daysInYear);
+        qDebug("Query failed");
     }
-    else
+
+    int totalCount = 0;
+
+    if (query.first())
     {
-        return QLatin1String("0.00");
+        totalCount = query.value(0).toInt();
     }
+
+    return QString::number(totalCount);
+}
+
+int SqlModel::courseTotal()
+{
+    const QString queryStr = QString::fromLatin1
+            ("SELECT sum(course_count) FROM "
+             "(SELECT "
+             "course_count, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course group by day ORDER BY course_input_time DESC)");
+
+    qDebug() << "Executing:" << queryStr;
+
+    QSqlQuery query;
+    if (!query.exec(queryStr))
+    {
+        qDebug("Query failed");
+    }
+
+    int totalCount = 0;
+
+    if (query.first())
+    {
+        totalCount = query.value(0).toInt();
+    }
+
+    return totalCount;
+}
+
+QString SqlModel::courseAverage()
+{
+    const QString queryStr = QString::fromLatin1
+            ("SELECT avg(course_count) FROM "
+             "(SELECT "
+             "course_count, "
+             "strftime('%Y-%m-%d', course_date) as day "
+             "from Course group by day ORDER BY course_input_time DESC)");
+
+    qDebug() << "Executing:" << queryStr;
+
+    QSqlQuery query;
+    if (!query.exec(queryStr))
+    {
+        qDebug("Query failed");
+    }
+
+    int totalCount = 0;
+
+    if (query.first())
+    {
+        totalCount = query.value(0).toInt();
+    }
+
+    return QString::number(totalCount);
 }
 
 QVariantMap SqlModel::dailyCourseCountForMonth(const int year, const int month)

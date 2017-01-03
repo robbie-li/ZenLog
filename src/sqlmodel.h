@@ -68,6 +68,8 @@ public:
     Q_INVOKABLE QString courseAverageForMonth(const int year, const int month);
     Q_INVOKABLE int courseTotalForYear(const int year);
     Q_INVOKABLE QString courseAverageForYear(const int year);
+    Q_INVOKABLE int courseTotal();
+    Q_INVOKABLE QString courseAverage();
 
 signals:
     void userSaved();

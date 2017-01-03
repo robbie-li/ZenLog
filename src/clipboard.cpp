@@ -31,7 +31,7 @@ void Clipboard::copyMonthlyCourse(const int year, const int month)
     result += QString::fromUtf8("时间:") + QString::fromLatin1("%1-%2").arg(year, 4, 10).arg((month+1), 2, 10, QLatin1Char('0')) + "\t";
 
     QDate date(year, month+1, 1);
-    for (int i = 1; i < date.daysInMonth(); ++i)
+    for (int i = 1; i <= date.daysInMonth(); ++i)
     {
         QString daystr = QString::fromLatin1("%1").arg(i, 2, 10, QLatin1Char('0'));
 
@@ -81,7 +81,7 @@ void Clipboard::copyMonthlyCourseAsHtml(const int year, const int month)
 
     result += "<table><tr>";
     QDate date(year,month+1,1);
-    for (int i = 1; i < date.daysInMonth(); ++i)
+    for (int i = 1; i <= date.daysInMonth(); ++i)
     {
         result += "<td>";
         QString daystr = QString::fromLatin1("%1").arg(i, 2, 10, QLatin1Char('0'));

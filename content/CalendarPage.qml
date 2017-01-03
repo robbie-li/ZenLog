@@ -179,7 +179,7 @@ Page {
                 Label {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 0.25 * parent.width
-                    text: "年度总计"
+                    text: "当年总计"
                     color: "#696969"
                 }
 
@@ -194,7 +194,7 @@ Page {
                 Label {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 0.25 * parent.width
-                    text: "年度平均"
+                    text: "当年平均"
                     color: "#696969"
                 }
 
@@ -203,6 +203,36 @@ Page {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 0.25 * parent.width
                     text: SqlModel.courseAverageForYear(calendar.visibleYear)
+                    color: "#696969"
+                }
+
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "历史总计"
+                    color: "#696969"
+                }
+
+                Label {
+                    id: historic_total
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseTotal()
+                    color: "#696969"
+                }
+
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: "历史平均"
+                    color: "#696969"
+                }
+
+                Label {
+                    id: historic_average
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 0.25 * parent.width
+                    text: SqlModel.courseAverage()
                     color: "#696969"
                 }
             }
