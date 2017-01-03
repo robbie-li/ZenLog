@@ -199,7 +199,8 @@ int SqlModel::courseTotalForMonth(const int year, const int month)
 QString SqlModel::courseAverageForMonth(const int year, const int month)
 {
     int total= courseTotalForMonth(year, month);
-    int daysInMonth = QDate(year, month, 1).daysInMonth();
+    int daysInMonth = QDate(year, month+1, 1).daysInMonth();
+    qDebug() << daysInMonth;
     if( total != 0)
     {
         return QString::asprintf("%.02f", ((double)total) / daysInMonth);

@@ -128,8 +128,10 @@ Calendar {
                 }
 
                 function getColor(count, selected) {
+
                     if (count) {
                         var user = SqlModel.getCurrentUser();
+                        console.log("course name:" + user.courseName)
                         if(user.courseName == "大悲咒") {
                             if (count < 108)
                                 return selected? "white" : "#EB7A77";
@@ -139,7 +141,7 @@ Calendar {
                         if(user.courseName == "佛号" ) {
                             if(count < 10000)
                                 return selected? "white" : "#EB7A77";
-                            if(count > targetCount)
+                            if(count > user.targetCount)
                                 return selected? "white" : "#2EA9DF";
                         }
                     }
