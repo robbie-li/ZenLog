@@ -29,11 +29,12 @@ Frame {
         }
 
         Button {
-            width: 20
             anchors {
                 verticalCenter: parent.verticalCenter
                 right: parent.right
             }
+
+            height: 32
 
             background: Rectangle {
                 color: "#B2E0E0"

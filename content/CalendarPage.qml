@@ -227,7 +227,7 @@ Page {
                         opacity: enabled ? 1 : 0.3
                     }
 
-                    implicitHeight: 32
+                    implicitHeight: 40
                     width: parent.width
                     Layout.margins: 4
                     Layout.fillWidth: true
