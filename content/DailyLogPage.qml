@@ -23,7 +23,19 @@ Page {
         var user = SqlModel.getCurrentUser();
         if(user) {
             labelName.text = user.courseName
-            console.log(labelName.text)
+            if(user.courseName == "") {
+                alert_column.visible = true;
+                input_row.visible = false;
+                confirm_button.visible = false;
+            } else {
+                alert_column.visible = false;
+                input_row.visible = true;
+                confirm_button.visible = true;
+            }
+        } else {
+            alert_column.visible = true;
+            input_row.visible = false;
+            confirm_button.visible = false;
         }
     }
 
@@ -39,7 +51,7 @@ Page {
     Column {
         id: input
         anchors { left: parent.left; right: parent.right; top: parent.top; }
-        spacing: 30
+        spacing: 20
 
         SimpleDatePicker {
             id: datepicker
@@ -50,10 +62,58 @@ Page {
             }
         }
 
+        ColumnLayout {
+            width: parent.width
+            id: alert_column
+
+            Row {
+                width: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 0
+
+                Label {
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 16
+                    text: "请点击顶部左上角的"
+                }
+
+                Rectangle {
+                    width: 28
+                    height: 28
+                    color: "#66BAB7"
+                    Image {
+                        anchors.fill: parent
+                        source: "qrc:/Material/icons/navigation/menu.svg"
+                    }
+                }
+
+                Label {
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 16
+                    text: "，设定你的个人信息。"
+                }
+            }
+
+            Label {
+                id: label2
+                width: parent.width * 0.3
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 16
+                Layout.alignment: Qt.AlignHCenter
+                text: "保存个人信息后，才能录入功课哦~";
+                color: "#C0C0C0"
+            }
+        }
+
         Row {
+            id: input_row
             width: parent.width
             height: 60
             spacing: 20
+            visible: labelName.text != ""
 
             Label {
                 id: labelName
@@ -76,49 +136,35 @@ Page {
             }
         }
 
-        Row {
-            width: parent.width
-            height: 60
+        Button {
+            id: confirm_button
 
-            Label {
-                id: prompt
-                text: qsTr("请在个人信息里先设定你的功课！")
-                visible: labelName.text == ''
+            background: Rectangle {
+                color: "#B2E0E0"
+                anchors.fill: parent
+                opacity: enabled ? 1 : 0.3
             }
 
-            Rectangle {
-                width: prompt.visible ? (parent.width - prompt.width) : parent.width
+            anchors.right: parent.right
+            anchors.rightMargin: 40
+            width: 80
+            height: 32
 
-                Button {
-                    background: Rectangle {
-                        color: "#B2E0E0"
-                        anchors.fill: parent
-                        opacity: enabled ? 1 : 0.3
-                    }
+            contentItem: Label {
+                anchors.fill: parent
+                opacity: enabled ? 1.0 : 0.3
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: qsTr("保存")
+                color: "#287B7B"
+                font.pixelSize: 18
+            }
 
-                    anchors.right: parent.right
-                    anchors.rightMargin: 40
-                    width: 100
-                    height: 40
-                    enabled: labelCount.text != '' && labelName.text != ''
-
-                    contentItem: Label {
-                        anchors.fill: parent
-                        opacity: enabled ? 1.0 : 0.3
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        text: qsTr("保存")
-                        color: "#287B7B"
-                        font.pixelSize: 22
-                    }
-
-                    onClicked: {
-                        if(SqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
-                            labelCount.text = '';
-                            labelCount.focus = false;
-                            root.reload();
-                        }
-                    }
+            onClicked: {
+                if(SqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
+                    labelCount.text = '';
+                    labelCount.focus = false;
+                    root.reload();
                 }
             }
         }

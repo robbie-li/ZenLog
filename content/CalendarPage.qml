@@ -87,10 +87,10 @@ Page {
         property bool status
 
         x: 50
-        y: 50
+        y: 200
 
         width: parent.width - 100
-        height: 200
+        height: 60
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -101,24 +101,23 @@ Page {
             running: false
             repeat: false
             onTriggered: {
-                console.log("timer: close popup")
                 clipboard_status.close()
             }
         }
 
         contentItem: Rectangle {
-            Label {
+            RowLayout {
                 anchors.centerIn: parent
-                text: clipboard_status.status ? qsTr("复制成功") : qsTr("复制失败")
-                font.bold: true
-                font.pixelSize: 30
-            }
 
-            Button {
-                text: qsTr("确定")
-                anchors { bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
-                onClicked: {
-                    clipboard_status.close()
+                Image {
+                    source : "qrc:/Material/icons/action/check_circle.svg"
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    text: clipboard_status.status ? qsTr("复制成功") : qsTr("复制失败")
+                    font.pixelSize: 22
                 }
             }
         }
@@ -132,7 +131,7 @@ Page {
 
         background: Rectangle {
             anchors.fill: parent
-            color: "#F0F0F0"
+            color: "#EFEFEF"
         }
 
         Column {
@@ -228,7 +227,7 @@ Page {
                         opacity: enabled ? 1 : 0.3
                     }
 
-                    implicitHeight: 50
+                    implicitHeight: 32
                     width: parent.width
                     Layout.margins: 4
                     Layout.fillWidth: true
@@ -239,7 +238,7 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: qsTr("复制当月记录")
-                        height: 40
+                        height: 32
                         color: "#287B7B"
                         font.pixelSize: 22
                     }

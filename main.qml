@@ -119,10 +119,15 @@ ApplicationWindow {
 
     function reloadTitle() {
         var user = SqlModel.getCurrentUser()
-        titleLabel.text = user.name + "的" + user.courseName + "日志"
+        if(user) {
+            titleLabel.text = user.name + "的" + user.courseName + "日志"
+        } else {
+            titleLabel.text = "精进日志"
+        }
     }
 
     Component.onCompleted: {
         reloadTitle()
+        daily.reloadUserSetting()
     }
 }
