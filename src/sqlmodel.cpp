@@ -34,7 +34,7 @@ QObject* SqlModel::getCurrentUser()
     if(query.first()) {
         User *user = new User(this);
         user->set_courseName(query.value("course_name").toString());
-        user->set_qq(query.value("qq").toInt());
+        user->set_qq(query.value("qq").toString());
         user->set_name(query.value("name").toString());
         user->set_classNum(query.value("class_num").toInt());
         user->set_groupNum(query.value("group_num").toInt());
@@ -47,7 +47,7 @@ QObject* SqlModel::getCurrentUser()
 }
 
 bool SqlModel::saveUser(const QString& course_name,
-                        int qq, const QString& name,
+                        const QString& qq, const QString& name,
                         int class_num, int group_num,
                         int group_idx, int target_count)
 {
@@ -70,7 +70,7 @@ bool SqlModel::saveUser(const QString& course_name,
                                        "target_count='%7'"
                                        " where qq='%2'")
                 .arg(course_name)
-                .arg(QString::number(qq))
+                .arg(qq)
                 .arg(name)
                 .arg(QString::number(class_num))
                 .arg(QString::number(group_num))
@@ -81,7 +81,7 @@ bool SqlModel::saveUser(const QString& course_name,
     {
         sqlSave = QString::fromLatin1("insert into User (course_name, qq, name, class_num, group_num, group_idx, target_count) values('%1', '%2', '%3', '%4', '%5', '%6', '%7')")
                 .arg(course_name)
-                .arg(QString::number(qq))
+                .arg(qq)
                 .arg(name)
                 .arg(QString::number(class_num))
                 .arg(QString::number(group_num))
@@ -385,7 +385,7 @@ bool SqlModel::createTables()
         qDebug() << "Failed to update course table" << query.lastError();
     }
 
-    if(!query.exec("CREATE TABLE IF NOT EXISTS User (course_name TEXT, qq INTEGER, name TEXT, class_num INTEGER, group_num INTEGER, group_idx INTEGER, target_count INTEGER)"))
+    if(!query.exec("CREATE TABLE IF NOT EXISTS User (course_name TEXT, qq TEXT, name TEXT, class_num INTEGER, group_num INTEGER, group_idx INTEGER, target_count INTEGER)"))
     {
         qDebug() << "Failed to create user table:" << query.lastError();
     }
