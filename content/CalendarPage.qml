@@ -52,13 +52,29 @@ Page {
         }
     }
 
-    function reload() {
-        console.log("reload CalendarPage")
+    function updateStatistic() {
         monthly_total.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
         monthly_average.text = SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
         yearly_total.text = SqlModel.courseTotalForYear(calendar.visibleYear)
         yearly_average.text = SqlModel.courseAverageForYear(calendar.visibleYear)
+        historic_average.text = SqlModel.courseAverage()
+        historic_total.text = SqlModel.courseTotal()
+    }
+
+    function reloadStatistic() {
+        var user = SqlModel.getCurrentUser();
+        if(user) {
+            statitisc_pane.visible = true
+        } else {
+            statitisc_pane.visible = false
+        }
+    }
+
+    function reload() {
+        console.log("reload CalendarPage")
+        updateStatistic()
         calendar.reload()
+        reloadStatistic()
     }
 
     MyCalendar {
@@ -74,10 +90,7 @@ Page {
         }
 
         onMonthSelected: {
-            monthly_total.text = SqlModel.courseTotalForMonth(calendar.visibleYear, calendar.visibleMonth)
-            monthly_average.text = SqlModel.courseAverageForMonth(calendar.visibleYear, calendar.visibleMonth)
-            yearly_total.text = SqlModel.courseTotalForYear(calendar.visibleYear)
-            yearly_average.text = SqlModel.courseAverageForYear(calendar.visibleYear)
+            updateStatistic()
         }
     }
 
@@ -124,6 +137,7 @@ Page {
     }
 
     Pane {
+        id: statitisc_pane
         anchors {
             topMargin: 0
             top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right;
@@ -136,8 +150,8 @@ Page {
 
         Column {
             anchors.fill: parent
-            anchors.topMargin: 60
-            spacing: 60
+            anchors.topMargin: 20
+            spacing: 30
 
             GridLayout {
                 width: parent.width
@@ -283,4 +297,6 @@ Page {
             }
         }
     }
+
+    Component.onCompleted:  reloadStatistic()
 }
