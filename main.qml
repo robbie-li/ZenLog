@@ -75,6 +75,40 @@ ApplicationWindow {
         }
     }
 
+    Popup {
+        id: aboutDialog
+        modal: true
+        focus: true
+        x: (window.width - width) / 2
+        y: window.height / 6
+        width: Math.min(window.width, window.height) / 3 * 2
+        contentHeight: aboutColumn.height
+
+        Column {
+            id: aboutColumn
+            spacing: 20
+
+            Label {
+                text: qsTr("关于")
+                font.bold: true
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                text: "精进群修行日志."
+                wrapMode: Label.Wrap
+                font.pixelSize: 12
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                text: "主页: http://www.github.com/robbie-li/zenlog"
+                wrapMode: Label.Wrap
+                font.pixelSize: 12
+            }
+        }
+    }
+
     footer: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
@@ -113,6 +147,7 @@ ApplicationWindow {
                 daily.reloadUserSetting()
                 drawer.close()
                 reloadTitle()
+                calendar.reloadStatistic()
             }
         }
     }
