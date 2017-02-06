@@ -19,7 +19,6 @@ OTHER_FILES += \
     content/UserSettings.qml
 
 RESOURCES += \
-    modules/FontRoboto.qrc \
     modules/Icons.qrc \
     resources.qrc
 

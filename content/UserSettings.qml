@@ -49,8 +49,7 @@ Frame {
 
             onClicked: {
                 if( qq.text != '' ) {
-                    var course = radio_dabeizhou.checked ? radio_dabeizhou.text : radio_fohao.text
-                    SqlModel.saveUser(course,
+                    SqlModel.saveUser(course.currentText,
                                       qq.text,
                                       name.text,
                                       class_num.currentIndex + 1,
@@ -61,10 +60,6 @@ Frame {
                 }
             }
         }
-    }
-
-    ButtonGroup {
-        buttons: subject_group.children
     }
 
     GridLayout {
@@ -82,32 +77,31 @@ Frame {
             text: "主修功课"
         }
 
-        Column {
-            id: subject_group
-
-            RadioButton {
-                id: radio_dabeizhou
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredWidth: 0.36 * parent.width
-                text: "大悲咒"
-                onCheckedChanged: {
-                    if(checked) {
-                        basic_target.text = "108"
-                    }
+        ComboBox {
+            id: course
+            model: ["大悲咒","佛号"]
+            Layout.preferredWidth: 0.7 * parent.width
+            onCurrentIndexChanged: {
+                if(course.currentIndex == 0) {
+                    basic_target.text = "108"
+                } else {
+                    basic_target.text = "10000"
                 }
             }
+        }
 
-            RadioButton {
-                id: radio_fohao
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredWidth: 0.36 * parent.width
-                text: "佛号"
-                onCheckedChanged: {
-                    if(checked) {
-                        basic_target.text = "10000"
-                    }
-                }
-            }
+        Label {
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("名号")
+        }
+
+        TextField {
+            id: name
+            width: 50
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 0.7 * parent.width
+            placeholderText: qsTr("名号")
+            inputMethodHints: Qt.ImhNone
         }
 
         Label {
@@ -119,23 +113,9 @@ Frame {
             id: qq
             width: 50
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 0.5 * parent.width
+            Layout.preferredWidth: 0.7 * parent.width
             placeholderText: "QQ"
             inputMethodHints: Qt.ImhDigitsOnly
-        }
-
-        Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTr("群内名号")
-        }
-
-        TextField {
-            id: name
-            width: 50
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 0.5 * parent.width
-            placeholderText: qsTr("群内名号")
-            inputMethodHints: Qt.ImhNone
         }
 
         Label {
@@ -144,6 +124,7 @@ Frame {
         }
 
         Row {
+            Layout.preferredWidth: 0.7 * parent.width
             spacing: 10
             ComboBox {
                 id: class_num
@@ -166,7 +147,7 @@ Frame {
             id: group_idx
             width: 50
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 0.5 * parent.width
+            Layout.preferredWidth: 0.7 * parent.width
             placeholderText: qsTr("群内编号")
             inputMethodHints: Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 10000; }
@@ -209,10 +190,12 @@ Frame {
     function reload() {
         var user = SqlModel.getCurrentUser();
         if( user !== null) {
-            if (user.courseName === radio_dabeizhou.text) {
-                radio_dabeizhou.checked = true;
+            if(user.courseName === "大悲咒") {
+                course.currentIndex = 0
+                basic_target.text = 108
             } else {
-                radio_fohao.checked = true;
+                course.currentIndex = 1
+                basic_target.text = 10000
             }
             qq.text = user.qq
             name.text = user.name
