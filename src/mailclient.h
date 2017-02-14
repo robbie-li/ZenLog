@@ -44,18 +44,18 @@
 #include <QList>
 #include <QObject>
 
+
 #include "course.h"
 
-class MailClient : public QObject
-{
+class MailClient : public QObject {
     Q_OBJECT
 
-public:
+  public:
     MailClient();
 
     Q_INVOKABLE void sendMail(const int year, const int month);
 
-signals:
+  signals:
     void mailSent(bool status);
 };
 

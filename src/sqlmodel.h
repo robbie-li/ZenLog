@@ -47,11 +47,11 @@
 
 #include "course.h"
 
-class SqlModel : public QSqlQueryModel
-{
+
+class SqlModel : public QSqlQueryModel {
     Q_OBJECT
 
-public:
+  public:
     SqlModel();
 
     Q_INVOKABLE QObject* getCurrentUser();
@@ -59,8 +59,8 @@ public:
                               int class_num, int group_num, int group_idx, int target_count);
 
     // FOR DAILY LOG PAGE.
-    Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate &date);
-    Q_INVOKABLE bool addCourse(const QDate &date, const QString& name, const int count);
+    Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate& date);
+    Q_INVOKABLE bool addCourse(const QDate& date, const QString& name, const int count);
     Q_INVOKABLE bool delCourse(const int index);
 
     // FOR CALENDAR PAGE
@@ -72,11 +72,11 @@ public:
     Q_INVOKABLE int courseTotal();
     Q_INVOKABLE QString courseAverage();
 
-signals:
+  signals:
     void userSaved();
     void courseChanged();
 
-private:
+  private:
     static bool createConnection();
     static bool createTables();
 };
