@@ -64,8 +64,10 @@ Page {
     function reloadStatistic() {
         var user = SqlModel.getCurrentUser();
         if(user) {
+            calendar.enabled = true
             statitisc_pane.visible = true
         } else {
+            calendar.enabled = false
             statitisc_pane.visible = false
         }
     }
@@ -81,7 +83,7 @@ Page {
         id: calendar
 
         width: parent.width
-        height: parent.height / 2
+        height: 2 * parent.height / 3
         anchors { top: parent.top }
 
         onDaySelected: {
