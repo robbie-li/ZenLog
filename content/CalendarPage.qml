@@ -152,15 +152,15 @@ Page {
 
         Column {
             anchors.fill: parent
-            anchors.topMargin: 20
-            spacing: 30
+            anchors.topMargin: 2
+            spacing: 10
 
             GridLayout {
                 width: parent.width
 
                 columns: 4
                 rowSpacing: 20
-                columnSpacing: 10
+                columnSpacing: 5
 
                 Label {
                     Layout.alignment: Qt.AlignVCenter
@@ -273,7 +273,7 @@ Page {
                         opacity: enabled ? 1 : 0.3
                     }
 
-                    implicitHeight: 40
+                    implicitHeight: 35
                     width: parent.width
                     Layout.margins: 4
                     Layout.fillWidth: true

@@ -12,5 +12,6 @@
         <file>content/UserSettings.qml</file>
         <file>+android/qtquickcontrols2.conf</file>
         <file>+windows/qtquickcontrols2.conf</file>
+        <file>content/UserTypeSelection.qml</file>
     </qresource>
 </RCC>

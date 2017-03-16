@@ -27,7 +27,6 @@ Calendar {
         reload()
     }
 
-
     frameVisible: false
 
     style: CalendarStyle {

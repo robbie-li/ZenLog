@@ -181,8 +181,19 @@ ApplicationWindow {
         }
     }
 
+    UserTypeSelection {
+        id: user_type_selection
+
+    }
+
     Component.onCompleted: {
         reloadTitle()
         daily.reloadUserSetting()
+
+        var user = SqlModel.getCurrentUser();
+        if(user == null) {
+            //user_type_selection.open();
+            drawer.open()
+        }
     }
 }
