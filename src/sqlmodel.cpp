@@ -1,9 +1,11 @@
 #include "sqlmodel.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QFileInfo>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QStandardPaths>
 
 #include "user.h"
 
@@ -22,8 +24,35 @@ SqlModel::SqlModel() : QSqlQueryModel() {
     }
 }
 
+QList<QObject*> SqlModel::getAllUsers() {
+    const QString queryStr = QString::fromLatin1("SELECT * FROM user");
+
+    QSqlQuery query;
+    if (!query.exec(queryStr)) {
+        qDebug() << ("failed to load user") << query.lastError();
+    }
+
+    QList<QObject*> users;
+
+    while (query.next()) {
+        User* user = new User(this);
+        user->set_userId(query.value("user_id").toString());
+        user->set_userType(query.value("user_type").toInt());
+        user->set_courseName(query.value("course_name").toString());
+        user->set_qq(query.value("qq").toString());
+        user->set_name(query.value("name").toString());
+        user->set_classNum(query.value("class_num").toInt());
+        user->set_groupNum(query.value("group_num").toInt());
+        user->set_groupIdx(query.value("group_idx").toInt());
+        user->set_targetCount(query.value("target_count").toInt());
+        users.append(user);
+    }
+
+    return users;
+}
+
 QObject* SqlModel::getCurrentUser() {
-    const QString queryStr = QString::fromLatin1("SELECT * FROM User");
+    const QString queryStr = QString::fromLatin1("SELECT * FROM user where is_default='1' ");
 
     QSqlQuery query;
     if (!query.exec(queryStr)) {
@@ -32,6 +61,8 @@ QObject* SqlModel::getCurrentUser() {
 
     if (query.first()) {
         User* user = new User(this);
+        user->set_userId(query.value("user_id").toString());
+        user->set_userType(query.value("user_type").toInt());
         user->set_courseName(query.value("course_name").toString());
         user->set_qq(query.value("qq").toString());
         user->set_name(query.value("name").toString());
@@ -45,11 +76,10 @@ QObject* SqlModel::getCurrentUser() {
     return NULL;
 }
 
-bool SqlModel::saveUser(const QString& course_name,
-                        const QString& qq, const QString& name,
-                        int class_num, int group_num,
-                        int group_idx, int target_count) {
-    const QString sqlSelect = QString::fromLatin1("SELECT * FROM User");
+bool SqlModel::saveUser(User* user) {
+    if (!user) return false;
+
+    const QString sqlSelect = QString::fromLatin1("SELECT * FROM User where user_id='%1'").arg(user->userId());
 
     QSqlQuery query;
     if (!query.exec(sqlSelect)) {
@@ -58,30 +88,41 @@ bool SqlModel::saveUser(const QString& course_name,
 
     QString sqlSave;
     if (query.first()) {
-        sqlSave  = QString::fromLatin1("update User set "
-                                       "course_name='%1',"
-                                       "name='%3',"
-                                       "class_num='%4',"
-                                       "group_num='%5',"
-                                       "group_idx='%6',"
-                                       "target_count='%7'"
-                                       " where qq='%2'")
-                   .arg(course_name)
-                   .arg(qq)
-                   .arg(name)
-                   .arg(QString::number(class_num))
-                   .arg(QString::number(group_num))
-                   .arg(QString::number(group_idx))
-                   .arg(target_count);
+        sqlSave  = QString::fromLatin1(R"(update User set
+                                       is_default='%2',
+                                       user_type='%3',
+                                       class_num='%4',
+                                       group_num='%5',
+                                       group_idx='%6',
+                                       qq='%7',
+                                       name='%8',
+                                       course_name='%9',
+                                       target_count='%10'
+                                       where user_id='%1'
+                                       )")
+                   .arg(user->userId())
+                   .arg(user->current())
+                   .arg(user->userType())
+                   .arg(user->classNum())
+                   .arg(user->groupNum())
+                   .arg(user->groupIdx())
+                   .arg(user->qq())
+                   .arg(user->name())
+                   .arg(user->courseName())
+                   .arg(user->targetCount());
     } else {
-        sqlSave = QString::fromLatin1("insert into User (course_name, qq, name, class_num, group_num, group_idx, target_count) values('%1', '%2', '%3', '%4', '%5', '%6', '%7')")
-                  .arg(course_name)
-                  .arg(qq)
-                  .arg(name)
-                  .arg(QString::number(class_num))
-                  .arg(QString::number(group_num))
-                  .arg(QString::number(group_idx))
-                  .arg(target_count);
+        sqlSave = QString::fromLatin1(R"(insert into User (user_id, is_default, user_type, class_num, group_num, group_idx, qq, name, course_name, target_count)
+                                      values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10'))")
+                  .arg(user->userId())
+                  .arg(user->current())
+                  .arg(user->userType())
+                  .arg(user->classNum())
+                  .arg(user->groupNum())
+                  .arg(user->groupIdx())
+                  .arg(user->qq())
+                  .arg(user->name())
+                  .arg(user->courseName())
+                  .arg(user->targetCount());
     }
 
     qDebug() << "Executing:" << sqlSave;
@@ -109,6 +150,7 @@ QList<QObject*> SqlModel::courseDetailsForDate(const QDate& date) {
     }
 
     QList<QObject*> courses;
+
     while (query.next()) {
         Course* course = new Course(this);
         course->set_index(query.value("id").toInt());
@@ -116,7 +158,6 @@ QList<QObject*> SqlModel::courseDetailsForDate(const QDate& date) {
         course->set_count(query.value("course_count").toInt());
         course->set_date(query.value("course_date").toDate());
         course->set_inputTime(query.value("course_input_time").toDateTime());
-        qDebug() << course->inputTime();
         courses.append(course);
     }
 
@@ -332,22 +373,71 @@ QVariantMap SqlModel::dailyCourseCountForMonth(const int year, const int month) 
 }
 
 bool SqlModel::createConnection() {
+    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("zenlog.db");
+    QDir dbdir;
+    dbdir.mkpath(appDataPath);
+    db.setDatabaseName(appDataPath + QDir::separator() + QLatin1String("zenlog.db"));
     return db.open();
 }
 
 bool SqlModel::createTables() {
     QSqlQuery query;
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS Course (id INTEGER PRIMARY KEY AUTOINCREMENT, course_name TEXT, course_date DATE, course_count INTEGER, course_input_time TIMESTAMP DEFAULT (datetime('now','localtime')))")) {
-        qDebug() << "Failed to create course table" << query.lastError();
-    } else if (!query.exec("ALTER TABLE Course ADD course_input_time TIMESTAMP DEFAULT (datetime('now','localtime'))")) {
-        qDebug() << "Failed to update course table" << query.lastError();
+    if (!query.exec(R"(CREATE TABLE IF NOT EXISTS user (
+                    user_id       guid NOT NULL PRIMARY KEY,
+                    user_type     smallint NOT NULL,
+                    is_default    smallint NOT NULL,
+                    course_name   text NOT NULL,
+                    qq            text,
+                    name          text,
+                    group_num     integer,
+                    group_idx     integer,
+                    class_num     integer,
+                    target_count  integer NOT NULL
+                  );)")) {
+        qDebug() << "Failed to create user table:" << query.lastError();
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS User (course_name TEXT, qq TEXT, name TEXT, class_num INTEGER, group_num INTEGER, group_idx INTEGER, target_count INTEGER)")) {
-        qDebug() << "Failed to create user table:" << query.lastError();
+    query.clear();
+
+    if (!query.exec(R"(CREATE TABLE IF NOT EXISTS course (
+                    course_id          integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    course_count       integer NOT NULL,
+                    course_name        text NOT NULL,
+                    course_date        date NOT NULL,
+                    course_input_time  timestamp DEFAULT CURRENT_TIMESTAMP,
+                    user_id            guid NOT NULL,
+                    /* Foreign keys */
+                    CONSTRAINT Foreign_key01
+                      FOREIGN KEY (user_id)
+                      REFERENCES user(user_id)
+                  );)")) {
+        qDebug() << "Failed to create course table" << query.lastError();
+    }
+
+    query.clear();
+
+    if (!query.exec(R"(CREATE TABLE dbversion (
+                    version       text NOT NULL
+                  );)")) {
+        qDebug() << "Failed to create dbversion table:" << query.lastError();
+    } else {
+        query.exec(R"(INSERT INTO dbversion VALUES (
+                            '1.0'
+                          );)");
+    }
+
+    query.clear();
+
+    if (!query.exec(R"(CREATE TABLE IF NOT EXISTS runtime_info (
+                    current_user_id  text NOT NULL,
+                    /* Foreign keys */
+                    CONSTRAINT Foreign_key02
+                      FOREIGN KEY (current_user_id)
+                      REFERENCES user(user_id)
+                  );)")) {
+        qDebug() << "Failed to create runtime_info table:" << query.lastError();
     }
 
     return true;

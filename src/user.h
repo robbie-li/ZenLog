@@ -6,10 +6,12 @@
 
 #include "macros.h"
 
-
 class User : public QObject {
     Q_OBJECT
 
+    DEFINE_Q_PROPERTY(QString, userId);
+    DEFINE_Q_PROPERTY(bool, current);
+    DEFINE_Q_PROPERTY(int, userType);
     DEFINE_Q_PROPERTY(int, classNum);
     DEFINE_Q_PROPERTY(int, groupNum);
     DEFINE_Q_PROPERTY(int, groupIdx);
@@ -17,9 +19,14 @@ class User : public QObject {
     DEFINE_Q_PROPERTY(QString, name);
     DEFINE_Q_PROPERTY(QString, courseName);
     DEFINE_Q_PROPERTY(int, targetCount);
+
   public:
     explicit User(QObject* parent = 0);
+
   signals:
+    void userIdChanged(const QString& userId);
+    void currentChanged(const bool current);
+    void userTypeChanged(const int userType);
     void classNumChanged(const int classNum);
     void groupNumChanged(const int groupNum);
     void groupIdxChanged(const int groupIdx);

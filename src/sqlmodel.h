@@ -46,7 +46,7 @@
 #include <QSqlTableModel>
 
 #include "course.h"
-
+#include "user.h"
 
 class SqlModel : public QSqlQueryModel {
     Q_OBJECT
@@ -54,9 +54,9 @@ class SqlModel : public QSqlQueryModel {
   public:
     SqlModel();
 
+    Q_INVOKABLE QList<QObject*> getAllUsers();
     Q_INVOKABLE QObject* getCurrentUser();
-    Q_INVOKABLE bool saveUser(const QString& course_name, const QString& qq, const QString& name,
-                              int class_num, int group_num, int group_idx, int target_count);
+    Q_INVOKABLE bool saveUser(User* user);
 
     // FOR DAILY LOG PAGE.
     Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate& date);

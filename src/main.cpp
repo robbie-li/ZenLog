@@ -1,9 +1,10 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
+#include <QtCore>
+#include <QtGui>
 #include <QtQml>
 #include <QQuickStyle>
-#include <QDebug>
+
 #include "clipboard.h"
+#include "course.h"
 #include "mailclient.h"
 #include "sqlmodel.h"
 #include "user.h"
@@ -38,6 +39,8 @@ int main(int argc, char* argv[]) {
     qmlRegisterSingletonType<SqlModel> ("zenlog.sqlmodel",  1, 0, "SqlModel",  sqlmodel_singletontype_provider);
     qmlRegisterSingletonType<Clipboard>("zenlog.clipboard", 1, 0, "ClipBoard", clipboard_singletontype_provider);
     qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
+    qmlRegisterType<User>("zenlog.user", 1, 0, "User");
+    qmlRegisterType<Course>("zenlog.course", 1, 0, "Course");
 
     engine.addImportPath(QStringLiteral("qrc:/modules/"));
     engine.addImportPath(QStringLiteral(":/"));

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
+import zenlog.user 1.0
 
 Frame {
     id: root
@@ -48,14 +49,19 @@ Frame {
             }
 
             onClicked: {
-                if( qq.text != '' ) {
-                    SqlModel.saveUser(course.currentText,
-                                      qq.text,
-                                      name.text,
-                                      class_num.currentIndex + 1,
-                                      group_num.currentIndex + 1,
-                                      group_idx.text,
-                                      target_count.text);
+                var user = Qt.createQmlObject('import QtQuick 2.0; import zenlog.user 1.0; User {}',
+                                              root,
+                                              "dynamicSnippet1");
+                user.userId     = "haha";
+                user.qq     = qq.text;
+                user.name   = name.text;
+                user.courseName = course.currentText;
+                user.classNum = class_num.currentIndex;
+                user.groupNum = group_num.currentIndex;
+                user.groupIdx = group_idx.text;
+                user.targetCount = target_count.text;
+
+                if( SqlModel.saveUser(user) ) {
                     root.userSettingsChanged()
                 }
             }
