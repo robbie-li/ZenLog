@@ -1,4 +1,6 @@
 SOURCES += \
+    $$PWD/BasicExcel.cpp \
+    $$PWD/excelreader.cpp \
     $$PWD/clipboard.cpp \
     $$PWD/course.cpp \
     $$PWD/mailclient.cpp \
@@ -7,8 +9,10 @@ SOURCES += \
     $$PWD/user.cpp
 
 HEADERS += \
+    $$PWD/BasicExcel.h \
     $$PWD/clipboard.h \
     $$PWD/course.h \
+    $$PWD/excelreader.h \
     $$PWD/macros.h \
     $$PWD/mailclient.h \
     $$PWD/sqlmodel.h \

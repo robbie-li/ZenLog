@@ -1,4 +1,4 @@
-QT += qml quick sql xml svg core gui quickcontrols2 network
+QT += qml quick sql xml svg core gui quickcontrols2 network axcontainer
 TARGET = ZenLog
 !no_desktop: QT += widgets
 !contains(sql-drivers, sqlite): QTPLUGIN += qsqlite
@@ -34,3 +34,4 @@ DISTFILES += \
     +windows/qtquickcontrols2.conf
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
