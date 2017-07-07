@@ -9,16 +9,16 @@
 class User : public QObject {
     Q_OBJECT
 
-    DEFINE_Q_PROPERTY(QString, userId);
-    DEFINE_Q_PROPERTY(bool, current);
-    DEFINE_Q_PROPERTY(int, userType);
-    DEFINE_Q_PROPERTY(int, classNum);
-    DEFINE_Q_PROPERTY(int, groupNum);
-    DEFINE_Q_PROPERTY(int, groupIdx);
-    DEFINE_Q_PROPERTY(QString, qq);
-    DEFINE_Q_PROPERTY(QString, name);
-    DEFINE_Q_PROPERTY(QString, courseName);
-    DEFINE_Q_PROPERTY(int, targetCount);
+    DEFINE_Q_PROPERTY(QString,  userId);
+    DEFINE_Q_PROPERTY(bool,     current);
+    DEFINE_Q_PROPERTY(int,      userType);
+    DEFINE_Q_PROPERTY(int,      classNum);
+    DEFINE_Q_PROPERTY(int,      groupNum);
+    DEFINE_Q_PROPERTY(int,      groupIdx);
+    DEFINE_Q_PROPERTY(QString,  qq);
+    DEFINE_Q_PROPERTY(QString,  name);
+    DEFINE_Q_PROPERTY(QString,  courseName);
+    DEFINE_Q_PROPERTY(int,      targetCount);
 
   public:
     explicit User(QObject* parent = 0);

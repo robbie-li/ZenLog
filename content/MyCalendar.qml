@@ -11,7 +11,7 @@ Calendar {
     id: calendar
 
     function reload() {
-        dataArr = SqlModel.dailyCourseCountForMonth(calendar.visibleYear, calendar.visibleMonth);
+        dataArr = SqlModel.monthlyCourses(calendar.visibleYear, calendar.visibleMonth);
     }
 
     property var dataArr
@@ -129,13 +129,13 @@ Calendar {
                 function getColor(count, selected) {
                     if (count) {
                         var user = SqlModel.getCurrentUser();
-                        if(user.courseName == "大悲咒") {
+                        if(user.courseName === "大悲咒") {
                             if (count < 108)
                                 return selected? "white" : "#EB7A77";
                             if (count >= user.targetCount)
                                 return selected? "white" : "#2EA9DF";
                         }
-                        if(user.courseName == "佛号" ) {
+                        if(user.courseName === "佛号" ) {
                             if(count < 10000)
                                 return selected? "white" : "#EB7A77";
                             if(count >= user.targetCount)

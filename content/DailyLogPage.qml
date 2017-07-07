@@ -23,7 +23,7 @@ Page {
         var user = SqlModel.getCurrentUser();
         if(user) {
             labelName.text = user.courseName
-            if(user.courseName == "") {
+            if(user.courseName === "") {
                 alert_column.visible = true;
                 input_row.visible = false;
                 confirm_button.visible = false;
@@ -45,7 +45,7 @@ Page {
     }
 
     function reload() {
-        contentReapter.model = SqlModel.courseDetailsForDate(datepicker.currentDate)
+        contentReapter.model = SqlModel.listCourse(datepicker.currentDate)
     }
 
     Column {
@@ -174,13 +174,13 @@ Page {
         anchors { left: parent.left; right: parent.right; top: input.bottom; bottom: parent.bottom; topMargin: 20 }
 
         id: contentReapter
-        model: SqlModel.courseDetailsForDate(datepicker.currentDate)
+        model: SqlModel.listCourse(datepicker.currentDate)
         clip: true
 
         delegate: ListViewDelegate {
             width: parent.width
             onTrashButtonClicked: {
-                SqlModel.delCourse(index)
+                SqlModel.deleteCourse(index)
                 root.reload()
             }
         }

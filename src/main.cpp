@@ -33,13 +33,6 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-
-    ExcelReader excel("D:\\temp\\test.xls");
-    qDebug() << "Sheet Count:" << excel.sheetCount();
-    qDebug() << "Row Count:" << excel.rows(0);
-    qDebug() << "Col Count:" << excel.cols(0);
-    qDebug() << "Col Count:" << excel.read(0, 0, 0);
-
     QQmlApplicationEngine engine;
     QQuickStyle::setStyle("Material");
 

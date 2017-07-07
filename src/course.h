@@ -15,6 +15,7 @@ class Course : public QObject {
     DEFINE_Q_PROPERTY(int,          count);
     DEFINE_Q_PROPERTY(QDate,        date);
     DEFINE_Q_PROPERTY(QDateTime,    inputTime);
+    DEFINE_Q_PROPERTY(int,          userIndex);
 
   public:
     explicit Course(QObject* parent = 0);
@@ -25,6 +26,7 @@ class Course : public QObject {
     void countChanged(const int count);
     void dateChanged(const  QDate& date);
     void inputTimeChanged(const QDateTime& date);
+    void userIndexChanged(const int index);
 };
 
 #endif  // COURSE_H

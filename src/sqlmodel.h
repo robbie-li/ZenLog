@@ -49,36 +49,42 @@
 #include "user.h"
 
 class SqlModel : public QSqlQueryModel {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    SqlModel();
+ public:
+  SqlModel();
 
-    Q_INVOKABLE QList<QObject*> getAllUsers();
-    Q_INVOKABLE QObject* getCurrentUser();
-    Q_INVOKABLE bool saveUser(User* user);
+  // User Management
+  Q_INVOKABLE QList<QObject*> listUsers();
+  Q_INVOKABLE User* getCurrentUser();
+  Q_INVOKABLE bool createUser(User* user);
+  Q_INVOKABLE bool updateUser(User* user);
+  Q_INVOKABLE bool deleteUser(User* user);
 
-    // FOR DAILY LOG PAGE.
-    Q_INVOKABLE QList<QObject*> courseDetailsForDate(const QDate& date);
-    Q_INVOKABLE bool addCourse(const QDate& date, const QString& name, const int count);
-    Q_INVOKABLE bool delCourse(const int index);
+  // Course Management
+  Q_INVOKABLE QList<QObject*> listCourse(const QDate& date);
+  Q_INVOKABLE bool createCourse(const int userIndex, const QDate& date, const QString& name, const int count);
+  Q_INVOKABLE bool deleteCourse(const int index);
 
-    // FOR CALENDAR PAGE
-    Q_INVOKABLE QVariantMap dailyCourseCountForMonth(const int year, const int month);
-    Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
-    Q_INVOKABLE QString courseAverageForMonth(const int year, const int month);
-    Q_INVOKABLE int courseTotalForYear(const int year);
-    Q_INVOKABLE QString courseAverageForYear(const int year);
-    Q_INVOKABLE int courseTotal();
-    Q_INVOKABLE QString courseAverage();
+  // FOR CALENDAR PAGE
+  Q_INVOKABLE QVariantMap monthlyCourses(const int year, const int month);
 
-  signals:
-    void userSaved();
-    void courseChanged();
+  Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
+  Q_INVOKABLE QString courseAverageForMonth(const int year, const int month);
+  Q_INVOKABLE int courseTotalForYear(const int year);
+  Q_INVOKABLE QString courseAverageForYear(const int year);
+  Q_INVOKABLE int courseTotal();
+  Q_INVOKABLE QString courseAverage();
 
-  private:
-    static bool createConnection();
-    static bool createTables();
+ signals:
+  void userCreated();
+  void userDeleted();
+  void userUpdated();
+  void courseChanged();
+
+ private:
+  static bool createConnection();
+  static bool createTables();
 };
 
 #endif

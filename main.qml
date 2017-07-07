@@ -61,10 +61,13 @@ ApplicationWindow {
                     id: optionsMenu
                     x: parent.width - width
                     transformOrigin: Menu.TopRight
-
                     MenuItem {
-                        text: qsTr("设置")
-                        onTriggered: settingsPopup.open()
+                        text: qsTr("导入功课")
+                        onTriggered: importDialog.open()
+                    }
+                    MenuItem {
+                        text: qsTr("导出功课")
+                        onTriggered: exportDialog.open()
                     }
                     MenuItem {
                         text: qsTr("关于")
@@ -75,13 +78,13 @@ ApplicationWindow {
         }
     }
 
-    Popup {
+    Dialog {
         id: aboutDialog
         modal: true
         focus: true
         x: (window.width - width) / 2
         y: window.height / 6
-        width: Math.min(window.width, window.height) / 3 * 2
+        width: Math.min(window.width, window.height) / 4 * 3
         contentHeight: aboutColumn.height
 
         Column {
@@ -130,13 +133,10 @@ ApplicationWindow {
         id: tabBar
         currentIndex: swipeView.currentIndex
         TabButton {
-            text: qsTr("日历")
+            text: qsTr("统计")
         }
         TabButton {
-            text: qsTr("日志")
-            //onClicked: {
-            //    daily.selectDate(new Date())
-            //}
+            text: qsTr("记录")
         }
     }
 
@@ -181,17 +181,12 @@ ApplicationWindow {
         }
     }
 
-    UserTypeSelection {
-        id: user_type_selection
-
-    }
-
     Component.onCompleted: {
         reloadTitle()
         daily.reloadUserSetting()
 
         var user = SqlModel.getCurrentUser();
-        if(user == null) {
+        if(user === null) {
             //user_type_selection.open();
             drawer.open()
         }
