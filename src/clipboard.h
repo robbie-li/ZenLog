@@ -4,14 +4,14 @@
 #include <QObject>
 
 class Clipboard : public QObject {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    Clipboard();
+ public:
+  Clipboard();
 
-    Q_INVOKABLE void copyMonthlyCourse(const int year, const int month);
+  Q_INVOKABLE void copyMonthlyCourse(const int year, const int month);
 
-    Q_INVOKABLE void copyMonthlyCourseAsHtml(const int year, const int month);
+  Q_INVOKABLE void copyMonthlyCourseAsHtml(const int year, const int month);
 };
 
 #endif

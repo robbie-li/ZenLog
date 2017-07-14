@@ -1,4 +1,4 @@
-#include "sqlmodel.h"
+#include "sql_model.h"
 
 #include <QDebug>
 #include <QDir>
@@ -149,7 +149,7 @@ bool SqlModel::updateUser(User* user) {
   return success;
 }
 
-bool SqlModel::deleteUser(User* user) {
+bool SqlModel::removeUser(User* user) {
   if (!user) return false;
 
   QSqlQuery query;

@@ -1,7 +1,6 @@
 module content
 CalendarPage 0.2 CalendarPage.qml
 DailyLogPage 0.2 DailyLogPage.qml
-ImageButton 0.2 ImageButton.qml
 ListViewDelegate 0.2 ListViewDelegate.qml
 MyCalendar 0.2 MyCalendar.qml
 SimpleDatePicker 0.2 SimpleDatePicker.qml

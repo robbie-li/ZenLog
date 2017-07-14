@@ -4,7 +4,8 @@
 #include <QClipboard>
 #include <QDebug>
 #include <QtXml>
-#include "sqlmodel.h"
+
+#include "sql_model.h"
 #include "user.h"
 
 Clipboard::Clipboard() {

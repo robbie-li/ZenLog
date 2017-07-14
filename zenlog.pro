@@ -11,12 +11,15 @@ OTHER_FILES += \
     content/qmldir \
     content/CalendarPage.qml \
     content/DailyLogPage.qml \
-    content/ImageButton.qml \
     content/ListViewDelegate.qml \
     content/MyCalendar.qml \
     content/SimpleDatePicker.qml \
     content/TumblerDatePicker.qml\
-    content/UserSettings.qml
+    content/UserInformation.qml \
+    content/UserSetting.qml \
+    content/UserSettings.qml\
+    content/controls/ImageButton.qml \
+    content/controls/ImageTextButton.qml
 
 RESOURCES += \
     modules/Icons.qrc \
@@ -32,6 +35,7 @@ DISTFILES += \
     android/gradlew.bat \
     +android/qtquickcontrols2.conf \
     +windows/qtquickcontrols2.conf
+
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

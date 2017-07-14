@@ -1,9 +1,9 @@
-#include "mailclient.h"
+#include "mail_client.h"
 
 #include <QDebug>
 
 #include "smtpclient/SmtpMime"
-#include "sqlmodel.h"
+#include "sql_model.h"
 #include "user.h"
 
 MailClient::MailClient() {

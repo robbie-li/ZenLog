@@ -1,20 +1,22 @@
 SOURCES += \
-    $$PWD/BasicExcel.cpp \
-    $$PWD/excelreader.cpp \
+    $$PWD/basic_excel.cpp \
+    $$PWD/excel_reader.cpp \
     $$PWD/clipboard.cpp \
     $$PWD/course.cpp \
-    $$PWD/mailclient.cpp \
+    $$PWD/mail_client.cpp \
     $$PWD/main.cpp \
-    $$PWD/sqlmodel.cpp \
-    $$PWD/user.cpp
+    $$PWD/sql_model.cpp \
+    $$PWD/user.cpp \
+    $$PWD/user_model.cpp
 
 HEADERS += \
-    $$PWD/BasicExcel.h \
+    $$PWD/basic_excel.h \
     $$PWD/clipboard.h \
     $$PWD/course.h \
-    $$PWD/excelreader.h \
+    $$PWD/excel_reader.h \
     $$PWD/macros.h \
-    $$PWD/mailclient.h \
-    $$PWD/sqlmodel.h \
-    $$PWD/user.h
+    $$PWD/mail_client.h \
+    $$PWD/sql_model.h \
+    $$PWD/user.h \
+    $$PWD/user_model.h
 
