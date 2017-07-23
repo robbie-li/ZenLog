@@ -8,6 +8,7 @@
 #include "mail_client.h"
 #include "sql_model.h"
 #include "user.h"
+#include "user_model.h"
 #include "excel_reader.h"
 
 // First, define the singleton type provider function (callback).
@@ -16,6 +17,14 @@ static QObject* sqlmodel_singletontype_provider(QQmlEngine* engine, QJSEngine* s
   Q_UNUSED(scriptEngine)
 
   SqlModel* model = new SqlModel;
+  return model;
+}
+
+static QObject* usermodel_singletontype_provider(QQmlEngine* engine, QJSEngine* scriptEngine) {
+  Q_UNUSED(engine)
+  Q_UNUSED(scriptEngine)
+
+  UserModel* model = new UserModel;
   return model;
 }
 
@@ -37,6 +46,7 @@ int main(int argc, char* argv[]) {
   QQuickStyle::setStyle("Material");
 
   qmlRegisterSingletonType<SqlModel> ("zenlog.sqlmodel",  1, 0, "SqlModel",  sqlmodel_singletontype_provider);
+  qmlRegisterSingletonType<UserModel> ("zenlog.usermodel",  1, 0, "UserModel",  usermodel_singletontype_provider);
   qmlRegisterSingletonType<Clipboard>("zenlog.clipboard", 1, 0, "ClipBoard", clipboard_singletontype_provider);
   qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
   qmlRegisterType<User>("zenlog.user", 1, 0, "User");

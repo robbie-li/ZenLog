@@ -2,7 +2,12 @@ import QtQuick 2.8
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import zenlog.user 1.0
+import zenlog.usermodel 1.0
+
 Frame {
+    property User currentUser: UserModel.currentUser
+
     GridLayout {
         id: grid
         width: parent.width
@@ -24,6 +29,7 @@ Frame {
             model: ["大悲咒","佛号"]
             Layout.fillHeight: true
             Layout.fillWidth: true
+            currentIndex: currentUser.courseName === "大悲咒" ? 0 : 1
         }
 
         Label {
@@ -39,6 +45,7 @@ Frame {
             id: textName
             Layout.fillHeight: true
             Layout.fillWidth: true
+            text: currentUser.name
         }
 
         Label {
@@ -54,6 +61,7 @@ Frame {
             id: textQQ
             Layout.fillWidth: true
             Layout.fillHeight: true
+            text: currentUser.qq
         }
 
         Label {
@@ -69,12 +77,14 @@ Frame {
                 id: comboClass
                 Layout.preferredWidth: parent.width* 0.35
                 model: ["一班","二班"]
+                currentIndex: currentUser.classNum
             }
 
             ComboBox {
                 id: comboGroup
                 Layout.preferredWidth: parent.width* 0.35
                 model: ["一组","二组"]
+                currentIndex: currentUser.groupNum
             }
         }
 
@@ -90,6 +100,7 @@ Frame {
             id: textGroupIndex
             Layout.fillWidth: true
             Layout.fillHeight: true
+            text: currentUser.groupIdx
         }
 
         Label {
@@ -104,6 +115,7 @@ Frame {
             id: textBaseTarget
             Layout.fillWidth: true
             Layout.fillHeight: true
+            text: comboCourse.currentText === "大悲咒" ? "108" : "10000"
         }
 
         Label {
@@ -118,6 +130,7 @@ Frame {
             id: textTarget
             Layout.fillWidth: true
             Layout.fillHeight: true
+            text: currentUser.targetCount
         }
     }
 }

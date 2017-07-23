@@ -14,8 +14,14 @@ class UserModel : public QObject {
   Q_INVOKABLE void update();
   Q_INVOKABLE void remove();
 
+  Q_INVOKABLE QStringList listUserNames() const;
+  Q_INVOKABLE QString currentUserName() const;
+
   User* currentUser() const;
   void setCurrentUser(User* user);
+
+ private:
+  void loadCurrentUser();
 
  signals:
   void modelChanged();

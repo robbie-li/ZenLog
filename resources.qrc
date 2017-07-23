@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-		<file>+android/qtquickcontrols2.conf</file>
+        <file>+android/qtquickcontrols2.conf</file>
         <file>+windows/qtquickcontrols2.conf</file>
-		<file>main.qml</file>
+        <file>main.qml</file>
         <file>content/qmldir</file>
         <file>content/CalendarPage.qml</file>
         <file>content/DailyLogPage.qml</file>
@@ -14,8 +14,9 @@
         <file>content/UserTypeSelection.qml</file>
         <file>content/UserInformation.qml</file>
         <file>content/UserSetting.qml</file>
-		<file>content/controls/qmldir</file>
-		<file>content/controls/ImageButton.qml</file>
+        <file>content/controls/qmldir</file>
+        <file>content/controls/ImageButton.qml</file>
         <file>content/controls/ImageTextButton.qml</file>
+        <file>content/UserManagementDialog.qml</file>
     </qresource>
 </RCC>

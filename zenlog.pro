@@ -16,6 +16,7 @@ OTHER_FILES += \
     content/SimpleDatePicker.qml \
     content/TumblerDatePicker.qml\
     content/UserInformation.qml \
+    content/UserManagementDialog.qml\
     content/UserSetting.qml \
     content/UserSettings.qml\
     content/controls/ImageButton.qml \

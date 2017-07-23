@@ -10,7 +10,7 @@
 #include "user.h"
 
 namespace {
-static bool connected = false;
+  static bool connected = false;
 }
 
 SqlModel::SqlModel() : QSqlQueryModel() {
@@ -24,7 +24,7 @@ SqlModel::SqlModel() : QSqlQueryModel() {
   }
 }
 
-QList<QObject*> SqlModel::listUsers() {
+QList<User*> SqlModel::listUsers() {
   const QString queryStr = QString::fromLatin1("SELECT * FROM user");
 
   QSqlQuery query;
@@ -32,7 +32,7 @@ QList<QObject*> SqlModel::listUsers() {
     qDebug() << ("failed to load user") << query.lastError();
   }
 
-  QList<QObject*> users;
+  QList<User*> users;
 
   while (query.next()) {
     User* user = new User(this);

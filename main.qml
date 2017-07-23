@@ -63,6 +63,10 @@ ApplicationWindow {
                     x: parent.width - width
                     transformOrigin: Menu.TopRight
                     MenuItem {
+                        text: qsTr("用户管理")
+                        onTriggered: userDialog.open()
+                    }
+                    MenuItem {
                         text: qsTr("导入功课")
                         onTriggered: importDialog.open()
                     }
@@ -77,6 +81,16 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    UserManagementDialog {
+        id: userDialog
+        modal: true
+        focus: true
+        x: (window.width - width) / 2
+        y: window.height *1 /12
+        width: Math.min(window.width, window.height) / 4 * 3
+        contentHeight: 400
     }
 
     Dialog {
