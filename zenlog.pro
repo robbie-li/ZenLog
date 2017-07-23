@@ -7,20 +7,7 @@ include(src/src.pri)
 include(smtpclient/smtpclient.pri)
 
 OTHER_FILES += \
-    main.qml \
-    content/qmldir \
-    content/CalendarPage.qml \
-    content/DailyLogPage.qml \
-    content/ListViewDelegate.qml \
-    content/MyCalendar.qml \
-    content/SimpleDatePicker.qml \
-    content/TumblerDatePicker.qml\
-    content/UserInformation.qml \
-    content/UserManagementDialog.qml\
-    content/UserSetting.qml \
-    content/UserSettings.qml\
-    content/controls/ImageButton.qml \
-    content/controls/ImageTextButton.qml
+    main.qml
 
 RESOURCES += \
     modules/Icons.qrc \

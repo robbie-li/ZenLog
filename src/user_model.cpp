@@ -1,6 +1,7 @@
 #include "user_model.h"
 #include "sql_model.h"
 #include <QDebug>
+#include <QUuid>
 
 UserModel::UserModel(QObject* parent)
   : QObject(parent)
@@ -26,6 +27,27 @@ void UserModel::remove() {
   emit modelChanged();
 }
 
+User* UserModel::createUser() {
+  User* user = new User(this);
+  user->set_userId(QUuid::createUuid().toString());
+  return user;
+}
+
+bool UserModel::saveUser(User* user) {
+  SqlModel model;
+  if (model.createUser(user)) {
+    delete  user;
+    emit modelChanged();
+    return true;
+  }
+  return false;
+}
+
+User* UserModel::getCurrentUser() {
+  loadCurrentUser();
+  return current_user_;
+}
+
 QStringList UserModel::listUserNames() const {
   SqlModel model;
   QList<User*> users = model.listUsers();
@@ -36,23 +58,10 @@ QStringList UserModel::listUserNames() const {
   return  result;
 }
 
-QString UserModel::currentUserName() const {
+QList<User*> UserModel::listUsers() const {
   SqlModel model;
   QList<User*> users = model.listUsers();
-
-  for (User* user : users) {
-    if (user->current()) return user->name();
-  }
-
-  return "";
-}
-
-User* UserModel::currentUser() const {
-  return current_user_;
-}
-
-void UserModel::setCurrentUser(User* user) {
-  current_user_ = user;
+  return  users;
 }
 
 void UserModel::loadCurrentUser() {
@@ -67,6 +76,9 @@ void UserModel::loadCurrentUser() {
     }
   }
 
+  if (current_user_ == nullptr && users.count()) {
+    current_user_ = users[0]->clone();
+  }
   qDebug() << "CurrentUser:" << current_user_;
   qDebug() << "CurrentUserName:" << current_user_->name();
 }

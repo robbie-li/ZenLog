@@ -5,7 +5,6 @@
 
 class UserModel : public QObject {
   Q_OBJECT
-  Q_PROPERTY(User* currentUser READ currentUser WRITE setCurrentUser NOTIFY currentUserChanged)
 
  public:
   UserModel(QObject* parent = nullptr);
@@ -14,18 +13,17 @@ class UserModel : public QObject {
   Q_INVOKABLE void update();
   Q_INVOKABLE void remove();
 
+  Q_INVOKABLE User* createUser();
+  Q_INVOKABLE bool  saveUser(User* user);
+  Q_INVOKABLE User* getCurrentUser();
   Q_INVOKABLE QStringList listUserNames() const;
-  Q_INVOKABLE QString currentUserName() const;
-
-  User* currentUser() const;
-  void setCurrentUser(User* user);
-
- private:
-  void loadCurrentUser();
+  Q_INVOKABLE QList<User*> listUsers() const;
 
  signals:
   void modelChanged();
-  void currentUserChanged();
+
+ private:
+  void loadCurrentUser();
 
  private:
   User* current_user_;

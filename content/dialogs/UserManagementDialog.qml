@@ -6,14 +6,17 @@ import zenlog.usermodel 1.0
 import zenlog.sqlmodel 1.0
 import zenlog.user 1.0
 
-import "./controls"
+import "../controls"
 
 Dialog {
     id: dialog
 
-    property User currentUser: UserModel.currentUser
+    property User currentUser: UserModel.getCurrentUser()
 
     title: "用户管理"
+
+    modal: true
+    focus: true
 
     Frame {
         width: parent.width
@@ -51,29 +54,28 @@ Dialog {
 
                 delegate: Rectangle {
                     width: listView.width
-                    height: 40
-                    color: "lightblue"
+                    implicitHeight: 48
+                    color: index % 2 == 0 ? "lightblue" : "lightgrey"
 
-                    Row {
+                    RowLayout {
                         anchors.fill: parent
 
                         RadioButton {
                             id: btnSelect
-                            height: parent.height
-                            width: parent.width - btnDelete.width
+                            implicitHeight: parent.height
                             text: modelData
                             font.pixelSize: 32
                             checked: modelData === currentUser.name
                             ButtonGroup.group: userGroup
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         }
 
                         ImageButton {
                             id: btnDelete
                             text: qsTr("删除")
-                            height: parent.height
+                            implicitHeight: parent.height
                             source: "qrc:/Material/icons/action/delete.svg"
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.margins: 4
+                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         }
                     }
                 }
@@ -96,6 +98,13 @@ Dialog {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.margins: 4
+            onClicked: createUserDialog.open()
         }
+    }
+
+    CreateUserDialog {
+        id: createUserDialog
+        width: dialog.width
+        contentHeight: 500
     }
 }

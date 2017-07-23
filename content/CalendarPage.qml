@@ -6,6 +6,8 @@ import zenlog.sqlmodel 1.0
 import zenlog.mailclient 1.0
 import zenlog.clipboard 1.0
 
+import "./controls"
+
 Page {
     id: root
     title: qsTr("每月视图")

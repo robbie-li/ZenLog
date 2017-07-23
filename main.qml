@@ -5,9 +5,12 @@ import QtQuick.Controls.Universal 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
+import zenlog.usermodel 1.0
+import zenlog.user 1.0
 
 import "content"
 import "content/controls"
+import "content/dialogs"
 
 ApplicationWindow {
     id: window
@@ -22,6 +25,8 @@ ApplicationWindow {
     Material.accent:     "#66BAB7"
     Material.primary:    "#66BAB7"
     Material.background: "white"
+
+    property User currentUser: UserModel.getCurrentUser()
 
     title: qsTr("精进修行")
 
@@ -93,57 +98,16 @@ ApplicationWindow {
         contentHeight: 400
     }
 
-    Dialog {
+    AboutDialog {
         id: aboutDialog
         modal: true
         focus: true
         x: (window.width - width) / 2
         y: window.height / 6
         width: Math.min(window.width, window.height) / 4 * 3
-        contentHeight: aboutColumn.height
-
-        Column {
-            id: aboutColumn
-            spacing: 20
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "精进群修行日志"
-                wrapMode: Label.Wrap
-                font.pixelSize: 14
-                font.bold: true
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "诸恶莫作，众善奉行，因果不虚，如影随形，"
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "念佛持咒，求生极乐，当勤精进，慎勿放逸。"
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "应常诵持，勿生懈怠，馺馺诵持，声声不绝，"
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-            }
-
-            Label {
-                width: aboutDialog.availableWidth
-                text: "忏悔业障，净持斋戒，发菩提心，为众忏悔。"
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-            }
-        }
+        contentHeight: 300
     }
-
+    
     footer: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
@@ -176,24 +140,13 @@ ApplicationWindow {
         id: drawer
         width: window.width * 3 / 4
         height: window.height
-        /*
-        UserSettings {
-            onUserSettingsChanged: {
-                console.log("user setting saved")
-                daily.reloadUserSetting()
-                drawer.close()
-                reloadTitle()
-                calendar.reloadStatistic()
-            }
-        }
-        */
         UserInformation {
             anchors.fill: parent
         }
     }
 
     function reloadTitle() {
-        var user = SqlModel.getCurrentUser()
+        var user = UserModel.getCurrentUser()
         if(user) {
             titleLabel.text = user.name + "的" + user.courseName + "日志"
         } else {
@@ -205,9 +158,7 @@ ApplicationWindow {
         reloadTitle()
         daily.reloadUserSetting()
 
-        var user = SqlModel.getCurrentUser();
-        if(user === null) {
-            //user_type_selection.open();
+        if(currentUser === null) {
             drawer.open()
         }
     }

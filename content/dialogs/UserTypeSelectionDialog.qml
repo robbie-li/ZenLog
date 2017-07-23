@@ -4,11 +4,6 @@ import QtQuick.Layouts 1.3
 
 Dialog {
     id: root
-    width: parent.width * 0.8
-    height: parent.height * 0.8
-
-    x: parent.width * 0.1
-    y: parent.height * 0.1
 
     title: "请选择个人类别:"
 

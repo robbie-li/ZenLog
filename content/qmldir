@@ -1,9 +1,0 @@
-module content
-CalendarPage 0.2 CalendarPage.qml
-DailyLogPage 0.2 DailyLogPage.qml
-ListViewDelegate 0.2 ListViewDelegate.qml
-MyCalendar 0.2 MyCalendar.qml
-SimpleDatePicker 0.2 SimpleDatePicker.qml
-TumblerDatePicker 0.2 TumblerDatePicker.qml
-UserSettings UserSettings.qml
-#singleton Units 0.2 Units.qml

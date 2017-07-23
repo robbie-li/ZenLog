@@ -3,6 +3,9 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
+import zenlog.usermodel 1.0
+
+import "./controls"
 
 Page {
     id: root
@@ -17,10 +20,20 @@ Page {
         }
     }
 
+    Connections {
+        target: UserModel
+        onModelChanged: {
+            console.log("user model changed")
+            reloadUserSetting();
+        }
+    }
+
     title: "精进修行"
 
     function reloadUserSetting() {
-        var user = SqlModel.getCurrentUser();
+        console.log("reload current user setting")
+        var user = UserModel.getCurrentUser()
+
         if(user) {
             labelName.text = user.courseName
             if(user.courseName === "") {
@@ -161,7 +174,9 @@ Page {
             }
 
             onClicked: {
-                if(SqlModel.addCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
+                var user = UserModel.currentUser
+
+                if(SqlModel.createCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
                     labelCount.text = '';
                     labelCount.focus = false;
                     root.reload();

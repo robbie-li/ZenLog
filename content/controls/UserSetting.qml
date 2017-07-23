@@ -3,10 +3,20 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.user 1.0
-import zenlog.usermodel 1.0
 
 Frame {
-    property User currentUser: UserModel.currentUser
+    property User currentUser
+
+    function updateUser() {
+        currentUser.name = labelName.text
+        currentUser.qq = labelQQ.text
+        currentUser.classNum = comboClass.currentIndex
+        currentUser.groupNum = comboGroup.currentIndex
+        currentUser.groupIdx = textGroupIndex.text
+        currentUser.courseName = comboCourse.currentText
+        currentUser.current = false
+        currentUser.targetCount = textTarget.text
+    }
 
     GridLayout {
         id: grid
