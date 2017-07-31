@@ -147,7 +147,6 @@ ApplicationWindow {
             id: user_info
             anchors.fill: parent
         }
-
     }
 
     function reloadTitle() {

@@ -7,14 +7,14 @@ import zenlog.user 1.0
 Frame {
     property User currentUser
 
-    function updateUser() {
+    function updateUser(isCurrent) {
         currentUser.name = textName.text
         currentUser.qq = textQQ.text
         currentUser.classNum = comboClass.currentIndex
         currentUser.groupNum = comboGroup.currentIndex
         currentUser.groupIdx = textGroupIndex.text
         currentUser.courseName = comboCourse.currentText
-        currentUser.current = false
+        currentUser.current = isCurrent
         currentUser.targetCount = textTarget.text
         currentUser.userType = userType.checked ? User.ExternalUser : User.GroupUser
     }

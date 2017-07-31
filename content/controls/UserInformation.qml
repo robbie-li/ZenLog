@@ -29,7 +29,10 @@ Frame {
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.margins: 4
-            onClicked: UserModel.update()
+            onClicked: {
+                userSetting.updateUser(true)
+                SqlModel.updateUser(userSetting.currentUser)
+            }
         }
     }
 
