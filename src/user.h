@@ -21,11 +21,19 @@ class User : public QObject {
   DEFINE_Q_PROPERTY(int,      targetCount);
 
  public:
+  enum UserType {
+    GroupUser,
+    ExternalUser
+  };
+  Q_ENUMS(UserType)
+
+ public:
   explicit User(QObject* parent = 0);
   User* clone() const;
 
  signals:
   void userIdChanged(const QString& userId);
+  void externalUserChanged(const bool externalUser);
   void currentChanged(const bool current);
   void userTypeChanged(const int userType);
   void classNumChanged(const int classNum);

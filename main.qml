@@ -69,7 +69,10 @@ ApplicationWindow {
                     transformOrigin: Menu.TopRight
                     MenuItem {
                         text: qsTr("用户管理")
-                        onTriggered: userDialog.open()
+                        onTriggered: {
+                            userDialog.reload()
+                            userDialog.open()
+                        }
                     }
                     MenuItem {
                         text: qsTr("导入功课")
@@ -141,8 +144,10 @@ ApplicationWindow {
         width: window.width * 3 / 4
         height: window.height
         UserInformation {
+            id: user_info
             anchors.fill: parent
         }
+
     }
 
     function reloadTitle() {
@@ -153,6 +158,17 @@ ApplicationWindow {
             titleLabel.text = "精进日志"
         }
     }
+
+    Connections {
+        target: SqlModel
+
+        onUserUpdated: {
+            console.log("user changed")
+            reloadTitle()
+            user_info.currentUser
+        }
+    }
+
 
     Component.onCompleted: {
         reloadTitle()

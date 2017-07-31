@@ -47,4 +47,9 @@ Frame {
         target: UserModel
         onModelChanged: userSetting.currentUser = UserModel.getCurrentUser()
     }
+
+    Connections {
+        target: SqlModel
+        onUserUpdated: userSetting.currentUser = UserModel.getCurrentUser()
+    }
 }

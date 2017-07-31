@@ -59,7 +59,8 @@ class SqlModel : public QSqlQueryModel {
   Q_INVOKABLE User* getCurrentUser();
   Q_INVOKABLE bool createUser(User* user);
   Q_INVOKABLE bool updateUser(User* user);
-  Q_INVOKABLE bool removeUser(User* user);
+  Q_INVOKABLE bool removeUser(const QString& name);
+  Q_INVOKABLE bool setDefaultUser(const QString& name);
 
   // Course Management
   Q_INVOKABLE QList<QObject*> listCourse(const QDate& date);

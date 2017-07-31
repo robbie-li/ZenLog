@@ -12,6 +12,14 @@ Page {
     id: root
     title: qsTr("每月视图")
 
+    Connections {
+        target: SqlModel
+        onUserUpdated: {
+            console.log("user changed")
+            reload()
+        }
+    }
+
     MailClient {
         id: mailclient
         onMailSent: {

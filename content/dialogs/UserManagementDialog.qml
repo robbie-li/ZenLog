@@ -12,93 +12,101 @@ Dialog {
     id: dialog
 
     property User currentUser: UserModel.getCurrentUser()
+    property string selectedUserName
+    property string deletedUserName
 
     title: "用户管理"
 
     modal: true
     focus: true
 
-    Frame {
-        width: parent.width
-        height: 300
+    Column {
+        anchors.fill: parent
 
-        anchors {
-            top: parent.top;
-            margins: 0
-        }
+        Frame {
+            width: parent.width
+            height: parent.height - 45
 
-        ColumnLayout {
-            anchors {
-                fill:parent
-                margins: 0
-            }
-
-            Label {
-                text: "用户列表"
-            }
-
-            ListView {
-                id: listView
-
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                orientation: ListView.Vertical
-                flickableDirection: Flickable.VerticalFlick
-
-                model: UserModel.listUserNames()
-
-                ButtonGroup {
-                    id: userGroup
+            ColumnLayout {
+                anchors {
+                    fill:parent
+                    margins: 0
                 }
 
-                delegate: Rectangle {
-                    width: listView.width
-                    implicitHeight: 48
-                    color: index % 2 == 0 ? "lightblue" : "lightgrey"
+                Label {
+                    text: "用户列表"
+                }
 
-                    RowLayout {
-                        anchors.fill: parent
+                ListView {
+                    id: listView
 
-                        RadioButton {
-                            id: btnSelect
-                            implicitHeight: parent.height
-                            text: modelData
-                            font.pixelSize: 32
-                            checked: modelData === currentUser.name
-                            ButtonGroup.group: userGroup
-                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                        }
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
 
-                        ImageButton {
-                            id: btnDelete
-                            text: qsTr("删除")
-                            implicitHeight: parent.height
-                            source: "qrc:/Material/icons/action/delete.svg"
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    orientation: ListView.Vertical
+                    flickableDirection: Flickable.VerticalFlick
+
+                    model: UserModel.listUserNames()
+                    clip: true
+
+                    ButtonGroup {
+                        id: userGroup
+                    }
+
+                    delegate: Rectangle {
+                        width: listView.width
+                        implicitHeight: 48
+                        color: index % 2 == 0 ? "lightblue" : "lightgrey"
+
+                        RowLayout {
+                            anchors.fill: parent
+
+                            RadioButton {
+                                id: btnSelect
+                                implicitHeight: parent.height
+                                text: modelData
+                                font.pixelSize: 32
+                                checked: modelData === currentUser.name
+                                ButtonGroup.group: userGroup
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                onCheckedChanged: {
+                                    if(checked) {
+                                        selectedUserName = btnSelect.text
+                                        SqlModel.setDefaultUser(selectedUserName)
+                                    }
+                                }
+                            }
+
+                            ImageButton {
+                                id: btnDelete
+                                text: qsTr("删除")
+                                implicitHeight: parent.height
+                                source: "qrc:/Material/icons/action/delete.svg"
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                onClicked: {
+                                    deletedUserName = modelData
+                                    deleteUserDialog.open()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    RowLayout {
-        id: rowButtons
-        width: parent.width
-        height: 40
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: 2
-        }
+        RowLayout {
+            id: rowButtons
+            width: parent.width
+            height: 40
 
-        ImageTextButton {
-            text: qsTr("新建用户")
-            source: "qrc:/Material/icons/content/add.svg"
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillHeight: true
-            Layout.margins: 4
-            onClicked: createUserDialog.open()
+            ImageTextButton {
+                text: qsTr("新建用户")
+                source: "qrc:/Material/icons/content/add.svg"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                Layout.margins: 4
+                onClicked: createUserDialog.open()
+            }
         }
     }
 
@@ -106,5 +114,21 @@ Dialog {
         id: createUserDialog
         width: dialog.width
         contentHeight: 500
+        onAccepted: reload()
+    }
+
+    DeleteUserDialog {
+        id: deleteUserDialog
+        width: dialog.width
+        contentHeight: 200
+        onAccepted: {
+            console.log("deleting user:" + deletedUserName)
+            SqlModel.removeUser(deletedUserName)
+            reload()
+        }
+    }
+
+    function reload() {
+        listView.model = UserModel.listUserNames();
     }
 }

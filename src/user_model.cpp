@@ -23,7 +23,7 @@ void UserModel::update() {
 
 void UserModel::remove() {
   SqlModel model;
-  model.removeUser(current_user_);
+  model.removeUser(current_user_->name());
   emit modelChanged();
 }
 

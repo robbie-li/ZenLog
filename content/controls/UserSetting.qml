@@ -8,14 +8,15 @@ Frame {
     property User currentUser
 
     function updateUser() {
-        currentUser.name = labelName.text
-        currentUser.qq = labelQQ.text
+        currentUser.name = textName.text
+        currentUser.qq = textQQ.text
         currentUser.classNum = comboClass.currentIndex
         currentUser.groupNum = comboGroup.currentIndex
         currentUser.groupIdx = textGroupIndex.text
         currentUser.courseName = comboCourse.currentText
         currentUser.current = false
         currentUser.targetCount = textTarget.text
+        currentUser.userType = userType.checked ? User.ExternalUser : User.GroupUser
     }
 
     GridLayout {
@@ -75,35 +76,53 @@ Frame {
         }
 
         Label {
-            text: qsTr("班组")
+            text: qsTr("")
             verticalAlignment: Text.AlignVCenter
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
         }
 
+        CheckBox {
+            id: userType
+            text: "群外莲友"
+            checked: currentUser.userType === User.ExternalUser
+        }
+
+        Label {
+            text: qsTr("班组")
+            verticalAlignment: Text.AlignVCenter
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width* 0.2
+            horizontalAlignment: Text.AlignRight
+            visible: !userType.checked
+        }
+
         Row {
+            visible: !userType.checked
+
             ComboBox {
                 id: comboClass
                 Layout.preferredWidth: parent.width* 0.35
-                model: ["一班","二班"]
+                model: ["1班","2班","3班","4班","5班","6班","7班","8班"]
                 currentIndex: currentUser.classNum
             }
 
             ComboBox {
                 id: comboGroup
                 Layout.preferredWidth: parent.width* 0.35
-                model: ["一组","二组"]
+                model: ["1组","2组","3组","4组","5组"]
                 currentIndex: currentUser.groupNum
             }
         }
 
         Label {
-            text: qsTr("组内编号")
+            text: qsTr("群内编号")
             verticalAlignment: Text.AlignVCenter
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
+            visible: !userType.checked
         }
 
         TextField {
@@ -111,6 +130,9 @@ Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
             text: currentUser.groupIdx
+            inputMethodHints : Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: 0; top: 1000000 }
+            visible: !userType.checked
         }
 
         Label {
@@ -141,6 +163,8 @@ Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
             text: currentUser.targetCount
+            inputMethodHints : Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: textBaseTarget.text; top: 99999 }
         }
     }
 }

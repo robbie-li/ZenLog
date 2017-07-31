@@ -18,6 +18,10 @@ Page {
             console.log("course changed")
             root.courseChanged();
         }
+        onUserUpdated: {
+            console.log("user changed")
+            reloadUserSetting()
+        }
     }
 
     Connections {

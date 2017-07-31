@@ -38,6 +38,7 @@ QList<User*> SqlModel::listUsers() {
     User* user = new User(this);
     user->set_userId(query.value("user_id").toString());
     user->set_userType(query.value("user_type").toInt());
+    user->set_current(query.value("is_default").toInt());
     user->set_courseName(query.value("course_name").toString());
     user->set_qq(query.value("qq").toString());
     user->set_name(query.value("name").toString());
@@ -63,6 +64,7 @@ User* SqlModel::getCurrentUser() {
     User* user = new User(this);
     user->set_userId(query.value("user_id").toString());
     user->set_userType(query.value("user_type").toInt());
+    user->set_current(query.value("is_default").toInt());
     user->set_courseName(query.value("course_name").toString());
     user->set_qq(query.value("qq").toString());
     user->set_name(query.value("name").toString());
@@ -82,7 +84,7 @@ bool SqlModel::createUser(User* user) {
   QSqlQuery query;
 
   QString sqlSave = QString::fromLatin1(R"(insert into User (user_id, is_default, user_type, class_num, group_num, group_idx, qq, name, course_name, target_count)
-                                      values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10'))")
+                                          values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10'))")
                     .arg(user->userId())
                     .arg(user->current())
                     .arg(user->userType())
@@ -113,17 +115,17 @@ bool SqlModel::updateUser(User* user) {
   QSqlQuery query;
 
   QString sqlSave = QString::fromLatin1(R"(update User set
-                                         is_default='%2',
-                                         user_type='%3',
-                                         class_num='%4',
-                                         group_num='%5',
-                                         group_idx='%6',
-                                         qq='%7',
-                                         name='%8',
-                                         course_name='%9',
-                                         target_count='%10'
-                                         where user_id='%1'
-                                         )")
+                                          is_default='%2',
+                                          user_type='%3',
+                                          class_num='%4',
+                                          group_num='%5',
+                                          group_idx='%6',
+                                          qq='%7',
+                                          name='%8',
+                                          course_name='%9',
+                                          target_count='%10'
+                                          where user_id='%1'
+                                          )")
                     .arg(user->userId())
                     .arg(user->current())
                     .arg(user->userType())
@@ -149,21 +151,49 @@ bool SqlModel::updateUser(User* user) {
   return success;
 }
 
-bool SqlModel::removeUser(User* user) {
-  if (!user) return false;
+bool SqlModel::removeUser(const QString& name) {
+  if (name.isEmpty()) return false;
 
   QSqlQuery query;
 
-  QString sqlDelete = QString::fromLatin1(R"(delete from User where user_id='%1')").arg(user->userId());
+  QString sqlDelete = QString::fromLatin1(R"(delete from User where name='%1')").arg(name);
 
   qDebug() << "Executing:" << sqlDelete;
 
   bool success = query.exec(sqlDelete);
   if (success) {
-    qDebug() << "user updated.";
+    qDebug() << "user deleted.";
     emit userDeleted();
   } else {
     qDebug() << "Failed to execute SQL:" << query.lastError();
+  }
+
+  return success;
+}
+
+bool SqlModel::setDefaultUser(const QString& name) {
+  if (name.isEmpty()) return false;
+
+  QSqlQuery query;
+
+  QString sqlUpdateAll = QString::fromLatin1(R"(update User set is_default='0')");
+
+  QString sqlUpdateOne = QString::fromLatin1(R"(update User set is_default='1' where name='%1')").arg(name);
+
+  qDebug() << "Executing:" << sqlUpdateAll;
+  bool success = query.exec(sqlUpdateAll);
+  if (!success) {
+    qDebug() << "Failed to execute SQL:" << query.lastError();
+    return false;
+  }
+
+  qDebug() << "Executing:" << sqlUpdateOne;
+  success = query.exec(sqlUpdateOne);
+  if (!success) {
+    qDebug() << "Failed to execute SQL:" << query.lastError();
+    return false;
+  } else {
+    emit userUpdated();
   }
 
   return success;
@@ -427,7 +457,7 @@ bool SqlModel::createTables() {
                     group_idx     integer,
                     class_num     integer,
                     target_count  integer NOT NULL
-                  );)")) {
+                    );)")) {
     qDebug() << "Failed to create user table:" << query.lastError();
   }
 
@@ -442,9 +472,9 @@ bool SqlModel::createTables() {
                     user_id            guid NOT NULL,
                     /* Foreign keys */
                     CONSTRAINT Foreign_key01
-                      FOREIGN KEY (user_id)
-                      REFERENCES user(user_id)
-                  );)")) {
+                    FOREIGN KEY (user_id)
+                    REFERENCES user(user_id)
+                    );)")) {
     qDebug() << "Failed to create course table" << query.lastError();
   }
 
@@ -452,12 +482,12 @@ bool SqlModel::createTables() {
 
   if (!query.exec(R"(CREATE TABLE dbversion (
                     version       text NOT NULL
-                  );)")) {
+                    );)")) {
     qDebug() << "Failed to create dbversion table:" << query.lastError();
   } else {
     query.exec(R"(INSERT INTO dbversion VALUES (
-                            '1.0'
-                          );)");
+                   '1.0'
+                   );)");
   }
 
   query.clear();
@@ -466,9 +496,9 @@ bool SqlModel::createTables() {
                     current_user_id  text NOT NULL,
                     /* Foreign keys */
                     CONSTRAINT Foreign_key02
-                      FOREIGN KEY (current_user_id)
-                      REFERENCES user(user_id)
-                  );)")) {
+                    FOREIGN KEY (current_user_id)
+                    REFERENCES user(user_id)
+                    );)")) {
     qDebug() << "Failed to create runtime_info table:" << query.lastError();
   }
 
