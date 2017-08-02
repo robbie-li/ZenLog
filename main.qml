@@ -41,8 +41,14 @@ ApplicationWindow {
             ImageButton {
                 Layout.leftMargin: 4
                 size: 28
-                source: "qrc:/Material/icons/navigation/menu.svg"
-                onClicked: drawer.open()
+                source: stack.depth > 1 ? "qrc:/Material/icons/navigation/chevron_left.svg" : "qrc:/Material/icons/navigation/menu.svg"
+                onClicked: {
+                    if (stack.depth > 1) {
+                        stack.pop()
+                    } else {
+                        drawer.open()
+                    }
+                }
             }
 
             Label {
@@ -69,10 +75,7 @@ ApplicationWindow {
                     transformOrigin: Menu.TopRight
                     MenuItem {
                         text: qsTr("用户管理")
-                        onTriggered: {
-                            userDialog.reload()
-                            userDialog.open()
-                        }
+                        onTriggered: stack.push(userManagerment)
                     }
                     MenuItem {
                         text: qsTr("导入功课")
@@ -91,14 +94,8 @@ ApplicationWindow {
         }
     }
 
-    UserManagementDialog {
-        id: userDialog
-        modal: true
-        focus: true
-        x: (window.width - width) / 2
-        y: window.height *1 /12
-        width: Math.min(window.width, window.height) / 4 * 3
-        contentHeight: 400
+    UserManagementPage {
+        id:userManagerment
     }
 
     AboutDialog {
@@ -111,31 +108,25 @@ ApplicationWindow {
         contentHeight: 300
     }
     
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("统计")
+    StackView {
+        id: stack
+
+        initialItem: CalendarPage {
+            id: calendar
+            onDaySelected: {
+                daily.selectDate(selectedDate)
+                stack.push(daily)
+            }
         }
-        TabButton {
-            text: qsTr("记录")
-        }
+
+        anchors.fill: parent
     }
 
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
-
-        CalendarPage {
-            id: calendar
-        }
-
-        DailyLogPage {
-            id: daily
-            onCourseChanged: {
-                calendar.reload()
-            }
+    DailyLogPage {
+        id: daily
+        visible: false
+        onCourseChanged: {
+            calendar.reload()
         }
     }
 
@@ -164,17 +155,10 @@ ApplicationWindow {
         onUserUpdated: {
             console.log("user changed")
             reloadTitle()
-            user_info.currentUser
         }
     }
 
-
     Component.onCompleted: {
         reloadTitle()
-        daily.reloadUserSetting()
-
-        if(currentUser === null) {
-            drawer.open()
-        }
     }
 }

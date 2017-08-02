@@ -6,26 +6,23 @@ import zenlog.usermodel 1.0
 import zenlog.sqlmodel 1.0
 import zenlog.user 1.0
 
-import "../controls"
+import "controls"
+import "dialogs"
 
-Dialog {
-    id: dialog
+Item {
+    id: root
 
     property User currentUser: UserModel.getCurrentUser()
     property string selectedUserName
     property string deletedUserName
+    property string title: qsTr("用户管理")
 
-    title: "用户管理"
-
-    modal: true
-    focus: true
-
-    Column {
+    ColumnLayout {
         anchors.fill: parent
 
         Frame {
-            width: parent.width
-            height: parent.height - 45
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
             ColumnLayout {
                 anchors {
@@ -33,8 +30,22 @@ Dialog {
                     margins: 0
                 }
 
-                Label {
-                    text: "用户列表"
+                RowLayout {
+                    width: parent.width
+                    height: 40
+
+                    Label {
+                        text: "用户列表"
+                        font.pixelSize: 20
+                        Layout.fillWidth: true
+                    }
+
+                    ImageTextButton {
+                        implicitHeight: 40
+                        text: "编辑"
+                        source: "qrc:/Material/icons/editor/mode_edit.svg"
+                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    }
                 }
 
                 ListView {
@@ -95,15 +106,15 @@ Dialog {
         }
 
         RowLayout {
-            id: rowButtons
             width: parent.width
             height: 40
 
             ImageTextButton {
+                implicitHeight: 40
+                Layout.fillWidth: true
                 text: qsTr("新建用户")
                 source: "qrc:/Material/icons/content/add.svg"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignCenter
                 Layout.margins: 4
                 onClicked: createUserDialog.open()
             }
@@ -112,14 +123,14 @@ Dialog {
 
     CreateUserDialog {
         id: createUserDialog
-        width: dialog.width
+        width: root.width
         contentHeight: 500
         onAccepted: reload()
     }
 
     DeleteUserDialog {
         id: deleteUserDialog
-        width: dialog.width
+        width: root.width
         contentHeight: 200
         onAccepted: {
             console.log("deleting user:" + deletedUserName)

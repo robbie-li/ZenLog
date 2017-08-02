@@ -199,9 +199,10 @@ bool SqlModel::setDefaultUser(const QString& name) {
   return success;
 }
 
-QList<QObject*> SqlModel::listCourse(const QDate& date) {
-  const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE course_date = '%1' order by course_input_time desc")
-                           .arg(date.toString("yyyy-MM-dd"));
+QList<QObject*> SqlModel::listCourse(const QString& userId, const QDate& date) {
+  const QString queryStr = QString::fromLatin1("SELECT * FROM Course WHERE course_date = '%1' and user_id='%2' order by course_input_time desc")
+                           .arg(date.toString("yyyy-MM-dd"))
+                           .arg(userId);
 
   qDebug() << "Executing:" << queryStr;
 
@@ -225,7 +226,7 @@ QList<QObject*> SqlModel::listCourse(const QDate& date) {
   return courses;
 }
 
-bool SqlModel::createCourse(const int userIndex, const QDate& date, const QString& name, const int count) {
+bool SqlModel::createCourse(const QString& userIndex, const QDate& date, const QString& name, const int count) {
   const QString queryStr = QString::fromLatin1
                            ("insert into Course (course_name,course_date,course_count,user_id) values('%1', '%2', '%3', '%4')")
                            .arg(name)

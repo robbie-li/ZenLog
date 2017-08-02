@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
 import zenlog.usermodel 1.0
+import zenlog.user 1.0
 
 import "./controls"
 
@@ -12,6 +13,7 @@ Page {
 
     signal courseChanged()
 
+    property User currentUser: SqlModel.getCurrentUser()
     Connections {
         target: SqlModel
         onCourseChanged: {
@@ -36,11 +38,11 @@ Page {
 
     function reloadUserSetting() {
         console.log("reload current user setting")
-        var user = UserModel.getCurrentUser()
+        currentUser = SqlModel.getCurrentUser()
 
-        if(user) {
-            labelName.text = user.courseName
-            if(user.courseName === "") {
+        if(currentUser) {
+            labelName.text = currentUser.courseName
+            if(currentUser.courseName === "") {
                 alert_column.visible = true;
                 input_row.visible = false;
                 confirm_button.visible = false;
@@ -62,7 +64,8 @@ Page {
     }
 
     function reload() {
-        contentReapter.model = SqlModel.listCourse(datepicker.currentDate)
+        currentUser = SqlModel.getCurrentUser()
+        contentReapter.model = SqlModel.listCourse(currentUser.userId, datepicker.currentDate)
     }
 
     Column {
@@ -178,9 +181,9 @@ Page {
             }
 
             onClicked: {
-                var user = UserModel.currentUser
+                var user = SqlModel.getCurrentUser()
 
-                if(SqlModel.createCourse(datepicker.currentDate, labelName.text, labelCount.text)) {
+                if(SqlModel.createCourse(user.userId, datepicker.currentDate, labelName.text, labelCount.text)) {
                     labelCount.text = '';
                     labelCount.focus = false;
                     root.reload();
@@ -193,7 +196,7 @@ Page {
         anchors { left: parent.left; right: parent.right; top: input.bottom; bottom: parent.bottom; topMargin: 20 }
 
         id: contentReapter
-        model: SqlModel.listCourse(datepicker.currentDate)
+        model: SqlModel.listCourse(currentUser.userId, datepicker.currentDate)
         clip: true
 
         delegate: ListViewDelegate {

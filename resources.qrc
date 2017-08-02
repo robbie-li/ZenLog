@@ -15,9 +15,11 @@
         <file>content/controls/UserInformation.qml</file>
         <file>content/controls/UserSetting.qml</file>
         <file>content/dialogs/AboutDialog.qml</file>
-        <file>content/dialogs/UserManagementDialog.qml</file>
-        <file>content/dialogs/UserTypeSelectionDialog.qml</file>
         <file>content/dialogs/CreateUserDialog.qml</file>
         <file>content/dialogs/DeleteUserDialog.qml</file>
+        <file>content/UserManagementPage.qml</file>
+        <file>content/dialogs/ClipBoardStatusDialog.qml</file>
+        <file>content/controls/CourseStatistic.qml</file>
+        <file>content/controls/ColoredImage.qml</file>
     </qresource>
 </RCC>

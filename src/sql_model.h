@@ -63,8 +63,8 @@ class SqlModel : public QSqlQueryModel {
   Q_INVOKABLE bool setDefaultUser(const QString& name);
 
   // Course Management
-  Q_INVOKABLE QList<QObject*> listCourse(const QDate& date);
-  Q_INVOKABLE bool createCourse(const int userIndex, const QDate& date, const QString& name, const int count);
+  Q_INVOKABLE QList<QObject*> listCourse(const QString& userId, const QDate& date);
+  Q_INVOKABLE bool createCourse(const QString& userIndex, const QDate& date, const QString& name, const int count);
   Q_INVOKABLE bool deleteCourse(const int index);
 
   // FOR CALENDAR PAGE

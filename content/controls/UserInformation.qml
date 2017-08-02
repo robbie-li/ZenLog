@@ -28,7 +28,7 @@ Frame {
             source: "qrc:/Material/icons/action/done.svg"
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.fillHeight: true
-            Layout.margins: 4
+            Layout.margins: 2
             onClicked: {
                 userSetting.updateUser(true)
                 SqlModel.updateUser(userSetting.currentUser)

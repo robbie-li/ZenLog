@@ -9,7 +9,7 @@ Dialog {
 
     standardButtons: Dialog.Ok
 
-    Column {
+    contentItem: Column {
         id: aboutColumn
         spacing: 20
 

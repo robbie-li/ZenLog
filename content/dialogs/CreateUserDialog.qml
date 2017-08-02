@@ -18,9 +18,8 @@ Dialog {
 
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    UserSetting {
+    contentItem: UserSetting {
         id: userSetting
-        anchors.fill: parent
         currentUser: UserModel.createUser()
     }
 

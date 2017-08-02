@@ -1,23 +1,28 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 Button {
     id: control
     property string source
+    property color overlayColor: "#000000"
 
     contentItem: RowLayout {
-        anchors.fill: parent
+        anchors.fill: control
+
         Image {
-            Layout.fillHeight: true
+            id: image
             opacity: enabled ? 1.0 : 0.3
-            fillMode: Image.PreserveAspectFit
             source: control.source
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignRight
+            smooth: true
+            fillMode: Image.PreserveAspectFit
         }
 
         Text {
             Layout.fillHeight: true
-            Layout.fillWidth: true
             text: control.text
             font: control.font
             opacity: enabled ? 1.0 : 0.3
@@ -33,5 +38,9 @@ Button {
         opacity: enabled ? 1 : 0.3
         border.color: control.down ? "#17a81a" : "#21be2b"
         border.width: 1
+    }
+
+    Component.onCompleted: {
+        console.log("ImageTextButton height:" + control.height)
     }
 }
