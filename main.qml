@@ -160,6 +160,15 @@ ApplicationWindow {
         }
     }
 
+    onClosing: {
+        if(stack.depth > 1) {
+            close.accepted = false;
+            stack.pop();
+        } else {
+            return;
+        }
+    }
+
     Component.onCompleted: {
         reloadTitle()
     }

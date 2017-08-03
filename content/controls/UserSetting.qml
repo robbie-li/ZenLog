@@ -104,14 +104,14 @@ Item {
 
             ComboBox {
                 id: comboClass
-                Layout.preferredWidth: 80
+                Layout.preferredWidth: 90
                 model: ["1班","2班","3班","4班","5班","6班","7班","8班"]
                 currentIndex: currentUser.classNum
             }
 
             ComboBox {
                 id: comboGroup
-                Layout.preferredWidth: 80
+                Layout.preferredWidth: 90
                 model: ["1组","2组","3组","4组","5组"]
                 currentIndex: currentUser.groupNum
             }
