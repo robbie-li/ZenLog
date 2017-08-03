@@ -26,7 +26,7 @@ ApplicationWindow {
     Material.primary:    "#66BAB7"
     Material.background: "white"
 
-    property User currentUser: UserModel.getCurrentUser()
+    property User currentUser: SqlModel.getCurrentUser()
 
     title: qsTr("精进修行")
 
@@ -68,6 +68,7 @@ ApplicationWindow {
                 size: 28
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
+                visible: stack.depth === 1
 
                 Menu {
                     id: optionsMenu
@@ -141,10 +142,11 @@ ApplicationWindow {
     }
 
     function reloadTitle() {
-        var user = UserModel.getCurrentUser()
+        var user = SqlModel.getCurrentUser()
         if(user) {
             titleLabel.text = user.name + "的" + user.courseName + "日志"
         } else {
+            console.log("failed to get current user")
             titleLabel.text = "精进日志"
         }
     }

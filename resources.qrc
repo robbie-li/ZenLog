@@ -21,5 +21,6 @@
         <file>content/dialogs/ClipBoardStatusDialog.qml</file>
         <file>content/controls/CourseStatistic.qml</file>
         <file>content/controls/ColoredImage.qml</file>
+        <file>content/controls/UserDelegate.qml</file>
     </qresource>
 </RCC>

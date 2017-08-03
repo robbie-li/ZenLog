@@ -24,7 +24,7 @@ SqlModel::SqlModel() : QSqlQueryModel() {
   }
 }
 
-QList<User*> SqlModel::listUsers() {
+QList<QObject*> SqlModel::listUsers() {
   const QString queryStr = QString::fromLatin1("SELECT * FROM user");
 
   QSqlQuery query;
@@ -32,7 +32,7 @@ QList<User*> SqlModel::listUsers() {
     qDebug() << ("failed to load user") << query.lastError();
   }
 
-  QList<User*> users;
+  QList<QObject*> users;
 
   while (query.next()) {
     User* user = new User(this);
@@ -56,6 +56,9 @@ User* SqlModel::getCurrentUser() {
   const QString queryStr = QString::fromLatin1("SELECT * FROM user where is_default='1' ");
 
   QSqlQuery query;
+
+  qDebug() << "Executing:" << queryStr;
+
   if (!query.exec(queryStr)) {
     qDebug() << ("failed to load user") << query.lastError();
   }
@@ -72,6 +75,7 @@ User* SqlModel::getCurrentUser() {
     user->set_groupNum(query.value("group_num").toInt());
     user->set_groupIdx(query.value("group_idx").toInt());
     user->set_targetCount(query.value("target_count").toInt());
+    qDebug() << "Current User:" << user->name();
     return user;
   }
 

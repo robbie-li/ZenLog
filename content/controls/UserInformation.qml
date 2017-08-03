@@ -28,6 +28,7 @@ Frame {
             source: "qrc:/Material/icons/action/done.svg"
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.fillHeight: true
+            Layout.preferredHeight: 48
             Layout.margins: 2
             onClicked: {
                 userSetting.updateUser(true)
@@ -39,7 +40,7 @@ Frame {
     UserSetting {
         id: userSetting
         width: parent.width
-        currentUser: UserModel.getCurrentUser()
+        currentUser: SqlModel.getCurrentUser()
         anchors {
             top: rowButtons.bottom
             bottom: parent.bottom
@@ -48,11 +49,11 @@ Frame {
 
     Connections {
         target: UserModel
-        onModelChanged: userSetting.currentUser = UserModel.getCurrentUser()
+        onModelChanged: userSetting.currentUser = SqlModel.getCurrentUser()
     }
 
     Connections {
         target: SqlModel
-        onUserUpdated: userSetting.currentUser = UserModel.getCurrentUser()
+        onUserUpdated: userSetting.currentUser = SqlModel.getCurrentUser()
     }
 }

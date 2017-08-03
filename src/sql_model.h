@@ -55,7 +55,7 @@ class SqlModel : public QSqlQueryModel {
   SqlModel();
 
   // User Management
-  Q_INVOKABLE QList<User*> listUsers();
+  Q_INVOKABLE QList<QObject*> listUsers();
   Q_INVOKABLE User* getCurrentUser();
   Q_INVOKABLE bool createUser(User* user);
   Q_INVOKABLE bool updateUser(User* user);

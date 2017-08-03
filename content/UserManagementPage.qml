@@ -13,9 +13,16 @@ Item {
     id: root
 
     property User currentUser: UserModel.getCurrentUser()
-    property string selectedUserName
-    property string deletedUserName
     property string title: qsTr("用户管理")
+    property int currentIndex: -1
+
+    Connections {
+        target: listView
+        onPressAndHold: {
+            currentIndex = index
+            userMenu.open()
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -32,24 +39,21 @@ Item {
 
                 RowLayout {
                     width: parent.width
-                    height: 40
 
                     Label {
+                        Layout.preferredHeight: 36
                         text: "用户列表"
                         font.pixelSize: 20
+                        font.bold: true
                         Layout.fillWidth: true
-                    }
-
-                    ImageTextButton {
-                        implicitHeight: 40
-                        text: "编辑"
-                        source: "qrc:/Material/icons/editor/mode_edit.svg"
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        Layout.margins: 5
                     }
                 }
 
                 ListView {
                     id: listView
+
+                    signal pressAndHold(int index)
 
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -57,48 +61,16 @@ Item {
                     orientation: ListView.Vertical
                     flickableDirection: Flickable.VerticalFlick
 
-                    model: UserModel.listUserNames()
+                    model: SqlModel.listUsers()
                     clip: true
 
-                    ButtonGroup {
-                        id: userGroup
-                    }
-
-                    delegate: Rectangle {
+                    delegate: UserDelegate {
+                        id: delegate
                         width: listView.width
-                        implicitHeight: 48
-                        color: index % 2 == 0 ? "lightblue" : "lightgrey"
 
-                        RowLayout {
-                            anchors.fill: parent
-
-                            RadioButton {
-                                id: btnSelect
-                                implicitHeight: parent.height
-                                text: modelData
-                                font.pixelSize: 32
-                                checked: modelData === currentUser.name
-                                ButtonGroup.group: userGroup
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                onCheckedChanged: {
-                                    if(checked) {
-                                        selectedUserName = btnSelect.text
-                                        SqlModel.setDefaultUser(selectedUserName)
-                                    }
-                                }
-                            }
-
-                            ImageButton {
-                                id: btnDelete
-                                text: qsTr("删除")
-                                implicitHeight: parent.height
-                                source: "qrc:/Material/icons/action/delete.svg"
-                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                                onClicked: {
-                                    deletedUserName = modelData
-                                    deleteUserDialog.open()
-                                }
-                            }
+                        Connections {
+                            target: delegate
+                            onPressAndHold: listView.pressAndHold(index)
                         }
                     }
                 }
@@ -107,10 +79,9 @@ Item {
 
         RowLayout {
             width: parent.width
-            height: 40
 
             ImageTextButton {
-                implicitHeight: 40
+                Layout.preferredHeight: 48
                 Layout.fillWidth: true
                 text: qsTr("新建用户")
                 source: "qrc:/Material/icons/content/add.svg"
@@ -140,6 +111,6 @@ Item {
     }
 
     function reload() {
-        listView.model = UserModel.listUserNames();
+        listView.model = SqlModel.listUsers();
     }
 }
