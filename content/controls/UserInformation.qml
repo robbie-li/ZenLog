@@ -15,12 +15,11 @@ Frame {
         height: 40
         anchors {
             top: parent.top
-            bottomMargin: 2
         }
 
         Label {
             text: "个人信息"
-            font.pixelSize: 32
+            font.pixelSize: 24
         }
 
         ImageTextButton {
@@ -28,7 +27,7 @@ Frame {
             source: "qrc:/Material/icons/action/done.svg"
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.fillHeight: true
-            Layout.preferredHeight: 48
+            Layout.preferredHeight: 32
             Layout.margins: 2
             onClicked: {
                 userSetting.updateUser(true)
@@ -37,12 +36,22 @@ Frame {
         }
     }
 
+    Rectangle {
+        id: separator
+        height: 2
+        width: parent.width
+        anchors.top: rowButtons.bottom
+        anchors.topMargin: 20
+        color: "black"
+    }
+
     UserSetting {
         id: userSetting
         width: parent.width
         currentUser: SqlModel.getCurrentUser()
         anchors {
-            top: rowButtons.bottom
+            topMargin: 20
+            top: separator.bottom
             bottom: parent.bottom
         }
     }

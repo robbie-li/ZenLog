@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 import zenlog.user 1.0
 
-Frame {
+Item {
     property User currentUser
 
     function updateUser(isCurrent) {
@@ -98,19 +98,20 @@ Frame {
             visible: !userType.checked
         }
 
-        Row {
+        RowLayout {
             visible: !userType.checked
+            Layout.fillWidth: true
 
             ComboBox {
                 id: comboClass
-                Layout.preferredWidth: parent.width* 0.35
+                Layout.preferredWidth: 80
                 model: ["1班","2班","3班","4班","5班","6班","7班","8班"]
                 currentIndex: currentUser.classNum
             }
 
             ComboBox {
                 id: comboGroup
-                Layout.preferredWidth: parent.width* 0.35
+                Layout.preferredWidth: 80
                 model: ["1组","2组","3组","4组","5组"]
                 currentIndex: currentUser.groupNum
             }
