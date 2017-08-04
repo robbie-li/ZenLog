@@ -16,8 +16,7 @@ static QObject* sqlmodel_singletontype_provider(QQmlEngine* engine, QJSEngine* s
   Q_UNUSED(engine)
   Q_UNUSED(scriptEngine)
 
-  SqlModel* model = new SqlModel;
-  return model;
+  return SqlModel::instance();
 }
 
 static QObject* usermodel_singletontype_provider(QQmlEngine* engine, QJSEngine* scriptEngine) {

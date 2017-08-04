@@ -1,5 +1,6 @@
 #include "sql_model.h"
 
+#include <mutex>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
@@ -10,7 +11,16 @@
 #include "user.h"
 
 namespace {
-  static bool connected = false;
+static bool connected = false;
+std::mutex sql_model_instance_mutex;
+}
+
+SqlModel* SqlModel::instance_ = nullptr;
+
+SqlModel* SqlModel::instance() {
+  static std::once_flag oc;
+  std::call_once(oc, [&] { instance_ = new SqlModel; });
+  return instance_;
 }
 
 SqlModel::SqlModel() : QSqlQueryModel() {
@@ -24,7 +34,7 @@ SqlModel::SqlModel() : QSqlQueryModel() {
   }
 }
 
-QList<QObject*> SqlModel::listUsers() {
+QList<User> SqlModel::listUsers() {
   const QString queryStr = QString::fromLatin1("SELECT * FROM user");
 
   QSqlQuery query;
@@ -32,20 +42,20 @@ QList<QObject*> SqlModel::listUsers() {
     qDebug() << ("failed to load user") << query.lastError();
   }
 
-  QList<QObject*> users;
+  QList<User> users;
 
   while (query.next()) {
-    User* user = new User(this);
-    user->set_userId(query.value("user_id").toString());
-    user->set_userType(query.value("user_type").toInt());
-    user->set_current(query.value("is_default").toInt());
-    user->set_courseName(query.value("course_name").toString());
-    user->set_qq(query.value("qq").toString());
-    user->set_name(query.value("name").toString());
-    user->set_classNum(query.value("class_num").toInt());
-    user->set_groupNum(query.value("group_num").toInt());
-    user->set_groupIdx(query.value("group_idx").toInt());
-    user->set_targetCount(query.value("target_count").toInt());
+    User user;
+    user.set_userId(query.value("user_id").toString());
+    user.set_userType(query.value("user_type").toInt());
+    user.set_current(query.value("is_default").toInt());
+    user.set_courseName(query.value("course_name").toString());
+    user.set_qq(query.value("qq").toString());
+    user.set_name(query.value("name").toString());
+    user.set_classNum(query.value("class_num").toInt());
+    user.set_groupNum(query.value("group_num").toInt());
+    user.set_groupIdx(query.value("group_idx").toInt());
+    user.set_targetCount(query.value("target_count").toInt());
     users.append(user);
   }
 
@@ -64,7 +74,7 @@ User* SqlModel::getCurrentUser() {
   }
 
   if (query.first()) {
-    User* user = new User(this);
+    User* user = new User();
     user->set_userId(query.value("user_id").toString());
     user->set_userType(query.value("user_type").toInt());
     user->set_current(query.value("is_default").toInt());
@@ -105,7 +115,7 @@ bool SqlModel::createUser(User* user) {
   bool success = query.exec(sqlSave);
   if (success) {
     qDebug() << "user created.";
-    emit userCreated();
+    emit userChanged();
   } else {
     qDebug() << "Failed to execute SQL:" << query.lastError();
   }
@@ -147,7 +157,7 @@ bool SqlModel::updateUser(User* user) {
   bool success = query.exec(sqlSave);
   if (success) {
     qDebug() << "user updated.";
-    emit userUpdated();
+    emit userChanged();
   } else {
     qDebug() << "Failed to execute SQL:" << query.lastError();
   }
@@ -167,7 +177,7 @@ bool SqlModel::removeUser(const QString& name) {
   bool success = query.exec(sqlDelete);
   if (success) {
     qDebug() << "user deleted.";
-    emit userDeleted();
+    emit userChanged();
   } else {
     qDebug() << "Failed to execute SQL:" << query.lastError();
   }
@@ -197,7 +207,7 @@ bool SqlModel::setDefaultUser(const QString& name) {
     qDebug() << "Failed to execute SQL:" << query.lastError();
     return false;
   } else {
-    emit userUpdated();
+    emit userChanged();
   }
 
   return success;

@@ -29,7 +29,8 @@ class User : public QObject {
 
  public:
   explicit User(QObject* parent = 0);
-  User* clone() const;
+  User(const User& user);
+  User& operator=(const User& user);
 
  signals:
   void userIdChanged(const QString& userId);

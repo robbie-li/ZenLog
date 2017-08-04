@@ -4,33 +4,47 @@
 #include <QUuid>
 
 UserModel::UserModel(QObject* parent)
-  : QObject(parent) {
+  : QAbstractListModel(parent)
+  , users_(SqlModel::instance()->listUsers()) {
+  connect(SqlModel::instance(), &SqlModel::userChanged, this, [this] {
+    beginResetModel();
+    users_ = SqlModel::instance()->listUsers();
+    endResetModel();
+  });
 }
 
-User* UserModel::createUser() {
-  User* user = new User(this);
-  user->set_userId(QUuid::createUuid().toString());
-  return user;
+int UserModel::rowCount(const QModelIndex&) const {
+  return users_.count();
 }
 
-bool UserModel::saveUser(User* user) {
-  SqlModel model;
-  if (model.createUser(user)) {
-    delete  user;
-    emit modelChanged();
-    return true;
-  }
-  return false;
+QVariant UserModel::data(const QModelIndex& index, int role) const {
+  if (index.row() < rowCount())
+    switch (role) {
+      case NameRole:        return users_.at(index.row()).name();
+      case QQRole:          return users_.at(index.row()).qq();
+      case CurrentRole:     return users_.at(index.row()).current();
+      case CourseRole:      return users_.at(index.row()).courseName();
+      case TypeRole:        return users_.at(index.row()).userType();
+      case GroupIndexRole:  return users_.at(index.row()).groupNum();
+      case ClassIndexRole:  return users_.at(index.row()).classNum();
+      case GroupNumberRole: return users_.at(index.row()).groupIdx();
+      case TargetCountRole: return users_.at(index.row()).targetCount();
+      default: return QVariant();
+    }
+  return QVariant();
 }
 
-User* UserModel::getCurrentUser() {
-  SqlModel model;
-  return model.getCurrentUser();
+QHash<int, QByteArray> UserModel::roleNames() const {
+  static const QHash<int, QByteArray> roles {
+    { NameRole,        "name"        },
+    { QQRole,          "QQ"          },
+    { CurrentRole,     "current"     },
+    { CourseRole,      "course"      },
+    { TypeRole,        "type"        },
+    { GroupIndexRole,  "groupIndex"  },
+    { ClassIndexRole,  "classIndex"  },
+    { GroupNumberRole, "groupNumber" },
+    { TargetCountRole, "targetCount" },
+  };
+  return roles;
 }
-
-QList<QObject*> UserModel::listUsers() const {
-  SqlModel model;
-  QList<QObject*> users = model.listUsers();
-  return  users;
-}
-

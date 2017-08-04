@@ -18,7 +18,7 @@ QString formatXML(const QString& xmlIn) {
 }
 
 void Clipboard::copyMonthlyCourse(const int year, const int month) {
-  SqlModel db;
+  SqlModel& db = *SqlModel::instance();
 
   User* user = qobject_cast<User*>(db.getCurrentUser());
 
@@ -46,7 +46,7 @@ void Clipboard::copyMonthlyCourse(const int year, const int month) {
 }
 
 void Clipboard::copyMonthlyCourseAsHtml(const int year, const int month) {
-  SqlModel db;
+  SqlModel& db = *SqlModel::instance();
 
   User* user = qobject_cast<User*>(db.getCurrentUser());
 

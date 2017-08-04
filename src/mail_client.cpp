@@ -19,7 +19,7 @@ void MailClient::sendMail(const int year, const int month) {
   smtp.setUser("xxxx@gmail.com");
   smtp.setPassword("xxxx");
 
-  SqlModel db;
+  SqlModel& db = *SqlModel::instance();
   QObject* obj = db.getCurrentUser();
   User* user = NULL;
   if(obj) {

@@ -51,11 +51,17 @@
 class SqlModel : public QSqlQueryModel {
   Q_OBJECT
 
- public:
+ protected:
+  static SqlModel* instance_;
+
+ protected:
   SqlModel();
 
+ public:
+  static SqlModel* instance();
+
   // User Management
-  Q_INVOKABLE QList<QObject*> listUsers();
+  Q_INVOKABLE QList<User> listUsers();
   Q_INVOKABLE User* getCurrentUser();
   Q_INVOKABLE bool createUser(User* user);
   Q_INVOKABLE bool updateUser(User* user);
@@ -78,9 +84,7 @@ class SqlModel : public QSqlQueryModel {
   Q_INVOKABLE QString courseAverage();
 
  signals:
-  void userCreated();
-  void userDeleted();
-  void userUpdated();
+  void userChanged();
   void courseChanged();
 
  private:
