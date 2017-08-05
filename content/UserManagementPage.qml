@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import zenlog.usermodel 1.0
 import zenlog.sqlmodel 1.0
 import zenlog.user 1.0
 
@@ -12,7 +11,7 @@ import "dialogs"
 Item {
     id: root
 
-    property User currentUser: UserModel.getCurrentUser()
+    property User currentUser: SqlModel.getCurrentUser()
     property string title: qsTr("用户管理")
     property int currentIndex: -1
 
@@ -61,7 +60,9 @@ Item {
                     orientation: ListView.Vertical
                     flickableDirection: Flickable.VerticalFlick
 
-                    model: SqlModel.listUsers()
+                    model: UserModel {
+                    }
+
                     clip: true
 
                     delegate: UserDelegate {
@@ -96,7 +97,6 @@ Item {
         id: createUserDialog
         width: root.width
         contentHeight: 500
-        onAccepted: reload()
     }
 
     DeleteUserDialog {
@@ -106,11 +106,6 @@ Item {
         onAccepted: {
             console.log("deleting user:" + deletedUserName)
             SqlModel.removeUser(deletedUserName)
-            reload()
         }
-    }
-
-    function reload() {
-        listView.model = SqlModel.listUsers();
     }
 }

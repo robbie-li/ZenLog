@@ -39,8 +39,4 @@ Button {
         border.color: control.down ? "#17a81a" : "#21be2b"
         border.width: 1
     }
-
-    Component.onCompleted: {
-        console.log("ImageTextButton height:" + control.height)
-    }
 }

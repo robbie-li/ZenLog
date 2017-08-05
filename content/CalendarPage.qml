@@ -16,8 +16,7 @@ Page {
 
     Connections {
         target: SqlModel
-        onUserUpdated: {
-            console.log("user changed")
+        onUserChanged: {
             reload()
         }
     }

@@ -57,7 +57,6 @@ Rectangle {
             color: "transparent"
 
             ImageButton {
-                size: 28
                 anchors.centerIn: parent
                 anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
                 source: "qrc:/Material/icons/action/delete.svg"

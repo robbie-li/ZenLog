@@ -3,7 +3,6 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
-import zenlog.usermodel 1.0
 import zenlog.user 1.0
 
 import "./controls"
@@ -20,17 +19,9 @@ Page {
             console.log("course changed")
             root.courseChanged();
         }
-        onUserUpdated: {
+        onUserChanged: {
             console.log("user changed")
             reloadUserSetting()
-        }
-    }
-
-    Connections {
-        target: UserModel
-        onModelChanged: {
-            console.log("user model changed")
-            reloadUserSetting();
         }
     }
 

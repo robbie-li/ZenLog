@@ -4,14 +4,9 @@ import QtQuick.Controls 2.2
 Button {
     id: control
     property var source
-    property int size: 48
-
-    implicitHeight: size
-    implicitWidth: size
 
     background: Rectangle {
-        implicitHeight: 20
-        implicitWidth: 40
+        anchors.fill: parent
         color: "transparent"
         opacity: enabled ? 1 : 0.3
     }
@@ -22,5 +17,6 @@ Button {
         source: control.source
         ToolTip.text: control.text
         fillMode: Image.PreserveAspectFit
+        smooth: true
     }
 }

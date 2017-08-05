@@ -88,8 +88,11 @@ class SqlModel : public QSqlQueryModel {
   void courseChanged();
 
  private:
+  int getDatabaseVersion();
+ private:
   static bool createConnection();
   static bool createTables();
+  static bool updateTables();
 };
 
 #endif

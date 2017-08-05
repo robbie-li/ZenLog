@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import zenlog.sqlmodel 1.0
+
 SwipeDelegate {
     id: delegate
 
@@ -17,19 +19,19 @@ SwipeDelegate {
         RowLayout {
             Layout.fillWidth: true
 
-            Image {
-                Layout.preferredHeight: 24
-                Layout.preferredWidth: 24
-                fillMode:Image.PreserveAspectFit
-                source: modelData.current ? "qrc:/Material/icons/toggle/check_box.svg" : "qrc:/Material/icons/toggle/check_box_outline_blank.svg"
+            CheckBox {
+                checked: current
+                onToggled: {
+                    if(toggled) {
+                        SqlModel.setDefaultUser(name)
+                    }
+                }
             }
 
-            Text {
+            Label {
                 Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: modelData.name
-                font.bold: true
-                font.pixelSize: 20
+                text: name
+                font.pixelSize: 30
             }
         }
 
@@ -47,7 +49,7 @@ SwipeDelegate {
             }
 
             Label {
-                text: modelData.qq
+                text: QQ
                 font.bold: true
                 elide: Text.ElideRight
                 Layout.fillWidth: true
@@ -59,7 +61,7 @@ SwipeDelegate {
             }
 
             Label {
-                text: modelData.courseName
+                text: course
                 font.bold: true
                 elide: Text.ElideRight
                 Layout.fillWidth: true
@@ -71,7 +73,7 @@ SwipeDelegate {
             }
 
             Label {
-                text: modelData.targetCount
+                text: targetCount
                 font.bold: true
                 elide: Text.ElideRight
                 Layout.fillWidth: true
@@ -100,7 +102,9 @@ SwipeDelegate {
         height: parent.height
         anchors.right: parent.right
 
-        SwipeDelegate.onClicked: listView.model.remove(index)
+        SwipeDelegate.onClicked: {
+            SqlModel.removeUser(name)
+        }
 
         background: Rectangle {
             color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"

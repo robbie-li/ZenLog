@@ -11,8 +11,8 @@
 #include "user.h"
 
 namespace {
-static bool connected = false;
-std::mutex sql_model_instance_mutex;
+  static bool connected = false;
+  std::mutex sql_model_instance_mutex;
 }
 
 SqlModel* SqlModel::instance_ = nullptr;
@@ -26,7 +26,13 @@ SqlModel* SqlModel::instance() {
 SqlModel::SqlModel() : QSqlQueryModel() {
   if (!connected) {
     connected = createConnection();
+
     if (connected) {
+      //int dbversion = getDatabaseVersion();
+      //if (dbversion != 1) {
+      updateTables();
+      //}
+
       createTables();
     } else {
       qFatal("failed to connect database.");
@@ -449,6 +455,25 @@ QVariantMap SqlModel::monthlyCourses(const int year, const int month) {
   return courses;
 }
 
+int SqlModel::getDatabaseVersion() {
+  const QString queryStr = QString::fromLatin1("SELECT version FROM dbversion")                           ;
+
+  qDebug() << "Executing:" << queryStr;
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug("Query failed");
+  }
+
+  int dbversion = 0;
+
+  if (query.first()) {
+    dbversion = query.value(0).toInt();
+  }
+
+  return dbversion;
+}
+
 bool SqlModel::createConnection() {
   QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -496,26 +521,50 @@ bool SqlModel::createTables() {
   query.clear();
 
   if (!query.exec(R"(CREATE TABLE dbversion (
-                    version       text NOT NULL
+                    version       smallint NOT NULL
                     );)")) {
     qDebug() << "Failed to create dbversion table:" << query.lastError();
   } else {
     query.exec(R"(INSERT INTO dbversion VALUES (
-                   '1.0'
+                   '1'
                    );)");
   }
 
   query.clear();
 
-  if (!query.exec(R"(CREATE TABLE IF NOT EXISTS runtime_info (
-                    current_user_id  text NOT NULL,
-                    /* Foreign keys */
-                    CONSTRAINT Foreign_key02
-                    FOREIGN KEY (current_user_id)
-                    REFERENCES user(user_id)
-                    );)")) {
-    qDebug() << "Failed to create runtime_info table:" << query.lastError();
+  return true;
+}
+
+bool SqlModel::updateTables() {
+  QSqlQuery query;
+
+  if (!query.exec(R"(ALTER TABLE user
+                    ADD
+                    COLUMN user_type  smallint NOT NULL default 0
+                    ;)")) {
+    qDebug() << "Failed to alter user table:" << query.lastError();
   }
 
-  return true;
+  if (!query.exec(R"(ALTER TABLE user
+                    ADD
+                    COLUMN is_default smallint NOT NULL default 0
+                    ;)")) {
+    qDebug() << "Failed to alter user table:" << query.lastError();
+  }
+
+  if (!query.exec(R"(ALTER TABLE course
+                    ADD
+                    COLUMN user_id guid
+                    ;)")) {
+    qDebug() << "Failed to alter course table:" << query.lastError();
+  }
+
+  if (!query.exec(R"(ALTER TABLE course
+                    ADD
+                    CONSTRAINT Foreign_key01
+                    FOREIGN KEY (user_id)
+                    REFERENCES user(user_id)
+                    ;)")) {
+    qDebug() << "Failed to alter course table:" << query.lastError();
+  }
 }

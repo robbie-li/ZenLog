@@ -1,11 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
-import QtQuick.Controls.Universal 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
-import zenlog.usermodel 1.0
 import zenlog.user 1.0
 
 import "content"
@@ -15,12 +13,6 @@ import "content/dialogs"
 ApplicationWindow {
     id: window
 
-    width: 540
-    height: 960
-    visible: true
-
-    Universal.theme: Universal.Dark
-
     Material.theme: Material.Light
     Material.accent:     "#66BAB7"
     Material.primary:    "#66BAB7"
@@ -28,11 +20,14 @@ ApplicationWindow {
 
     property User currentUser: SqlModel.getCurrentUser()
 
+    width: 480
+    height: 720
+    visible: true
     title: qsTr("精进修行")
+    flags: Qt.FramelessWindowHint | Qt.Window
 
     header: ToolBar {
         id: toolbar
-        contentHeight: 32
 
         RowLayout {
             spacing: 20
@@ -40,7 +35,8 @@ ApplicationWindow {
 
             ImageButton {
                 Layout.leftMargin: 4
-                size: 28
+                Layout.preferredHeight: 32
+                Layout.preferredWidth: 32
                 source: stack.depth > 1 ? "qrc:/Material/icons/navigation/chevron_left.svg" : "qrc:/Material/icons/navigation/menu.svg"
                 onClicked: {
                     if (stack.depth > 1) {
@@ -59,13 +55,15 @@ ApplicationWindow {
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
+                Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 color: "white"
             }
 
             ImageButton {
                 Layout.rightMargin: 4
-                size: 28
+                Layout.preferredHeight: 32
+                Layout.preferredWidth: 32
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
                 visible: stack.depth === 1
@@ -95,8 +93,40 @@ ApplicationWindow {
         }
     }
 
+    Drawer {
+        id: drawer
+        width: window.width * 3 / 4
+        height: window.height
+        UserInformation {
+            id: user_info
+            anchors.fill: parent
+        }
+    }
+
+    StackView {
+        id: stack
+        anchors.fill: parent
+
+        initialItem: CalendarPage {
+            id: calendar
+            onDaySelected: {
+                daily.selectDate(selectedDate)
+                stack.push(daily)
+            }
+        }
+    }
+
+    DailyLogPage {
+        id: daily
+        visible: false
+        onCourseChanged: {
+            calendar.reload()
+        }
+    }
+
     UserManagementPage {
         id:userManagerment
+        visible: false
     }
 
     AboutDialog {
@@ -108,38 +138,7 @@ ApplicationWindow {
         width: Math.min(window.width, window.height) / 4 * 3
         contentHeight: 300
     }
-    
-    StackView {
-        id: stack
 
-        initialItem: CalendarPage {
-            id: calendar
-            onDaySelected: {
-                daily.selectDate(selectedDate)
-                stack.push(daily)
-            }
-        }
-
-        anchors.fill: parent
-    }
-
-    DailyLogPage {
-        id: daily
-        visible: false
-        onCourseChanged: {
-            calendar.reload()
-        }
-    }
-
-    Drawer {
-        id: drawer
-        width: window.width * 3 / 4
-        height: window.height
-        UserInformation {
-            id: user_info
-            anchors.fill: parent
-        }
-    }
 
     function reloadTitle() {
         var user = SqlModel.getCurrentUser()
@@ -154,7 +153,7 @@ ApplicationWindow {
     Connections {
         target: SqlModel
 
-        onUserUpdated: {
+        onUserChanged: {
             console.log("user changed")
             reloadTitle()
         }

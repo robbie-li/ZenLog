@@ -22,5 +22,6 @@
         <file>content/controls/CourseStatistic.qml</file>
         <file>content/controls/ColoredImage.qml</file>
         <file>content/controls/UserDelegate.qml</file>
+        <file>content/dialogs/UserDialog.qml</file>
     </qresource>
 </RCC>

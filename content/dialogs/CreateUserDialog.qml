@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import zenlog.usermodel 1.0
 import zenlog.sqlmodel 1.0
 import zenlog.user 1.0
 
@@ -13,6 +12,10 @@ Dialog {
 
     title: "创建用户"
 
+    User {
+        id: currentUser
+    }
+
     modal: true
     focus: true
 
@@ -20,12 +23,11 @@ Dialog {
 
     contentItem: UserSetting {
         id: userSetting
-        currentUser: UserModel.createUser()
+        currentUser: currentUser
     }
 
     onAccepted: {
-        userSetting.updateUser();
-        var user = userSetting.currentUser;
-        UserModel.saveUser(user);
+        userSetting.updateUser(false)
+        SqlModel.createUser(userSetting.currentUser);
     }
 }

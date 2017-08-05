@@ -19,14 +19,6 @@ static QObject* sqlmodel_singletontype_provider(QQmlEngine* engine, QJSEngine* s
   return SqlModel::instance();
 }
 
-static QObject* usermodel_singletontype_provider(QQmlEngine* engine, QJSEngine* scriptEngine) {
-  Q_UNUSED(engine)
-  Q_UNUSED(scriptEngine)
-
-  UserModel* model = new UserModel;
-  return model;
-}
-
 static QObject* clipboard_singletontype_provider(QQmlEngine* engine, QJSEngine* scriptEngine) {
   Q_UNUSED(engine)
   Q_UNUSED(scriptEngine)
@@ -45,14 +37,15 @@ int main(int argc, char* argv[]) {
   QQuickStyle::setStyle("Material");
 
   qmlRegisterSingletonType<SqlModel> ("zenlog.sqlmodel",  1, 0, "SqlModel",  sqlmodel_singletontype_provider);
-  qmlRegisterSingletonType<UserModel> ("zenlog.usermodel",  1, 0, "UserModel",  usermodel_singletontype_provider);
   qmlRegisterSingletonType<Clipboard>("zenlog.clipboard", 1, 0, "ClipBoard", clipboard_singletontype_provider);
-  qmlRegisterType<MailClient>("zenlog.mailclient", 1, 0, "MailClient");
   qmlRegisterType<User>("zenlog.user", 1, 0, "User");
+  qmlRegisterType<UserModel>("zenlog.user", 1, 0, "UserModel");
   qmlRegisterType<Course>("zenlog.course", 1, 0, "Course");
 
   engine.addImportPath(QStringLiteral("qrc:/modules/"));
   engine.addImportPath(QStringLiteral(":/"));
+
+
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty())
