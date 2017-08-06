@@ -12,12 +12,19 @@ Dialog {
 
     title: "删除用户"
 
+    property string userName
+
     modal: true
     focus: true
 
     standardButtons: Dialog.Yes | Dialog.No
 
     contentItem: Text {
-        text: "你确定要删除该用户?"
+        text: "你确定要删除该用户:" + userName + "?"
+    }
+
+    onAccepted: {
+        console.log("deleting user:" + userName)
+        SqlModel.removeUser(userName);
     }
 }

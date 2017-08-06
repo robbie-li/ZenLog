@@ -12,8 +12,19 @@ Dialog {
 
     title: "创建用户"
 
+    function guid() {
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+
     User {
         id: currentUser
+        userId: guid()
     }
 
     modal: true
@@ -27,7 +38,9 @@ Dialog {
     }
 
     onAccepted: {
-        userSetting.updateUser(false)
-        SqlModel.createUser(userSetting.currentUser);
+        if(userSetting.valid()) {
+            userSetting.updateUser(false)
+            SqlModel.createUser(userSetting.currentUser);
+        }
     }
 }

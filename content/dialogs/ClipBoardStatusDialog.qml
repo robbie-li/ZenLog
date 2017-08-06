@@ -16,6 +16,12 @@ Dialog {
     focus: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
+    function show(result) {
+        clipboard_status.status = result;
+        clipboard_timer.start();
+        clipboard_status.open();
+    }
+
     Timer {
         id: clipboard_timer
         interval: 2000

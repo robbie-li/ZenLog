@@ -3,9 +3,13 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
+import "../dialogs"
 
 SwipeDelegate {
     id: delegate
+
+    signal editUser(string userId)
+    signal removeUser(string userName)
 
     checkable: true
 
@@ -103,7 +107,7 @@ SwipeDelegate {
         anchors.right: parent.right
 
         SwipeDelegate.onClicked: {
-            SqlModel.removeUser(name)
+           delegate.removeUser(name)
         }
 
         background: Rectangle {
@@ -120,7 +124,9 @@ SwipeDelegate {
         height: parent.height
         anchors.left: parent.left
 
-        SwipeDelegate.onClicked: listView.model.remove(index)
+        SwipeDelegate.onClicked: {
+            delegate.editUser(userId)
+        }
 
         background: Rectangle {
             color: editLabel.SwipeDelegate.pressed ? Qt.darker("deepskyblue", 1.1) : "deepskyblue"

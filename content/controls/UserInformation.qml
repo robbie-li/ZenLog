@@ -32,6 +32,7 @@ Frame {
                 userSetting.updateUser(true)
                 SqlModel.updateUser(userSetting.currentUser)
             }
+            enabled: userSetting.valid()
         }
     }
 

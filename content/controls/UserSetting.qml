@@ -19,6 +19,15 @@ Item {
         currentUser.userType = userType.checked ? User.ExternalUser : User.GroupUser
     }
 
+    function valid() {
+        if( !textTarget.acceptableInput ) return false;
+        if( !textGroupIndex.acceptableInput) return false;
+        if( textQQ.text === '') return false;
+        if( textName.text === '') return false;
+
+        return true;
+    }
+
     GridLayout {
         id: grid
         width: parent.width
@@ -149,6 +158,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             text: comboCourse.currentText === "大悲咒" ? "108" : "10000"
+            readOnly: true
         }
 
         Label {
@@ -165,7 +175,7 @@ Item {
             Layout.fillHeight: true
             text: currentUser.targetCount
             inputMethodHints : Qt.ImhDigitsOnly
-            validator: IntValidator { bottom: textBaseTarget.text; top: 99999 }
+            validator: IntValidator { bottom: textBaseTarget.text; top: 999999 }
         }
     }
 }

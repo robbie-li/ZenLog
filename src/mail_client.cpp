@@ -22,11 +22,11 @@ void MailClient::sendMail(const int year, const int month) {
   SqlModel& db = *SqlModel::instance();
   QObject* obj = db.getCurrentUser();
   User* user = NULL;
-  if(obj) {
+  if (obj) {
     user = qobject_cast<User*>(obj);
   }
 
-  if(!user) {
+  if (!user) {
     return;
   }
 
@@ -53,14 +53,14 @@ void MailClient::sendMail(const int year, const int month) {
   QString html = "<h1>" + user->name()  + "</h1>"
                  "<h2>" + date  + "</h2>";
 
-  QVariantMap data = db.monthlyCourses(year, month);
+  QVariantMap data = db.monthlyCourses(user->userId(), year, month);
 
   html += "<table border='1'>"
           "<td>"
           "<th>day</th>"
           "<th>count</th>"
           "</td>";
-  for(QVariantMap::iterator itr = data.begin(); itr != data.end(); ++itr) {
+  for (QVariantMap::iterator itr = data.begin(); itr != data.end(); ++itr) {
     html += "<td>";
     html += "<tr>" + itr.key() + "</tr>";
     html += "<tr>" + itr.value().toString() + "</tr>";

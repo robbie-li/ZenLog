@@ -63,6 +63,7 @@ class SqlModel : public QSqlQueryModel {
   // User Management
   Q_INVOKABLE QList<User> listUsers();
   Q_INVOKABLE User* getCurrentUser();
+  Q_INVOKABLE User* getUser(const QString& userId);
   Q_INVOKABLE bool createUser(User* user);
   Q_INVOKABLE bool updateUser(User* user);
   Q_INVOKABLE bool removeUser(const QString& name);
@@ -74,14 +75,14 @@ class SqlModel : public QSqlQueryModel {
   Q_INVOKABLE bool deleteCourse(const int index);
 
   // FOR CALENDAR PAGE
-  Q_INVOKABLE QVariantMap monthlyCourses(const int year, const int month);
+  Q_INVOKABLE QVariantMap monthlyCourses(const QString& userId, const int year, const int month);
 
-  Q_INVOKABLE int courseTotalForMonth(const int year, const int month);
-  Q_INVOKABLE QString courseAverageForMonth(const int year, const int month);
-  Q_INVOKABLE int courseTotalForYear(const int year);
-  Q_INVOKABLE QString courseAverageForYear(const int year);
-  Q_INVOKABLE int courseTotal();
-  Q_INVOKABLE QString courseAverage();
+  Q_INVOKABLE int courseTotalForMonth(const QString& userId, const int year, const int month);
+  Q_INVOKABLE QString courseAverageForMonth(const QString& userId, const int year, const int month);
+  Q_INVOKABLE int courseTotalForYear(const QString& userId, const int year);
+  Q_INVOKABLE QString courseAverageForYear(const QString& userId, const int year);
+  Q_INVOKABLE int courseTotal(const QString& userId);
+  Q_INVOKABLE QString courseAverage(const QString& userId);
 
  signals:
   void userChanged();

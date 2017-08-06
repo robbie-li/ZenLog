@@ -15,6 +15,9 @@ Item {
     property string title: qsTr("用户管理")
     property int currentIndex: -1
 
+    signal editUser(string userId)
+    signal removeUser(string userName)
+
     Connections {
         target: listView
         onPressAndHold: {
@@ -73,6 +76,16 @@ Item {
                             target: delegate
                             onPressAndHold: listView.pressAndHold(index)
                         }
+
+                        onEditUser: {
+                            editDialog.currentUser = SqlModel.getUser(userId)
+                            editDialog.open()
+                        }
+
+                        onRemoveUser: {
+                            deleteUserDialog.userName = userName
+                            deleteUserDialog.open()
+                        }
                     }
                 }
             }
@@ -103,9 +116,11 @@ Item {
         id: deleteUserDialog
         width: root.width
         contentHeight: 200
-        onAccepted: {
-            console.log("deleting user:" + deletedUserName)
-            SqlModel.removeUser(deletedUserName)
-        }
+    }
+
+    UserDialog {
+        id: editDialog
+        width: root.width
+        contentHeight: 500
     }
 }

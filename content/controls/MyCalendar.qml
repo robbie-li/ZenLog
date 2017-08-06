@@ -6,18 +6,27 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 
 import zenlog.sqlmodel 1.0
+import zenlog.user 1.0
 
 Calendar {
     id: calendar
 
     function reload() {
-        dataArr = SqlModel.monthlyCourses(calendar.visibleYear, calendar.visibleMonth);
+        dataArr = SqlModel.monthlyCourses(currentUser.userId, calendar.visibleYear, calendar.visibleMonth);
     }
 
     property var dataArr
+    property User currentUser: SqlModel.getCurrentUser()
 
     signal daySelected(date selectedDate)
     signal monthSelected(date selectedMonth)
+
+    Connections {
+        target: SqlModel
+        onUserChanged: {
+            currentUser = SqlModel.getCurrentUser()
+        }
+    }
 
     onVisibleYearChanged : {
         reload()

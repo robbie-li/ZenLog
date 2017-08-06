@@ -10,6 +10,7 @@ class UserModel : public QAbstractListModel {
   enum UserRole {
     NameRole    = Qt::DisplayRole,
     QQRole      = Qt::UserRole,
+    UserIdRole,
     CurrentRole,
     CourseRole,
     TypeRole,

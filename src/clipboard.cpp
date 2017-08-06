@@ -17,12 +17,16 @@ QString formatXML(const QString& xmlIn) {
   return doc.toString(1);
 }
 
-void Clipboard::copyMonthlyCourse(const int year, const int month) {
+bool Clipboard::copyMonthlyCourse(const int year, const int month) {
   SqlModel& db = *SqlModel::instance();
 
   User* user = qobject_cast<User*>(db.getCurrentUser());
 
-  QVariantMap data = db.monthlyCourses(year, month);
+  if (!user) {
+    return false;
+  }
+
+  QVariantMap data = db.monthlyCourses(user->userId(), year, month);
 
   QString result;
   result += QString::fromUtf8("功课记录:") + user->name() + "\t";
@@ -43,14 +47,20 @@ void Clipboard::copyMonthlyCourse(const int year, const int month) {
 
   qDebug() << "Copy to clipboard:" << result;
   QApplication::clipboard()->setText(result);
+
+  return true;
 }
 
-void Clipboard::copyMonthlyCourseAsHtml(const int year, const int month) {
+bool Clipboard::copyMonthlyCourseAsHtml(const int year, const int month) {
   SqlModel& db = *SqlModel::instance();
 
   User* user = qobject_cast<User*>(db.getCurrentUser());
 
-  QVariantMap data = db.monthlyCourses(year, month);
+  if (!user) {
+    return false;
+  }
+
+  QVariantMap data = db.monthlyCourses(user->userId(), year, month);
 
   QString result;
   result += "<html>";
@@ -87,4 +97,6 @@ void Clipboard::copyMonthlyCourseAsHtml(const int year, const int month) {
   result += "</tr></table></body></html>";
 
   QApplication::clipboard()->setText(formatXML(result));
+
+  return true;
 }

@@ -56,7 +56,9 @@ Page {
 
     function reload() {
         currentUser = SqlModel.getCurrentUser()
-        contentReapter.model = SqlModel.listCourse(currentUser.userId, datepicker.currentDate)
+        if(currentUser != null) {
+            contentReapter.model = SqlModel.listCourse(currentUser.userId, datepicker.currentDate)
+        }
     }
 
     Column {

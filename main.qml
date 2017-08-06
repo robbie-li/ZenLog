@@ -133,12 +133,11 @@ ApplicationWindow {
         id: aboutDialog
         modal: true
         focus: true
-        x: (window.width - width) / 2
-        y: window.height / 6
-        width: Math.min(window.width, window.height) / 4 * 3
-        contentHeight: 300
+        x: 0
+        y: window.height / 12
+        width: window.width
+        contentHeight: 400
     }
-
 
     function reloadTitle() {
         var user = SqlModel.getCurrentUser()
@@ -170,5 +169,8 @@ ApplicationWindow {
 
     Component.onCompleted: {
         reloadTitle()
+        if(currentUser === null) {
+            stack.push(userManagerment)
+        }
     }
 }

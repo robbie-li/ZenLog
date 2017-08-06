@@ -98,6 +98,35 @@ User* SqlModel::getCurrentUser() {
   return nullptr;
 }
 
+User* SqlModel::getUser(const QString& userId) {
+  const QString queryStr = QString::fromLatin1("SELECT * FROM user where user_id='%1'").arg(userId);
+
+  QSqlQuery query;
+
+  qDebug() << "Executing:" << queryStr;
+
+  if (!query.exec(queryStr)) {
+    qDebug() << ("failed to load user") << query.lastError();
+  }
+
+  if (query.first()) {
+    User* user = new User();
+    user->set_userId(query.value("user_id").toString());
+    user->set_userType(query.value("user_type").toInt());
+    user->set_current(query.value("is_default").toInt());
+    user->set_courseName(query.value("course_name").toString());
+    user->set_qq(query.value("qq").toString());
+    user->set_name(query.value("name").toString());
+    user->set_classNum(query.value("class_num").toInt());
+    user->set_groupNum(query.value("group_num").toInt());
+    user->set_groupIdx(query.value("group_idx").toInt());
+    user->set_targetCount(query.value("target_count").toInt());
+    return user;
+  }
+
+  return nullptr;
+}
+
 bool SqlModel::createUser(User* user) {
   if (!user) return false;
 
@@ -277,16 +306,17 @@ bool SqlModel::deleteCourse(const int index) {
   return true;
 }
 
-int SqlModel::courseTotalForMonth(const int year, const int month) {
+int SqlModel::courseTotalForMonth(const QString& userId, const int year, const int month) {
   const QString queryStr = QString::fromLatin1
                            ("SELECT sum(course_count) FROM "
                             "(SELECT "
                             "course_count, "
                             "strftime('%Y-%m', course_date) as month, "
                             "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course WHERE '%1-%2' = month group by day ORDER BY course_input_time DESC)")
+                            "from Course WHERE '%1-%2' = month and user_id='%3' group by day ORDER BY course_input_time DESC)")
                            .arg(year, 4, 10)
-                           .arg((month + 1), 2, 10, QLatin1Char('0'));
+                           .arg((month + 1), 2, 10, QLatin1Char('0'))
+                           .arg(userId);
 
   qDebug() << "Executing:" << queryStr;
 
@@ -304,16 +334,17 @@ int SqlModel::courseTotalForMonth(const int year, const int month) {
   return totalCount;
 }
 
-QString SqlModel::courseAverageForMonth(const int year, const int month) {
+QString SqlModel::courseAverageForMonth(const QString& userId, const int year, const int month) {
   const QString queryStr = QString::fromLatin1
                            ("SELECT avg(course_count) FROM "
                             "(SELECT "
                             "course_count, "
                             "strftime('%Y-%m', course_date) as month, "
                             "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course WHERE '%1-%2' = month group by day ORDER BY course_input_time DESC)")
+                            "from Course WHERE '%1-%2' = month and user_id='%3' group by day ORDER BY course_input_time DESC)")
                            .arg(year, 4, 10)
-                           .arg((month + 1), 2, 10, QLatin1Char('0'));
+                           .arg((month + 1), 2, 10, QLatin1Char('0'))
+                           .arg(userId);
 
   qDebug() << "Executing:" << queryStr;
 
@@ -331,111 +362,116 @@ QString SqlModel::courseAverageForMonth(const int year, const int month) {
   return QString::number(totalCount);
 }
 
-int SqlModel::courseTotalForYear(const int year) {
+int SqlModel::courseTotalForYear(const QString& userId, const int year) {
   const QString queryStr = QString::fromLatin1
                            ("SELECT sum(course_count) FROM "
                             "(SELECT "
                             "course_count, "
                             "strftime('%Y', course_date) as year, "
                             "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course WHERE '%1' = year group by day ORDER BY course_input_time DESC)")
-                           .arg(year, 4);
-
-  qDebug() << "Executing:" << queryStr;
-
-  QSqlQuery query;
-  if (!query.exec(queryStr)) {
-    qDebug("Query failed");
-  }
-
-  int totalCount = 0;
-
-  if (query.first()) {
-    totalCount = query.value(0).toInt();
-  }
-
-  return totalCount;
-}
-
-QString SqlModel::courseAverageForYear(const int year) {
-  const QString queryStr = QString::fromLatin1
-                           ("SELECT avg(course_count) FROM "
-                            "(SELECT "
-                            "course_count, "
-                            "strftime('%Y', course_date) as year, "
-                            "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course WHERE '%1' = year group by day ORDER BY course_input_time DESC)")
-                           .arg(year, 4);
-
-  qDebug() << "Executing:" << queryStr;
-
-  QSqlQuery query;
-  if (!query.exec(queryStr)) {
-    qDebug("Query failed");
-  }
-
-  int totalCount = 0;
-
-  if (query.first()) {
-    totalCount = query.value(0).toInt();
-  }
-
-  return QString::number(totalCount);
-}
-
-int SqlModel::courseTotal() {
-  const QString queryStr = QString::fromLatin1
-                           ("SELECT sum(course_count) FROM "
-                            "(SELECT "
-                            "course_count, "
-                            "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course group by day ORDER BY course_input_time DESC)");
-
-  qDebug() << "Executing:" << queryStr;
-
-  QSqlQuery query;
-  if (!query.exec(queryStr)) {
-    qDebug("Query failed");
-  }
-
-  int totalCount = 0;
-
-  if (query.first()) {
-    totalCount = query.value(0).toInt();
-  }
-
-  return totalCount;
-}
-
-QString SqlModel::courseAverage() {
-  const QString queryStr = QString::fromLatin1
-                           ("SELECT avg(course_count) FROM "
-                            "(SELECT "
-                            "course_count, "
-                            "strftime('%Y-%m-%d', course_date) as day "
-                            "from Course group by day ORDER BY course_input_time DESC)");
-
-  qDebug() << "Executing:" << queryStr;
-
-  QSqlQuery query;
-  if (!query.exec(queryStr)) {
-    qDebug("Query failed");
-  }
-
-  int totalCount = 0;
-
-  if (query.first()) {
-    totalCount = query.value(0).toInt();
-  }
-
-  return QString::number(totalCount);
-}
-
-QVariantMap SqlModel::monthlyCourses(const int year, const int month) {
-  const QString queryStr = QString::fromLatin1
-                           ("SELECT course_count, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' group by cd  ORDER BY course_input_time DESC")
+                            "from Course WHERE '%1' = year and user_id='%2' group by day ORDER BY course_input_time DESC)")
                            .arg(year, 4)
-                           .arg(month + 1, 2, 10, QLatin1Char('0'));
+                           .arg(userId);
+
+  qDebug() << "Executing:" << queryStr;
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug("Query failed");
+  }
+
+  int totalCount = 0;
+
+  if (query.first()) {
+    totalCount = query.value(0).toInt();
+  }
+
+  return totalCount;
+}
+
+QString SqlModel::courseAverageForYear(const QString& userId, const int year) {
+  const QString queryStr = QString::fromLatin1
+                           ("SELECT avg(course_count) FROM "
+                            "(SELECT "
+                            "course_count, "
+                            "strftime('%Y', course_date) as year, "
+                            "strftime('%Y-%m-%d', course_date) as day "
+                            "from Course WHERE '%1' = year and user_id='%2' group by day ORDER BY course_input_time DESC)")
+                           .arg(year, 4)
+                           .arg(userId);
+
+  qDebug() << "Executing:" << queryStr;
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug("Query failed");
+  }
+
+  int totalCount = 0;
+
+  if (query.first()) {
+    totalCount = query.value(0).toInt();
+  }
+
+  return QString::number(totalCount);
+}
+
+int SqlModel::courseTotal(const QString& userId) {
+  const QString queryStr = QString::fromLatin1
+                           ("SELECT sum(course_count) FROM "
+                            "(SELECT "
+                            "course_count, "
+                            "strftime('%Y-%m-%d', course_date) as day "
+                            "from Course where user_id='%1' group by day ORDER BY course_input_time DESC)")
+                           .arg(userId);
+
+  qDebug() << "Executing:" << queryStr;
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug("Query failed");
+  }
+
+  int totalCount = 0;
+
+  if (query.first()) {
+    totalCount = query.value(0).toInt();
+  }
+
+  return totalCount;
+}
+
+QString SqlModel::courseAverage(const QString& userId) {
+  const QString queryStr = QString::fromLatin1
+                           ("SELECT avg(course_count) FROM "
+                            "(SELECT "
+                            "course_count, "
+                            "strftime('%Y-%m-%d', course_date) as day "
+                            "from Course where user_id='%1' group by day ORDER BY course_input_time DESC)")
+                           .arg(userId);
+
+  qDebug() << "Executing:" << queryStr;
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug("Query failed");
+  }
+
+  int totalCount = 0;
+
+  if (query.first()) {
+    totalCount = query.value(0).toInt();
+  }
+
+  return QString::number(totalCount);
+}
+
+QVariantMap SqlModel::monthlyCourses(const QString& userId, const int year, const int month) {
+  const QString queryStr = QString::fromLatin1
+                           ("SELECT course_count, strftime('%d', course_date) as cd from Course WHERE strftime('%Y-%m', course_date) = '%1-%2' and user_id='%3' group by cd  ORDER BY course_input_time DESC")
+                           .arg(year, 4)
+                           .arg(month + 1, 2, 10, QLatin1Char('0'))
+                           .arg(userId);
 
   qDebug() << "Executing:" << queryStr;
 
