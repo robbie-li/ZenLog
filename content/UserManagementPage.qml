@@ -101,7 +101,10 @@ Item {
                 source: "qrc:/Material/icons/content/add.svg"
                 Layout.alignment: Qt.AlignCenter
                 Layout.margins: 4
-                onClicked: createUserDialog.open()
+                onClicked: {
+                    createUserDialog.reload()
+                    createUserDialog.open()
+                }
             }
         }
     }

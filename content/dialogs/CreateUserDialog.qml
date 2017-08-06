@@ -12,12 +12,16 @@ Dialog {
 
     title: "创建用户"
 
+    function reload() {
+        currentUser.userId = guid()
+    }
+
     function guid() {
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
     function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
+        return Math.floor((1 + Math.random()) * 0x10000)
         .toString(16)
         .substring(1);
     }

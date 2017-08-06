@@ -21,7 +21,9 @@ Item {
 
     function valid() {
         if( !textTarget.acceptableInput ) return false;
-        if( !textGroupIndex.acceptableInput) return false;
+        if( !userType.checked  && !textGroupIndex.acceptableInput) {
+          return false;
+        }
         if( textQQ.text === '') return false;
         if( textName.text === '') return false;
 
@@ -66,6 +68,7 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             text: currentUser.name
+            color: text === '' ? "red" : "black"
         }
 
         Label {
@@ -82,6 +85,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             text: currentUser.qq
+            color: text === '' ? "red" : "black"
         }
 
         Label {
@@ -143,6 +147,7 @@ Item {
             inputMethodHints : Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 1000000 }
             visible: !userType.checked
+            color: acceptableInput ? "black" : "red"
         }
 
         Label {
@@ -151,6 +156,7 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
+            visible: !userType.checked
         }
 
         TextField {
@@ -159,6 +165,7 @@ Item {
             Layout.fillHeight: true
             text: comboCourse.currentText === "大悲咒" ? "108" : "10000"
             readOnly: true
+            visible: !userType.checked
         }
 
         Label {
@@ -175,7 +182,8 @@ Item {
             Layout.fillHeight: true
             text: currentUser.targetCount
             inputMethodHints : Qt.ImhDigitsOnly
-            validator: IntValidator { bottom: textBaseTarget.text; top: 999999 }
+            validator: IntValidator { bottom: 0; top: 999999 }
+            color: acceptableInput ? "black" : "red"
         }
     }
 }
