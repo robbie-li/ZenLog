@@ -26,6 +26,7 @@ Frame {
             source: "qrc:/Material/icons/action/done.svg"
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.fillHeight: true
+            Layout.preferredWidth: 90
             Layout.preferredHeight: 32
             Layout.margins: 2
             onClicked: {
@@ -36,22 +37,13 @@ Frame {
         }
     }
 
-    Rectangle {
-        id: separator
-        height: 2
-        width: parent.width
-        anchors.top: rowButtons.bottom
-        anchors.topMargin: 20
-        color: "black"
-    }
-
     UserSetting {
         id: userSetting
         width: parent.width
         currentUser: SqlModel.getCurrentUser()
         anchors {
             topMargin: 20
-            top: separator.bottom
+            top: rowButtons.bottom
             bottom: parent.bottom
         }
     }

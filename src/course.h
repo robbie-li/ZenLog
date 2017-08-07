@@ -8,25 +8,25 @@
 #include "macros.h"
 
 class Course : public QObject {
-    Q_OBJECT
+  Q_OBJECT
 
-    DEFINE_Q_PROPERTY(int,          index);
-    DEFINE_Q_PROPERTY(QString,      name);
-    DEFINE_Q_PROPERTY(int,          count);
-    DEFINE_Q_PROPERTY(QDate,        date);
-    DEFINE_Q_PROPERTY(QDateTime,    inputTime);
-    DEFINE_Q_PROPERTY(int,          userIndex);
+  DEFINE_Q_PROPERTY(int,          courseId);
+  DEFINE_Q_PROPERTY(QString,      name);
+  DEFINE_Q_PROPERTY(int,          count);
+  DEFINE_Q_PROPERTY(QDate,        date);
+  DEFINE_Q_PROPERTY(QDateTime,    inputTime);
+  DEFINE_Q_PROPERTY(QString,      userId);
 
-  public:
-    explicit Course(QObject* parent = 0);
+ public:
+  explicit Course(QObject* parent = 0);
 
-  signals:
-    void indexChanged(const int index);
-    void nameChanged(const QString& name);
-    void countChanged(const int count);
-    void dateChanged(const  QDate& date);
-    void inputTimeChanged(const QDateTime& date);
-    void userIndexChanged(const int index);
+ signals:
+  void courseIdChanged(const int courseId);
+  void nameChanged(const QString& name);
+  void countChanged(const int count);
+  void dateChanged(const  QDate& date);
+  void inputTimeChanged(const QDateTime& inputTime);
+  void userIdChanged(const QString& userId);
 };
 
 #endif  // COURSE_H

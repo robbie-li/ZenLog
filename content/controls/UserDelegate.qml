@@ -14,17 +14,46 @@ SwipeDelegate {
     checkable: true
 
     background: Rectangle {
-        color: index % 2 == 0 ? "lightblue": "lightgrey"
+        color: current ? "#EFEFEF": "white"
+        Rectangle {
+            width: delegate.width
+            height: 1
+            color: Qt.lighter("grey")
+            anchors.bottom: parent.bottom
+        }
     }
 
     contentItem: ColumnLayout {
-        spacing: 10
+        spacing: 5
 
         RowLayout {
             Layout.fillWidth: true
 
             CheckBox {
+                id: cb
                 checked: current
+
+                /*
+                indicator: Rectangle {
+                    implicitWidth: 26
+                    implicitHeight: 26
+                    x: cb.leftPadding
+                    y: parent.height / 2 - height / 2
+                    radius: 2
+                    border.color: "#66BAB7"
+                    border.width: 2
+
+                    Rectangle {
+                        width: 14
+                        height: 14
+                        x: 6
+                        y: 6
+                        radius: 2
+                        color: "#66BAB7"
+                        visible: cb.checked
+                    }
+                }
+                */
                 onToggled: {
                     if(toggled) {
                         SqlModel.setDefaultUser(name)
@@ -35,7 +64,7 @@ SwipeDelegate {
             Label {
                 Layout.fillWidth: true
                 text: name
-                font.pixelSize: 30
+                font.pixelSize: 22
             }
         }
 

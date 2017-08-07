@@ -8,7 +8,6 @@
         <file>content/controls/Calendar.js</file>
         <file>content/controls/ImageButton.qml</file>
         <file>content/controls/ImageTextButton.qml</file>
-        <file>content/controls/ListViewDelegate.qml</file>
         <file>content/controls/MyCalendar.qml</file>
         <file>content/controls/SimpleDatePicker.qml</file>
         <file>content/controls/TumblerDatePicker.qml</file>
@@ -23,5 +22,6 @@
         <file>content/controls/ColoredImage.qml</file>
         <file>content/controls/UserDelegate.qml</file>
         <file>content/dialogs/UserDialog.qml</file>
+        <file>content/controls/CourseDelegate.qml</file>
     </qresource>
 </RCC>

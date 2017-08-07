@@ -13,6 +13,7 @@ Page {
     signal courseChanged()
 
     property User currentUser: SqlModel.getCurrentUser()
+
     Connections {
         target: SqlModel
         onCourseChanged: {
@@ -192,10 +193,10 @@ Page {
         model: SqlModel.listCourse(currentUser.userId, datepicker.currentDate)
         clip: true
 
-        delegate: ListViewDelegate {
+        delegate: CourseDelegate {
             width: parent.width
             onTrashButtonClicked: {
-                SqlModel.deleteCourse(index)
+                SqlModel.deleteCourse(modelData.courseId)
                 root.reload()
             }
         }

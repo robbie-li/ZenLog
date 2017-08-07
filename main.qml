@@ -20,8 +20,8 @@ ApplicationWindow {
 
     property User currentUser: SqlModel.getCurrentUser()
 
-    width: 480
-    height: 720
+    width: 540
+    height: 960
     visible: true
     title: qsTr("精进修行")
     flags: Qt.FramelessWindowHint | Qt.Window
@@ -66,7 +66,8 @@ ApplicationWindow {
                 Layout.preferredWidth: 32
                 source: "qrc:/Material/icons/navigation/more_vert.svg"
                 onClicked: optionsMenu.open()
-                visible: stack.depth === 1
+                opacity: stack.depth === 1 ? 1 : 0
+                enabled: stack.depth === 1
 
                 Menu {
                     id: optionsMenu
@@ -78,10 +79,12 @@ ApplicationWindow {
                     }
                     MenuItem {
                         text: qsTr("导入功课")
+                        enabled: false
                         onTriggered: importDialog.open()
                     }
                     MenuItem {
                         text: qsTr("导出功课")
+                        enabled: false
                         onTriggered: exportDialog.open()
                     }
                     MenuItem {
@@ -136,7 +139,7 @@ ApplicationWindow {
         x: 0
         y: window.height / 12
         width: window.width
-        contentHeight: 400
+        contentHeight: 600
     }
 
     function reloadTitle() {

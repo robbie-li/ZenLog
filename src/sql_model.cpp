@@ -264,24 +264,25 @@ QList<QObject*> SqlModel::listCourse(const QString& userId, const QDate& date) {
 
   while (query.next()) {
     Course* course = new Course(this);
-    course->set_index(query.value("id").toInt());
+    course->set_courseId(query.value("course_id").toInt());
     course->set_name(query.value("course_name").toString());
     course->set_count(query.value("course_count").toInt());
     course->set_date(query.value("course_date").toDate());
     course->set_inputTime(query.value("course_input_time").toDateTime());
+    course->set_userId(query.value("user_id").toString());
     courses.append(course);
   }
 
   return courses;
 }
 
-bool SqlModel::createCourse(const QString& userIndex, const QDate& date, const QString& name, const int count) {
+bool SqlModel::createCourse(const QString& userId, const QDate& date, const QString& name, const int count) {
   const QString queryStr = QString::fromLatin1
                            ("insert into Course (course_name,course_date,course_count,user_id) values('%1', '%2', '%3', '%4')")
                            .arg(name)
                            .arg(date.toString("yyyy-MM-dd"))
                            .arg(QString::number(count))
-                           .arg(userIndex);
+                           .arg(userId);
   qDebug() << "Executing:" << queryStr;
   QSqlQuery query;
   if (!query.exec(queryStr)) {
@@ -293,8 +294,8 @@ bool SqlModel::createCourse(const QString& userIndex, const QDate& date, const Q
   return true;
 }
 
-bool SqlModel::deleteCourse(const int index) {
-  const QString queryStr = QString::fromLatin1("delete from Course where id='%1'").arg(index);
+bool SqlModel::deleteCourse(const int courseId) {
+  const QString queryStr = QString::fromLatin1("delete from Course where course_id='%1'").arg(courseId);
   qDebug() << "executing:" << queryStr;
   QSqlQuery query;
   if (!query.exec(queryStr)) {

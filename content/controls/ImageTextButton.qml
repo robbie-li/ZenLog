@@ -7,36 +7,45 @@ Button {
     id: control
     property string source
     property color overlayColor: "#000000"
+    property color bgColor: "#B2E0E0"
+    property color textColor: "#287B7B"
 
-    contentItem: RowLayout {
+    contentItem: Rectangle {
         anchors.fill: control
+        color: "transparent"
 
-        Image {
-            id: image
-            opacity: enabled ? 1.0 : 0.3
-            source: control.source
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignRight
-            smooth: true
-            fillMode: Image.PreserveAspectFit
-        }
+        RowLayout {
+            anchors.centerIn: parent
 
-        Text {
-            Layout.fillHeight: true
-            text: control.text
-            font: control.font
-            opacity: enabled ? 1.0 : 0.3
-            color: control.down ? "#17a81a" : "#21be2b"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
+            Image {
+                id: image
+                opacity: enabled ? 1.0 : 0.3
+                source: control.source
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignRight
+                smooth: true
+                fillMode: Image.PreserveAspectFit
+                Layout.preferredHeight: 32
+                Layout.preferredWidth: 32
+            }
+
+            Text {
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignLeft
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1.0 : 0.3
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
         }
     }
 
     background: Rectangle {
         anchors.fill: parent
         opacity: enabled ? 1 : 0.3
-        border.color: control.down ? "#17a81a" : "#21be2b"
-        border.width: 1
+        color: bgColor
     }
 }

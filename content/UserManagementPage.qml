@@ -29,9 +29,10 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
-        Frame {
+        Pane {
             Layout.fillHeight: true
             Layout.fillWidth: true
+
 
             ColumnLayout {
                 anchors {
@@ -101,6 +102,8 @@ Item {
                 source: "qrc:/Material/icons/content/add.svg"
                 Layout.alignment: Qt.AlignCenter
                 Layout.margins: 4
+                font.pixelSize: 22
+
                 onClicked: {
                     createUserDialog.reload()
                     createUserDialog.open()

@@ -58,6 +58,8 @@ Rectangle {
 
             ImageButton {
                 anchors.centerIn: parent
+                width: 32
+                height: 32
                 anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
                 source: "qrc:/Material/icons/action/delete.svg"
                 onClicked: root.trashButtonClicked(modelData.index)
