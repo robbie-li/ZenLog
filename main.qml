@@ -103,6 +103,9 @@ ApplicationWindow {
         UserInformation {
             id: user_info
             anchors.fill: parent
+            onUserSaved: {
+                drawer.close()
+            }
         }
     }
 

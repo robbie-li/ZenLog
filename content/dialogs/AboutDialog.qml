@@ -15,9 +15,11 @@ Dialog {
         Label {
             width: root.width
             text: "精进群修行日志"
-            font.pixelSize: 30
+            font.pixelSize: 24
+            font.bold: true
             anchors.margins: 10
             anchors.top: parent.top
+            horizontalAlignment: Qt.AlignCenter
         }
     }
 
@@ -111,6 +113,8 @@ Dialog {
             Layout.preferredHeight: 35
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
+            imageVisible: false
+            font.pixelSize: 22
             onClicked: {
                 aboutDialog.close()
             }

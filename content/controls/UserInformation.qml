@@ -8,6 +8,8 @@ import zenlog.user 1.0
 Frame {
     id: frame
 
+    signal userSaved()
+
     RowLayout {
         id: rowButtons
         width: parent.width
@@ -31,7 +33,9 @@ Frame {
             Layout.margins: 2
             onClicked: {
                 userSetting.updateUser(true)
-                SqlModel.updateUser(userSetting.currentUser)
+                if( SqlModel.updateUser(userSetting.currentUser) ) {
+                    frame.userSaved()
+                }
             }
             enabled: userSetting.valid()
         }
