@@ -105,14 +105,14 @@ SwipeDelegate {
         }
     ]
 
-    swipe.right: Label {
+    swipe.right: Button {
         id: deleteLabel
         text: qsTr("删除")
         padding: 12
         height: parent.height
         anchors.right: parent.right
 
-        SwipeDelegate.onClicked: {
+        onClicked: {
             delegate.removeUser(name)
         }
 
@@ -121,14 +121,14 @@ SwipeDelegate {
         }
     }
 
-    swipe.left: Label {
+    swipe.left: Button {
         id: editLabel
         text: qsTr("编辑")
         padding: 12
         height: parent.height
         anchors.left: parent.left
 
-        SwipeDelegate.onClicked: {
+        onClicked: {
             delegate.editUser(userId)
         }
 
@@ -138,6 +138,6 @@ SwipeDelegate {
     }
 
     Component.onCompleted: {
-        console.log("Loading UserDelegate")
+        console.log("Loading +android/UserDelegate")
     }
 }

@@ -1,8 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 
-import zenlog.sqlmodel 1.0
-import zenlog.user 1.0
+import zenlog.model 1.0
+
 import "../controls"
 
 Dialog {

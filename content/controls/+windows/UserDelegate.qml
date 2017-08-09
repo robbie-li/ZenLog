@@ -138,6 +138,6 @@ SwipeDelegate {
     }
 
     Component.onCompleted: {
-        console.log("Loading UserDelegate")
+        console.log("Loading +windows/UserDelegate")
     }
 }

@@ -2,7 +2,7 @@ import QtQuick 2.8
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import zenlog.user 1.0
+import zenlog.model 1.0
 
 Item {
     property User currentUser

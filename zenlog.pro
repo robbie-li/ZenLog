@@ -4,7 +4,10 @@ TARGET = ZenLog
 !contains(sql-drivers, sqlite): QTPLUGIN += qsqlite
 
 include(src/src.pri)
-include(smtpclient/smtpclient.pri)
+include(src/smtpclient/smtpclient.pri)
+
+INCLUDEPATH += \
+    $$PWD\src
 
 OTHER_FILES += \
     main.qml
@@ -23,7 +26,6 @@ DISTFILES += \
     android/gradlew.bat \
     +android/qtquickcontrols2.conf \
     +windows/qtquickcontrols2.conf
-
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

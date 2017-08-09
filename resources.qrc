@@ -1,11 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>+android/qtquickcontrols2.conf</file>
-        <file>+windows/qtquickcontrols2.conf</file>
-        <file>main.qml</file>
-        <file>content/CalendarPage.qml</file>
-        <file>content/DailyLogPage.qml</file>
         <file>content/controls/Calendar.js</file>
+        <file>content/controls/ColoredImage.qml</file>
+        <file>content/controls/CourseDelegate.qml</file>
+        <file>content/controls/CourseStatistic.qml</file>
         <file>content/controls/ImageButton.qml</file>
         <file>content/controls/ImageTextButton.qml</file>
         <file>content/controls/MyCalendar.qml</file>
@@ -14,14 +12,16 @@
         <file>content/controls/UserInformation.qml</file>
         <file>content/controls/UserSetting.qml</file>
         <file>content/dialogs/AboutDialog.qml</file>
+        <file>content/dialogs/ClipBoardStatusDialog.qml</file>
         <file>content/dialogs/CreateUserDialog.qml</file>
         <file>content/dialogs/DeleteUserDialog.qml</file>
-        <file>content/UserManagementPage.qml</file>
-        <file>content/dialogs/ClipBoardStatusDialog.qml</file>
-        <file>content/controls/CourseStatistic.qml</file>
-        <file>content/controls/ColoredImage.qml</file>
-        <file>content/controls/UserDelegate.qml</file>
         <file>content/dialogs/UserDialog.qml</file>
-        <file>content/controls/CourseDelegate.qml</file>
+        <file>content/pages/CalendarPage.qml</file>
+        <file>content/pages/DailyLogPage.qml</file>
+        <file>content/pages/UserManagementPage.qml</file>
+        <file>content/main.qml</file>
+        <file>content/controls/+windows/UserDelegate.qml</file>
+        <file>content/controls/+android/UserDelegate.qml</file>
+        <file>content/controls/UserDelegate.qml</file>
     </qresource>
 </RCC>

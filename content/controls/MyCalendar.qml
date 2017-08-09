@@ -5,8 +5,7 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.3
 
-import zenlog.sqlmodel 1.0
-import zenlog.user 1.0
+import zenlog.model 1.0
 
 Calendar {
     id: calendar

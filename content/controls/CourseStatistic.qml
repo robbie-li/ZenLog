@@ -2,9 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import zenlog.sqlmodel 1.0
-import zenlog.user 1.0
-import zenlog.clipboard 1.0
+import zenlog.model 1.0
+import zenlog.utils 1.0
 
 Pane {
     id: statitisc_pane

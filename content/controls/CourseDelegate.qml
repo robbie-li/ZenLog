@@ -30,7 +30,7 @@ Rectangle {
                 anchors.fill: parent
                 width: parent.width
                 wrapMode: Text.Wrap
-                text: modelData.inputTime.toTimeString()
+                text: courseInputTime.toTimeString()
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -45,7 +45,7 @@ Rectangle {
                 anchors.fill: parent
                 width: parent.width
                 wrapMode: Text.Wrap
-                text: modelData.count
+                text: courseCount
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -62,7 +62,7 @@ Rectangle {
                 height: 32
                 anchors { top: parent.top; bottom: parent.bottom; right: parent.right; margins: 1}
                 source: "qrc:/Material/icons/action/delete.svg"
-                onClicked: root.trashButtonClicked(modelData.index)
+                onClicked: root.trashButtonClicked(courseID)
             }
         }
     }
