@@ -1,6 +1,5 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.model 1.0
@@ -11,11 +10,6 @@ import "pages"
 
 ApplicationWindow {
     id: window
-
-    Material.theme: Material.Light
-    Material.accent:     "#66BAB7"
-    Material.primary:    "#66BAB7"
-    Material.background: "white"
 
     property User currentUser: SqlModel.getCurrentUser()
 
@@ -57,6 +51,13 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 color: "white"
+
+                MouseArea {
+                    anchors.fill: titleLabel
+                    onClicked: {
+                        currentUserSelection.open()
+                    }
+                }
             }
 
             ImageButton {
@@ -127,6 +128,16 @@ ApplicationWindow {
         onCourseChanged: {
             calendar.reload()
         }
+    }
+
+    CurrentUserSelection {
+        id: currentUserSelection
+        modal: true
+        focus: true
+        x: 50
+        y: 0
+        width: window.width - 100
+        contentHeight: 200
     }
 
     UserManagementPage {

@@ -9,6 +9,16 @@ Pane {
     id: statitisc_pane
 
     property User currentUser: SqlModel.getCurrentUser()
+    property int year
+    property int month
+
+    onYearChanged: {
+        reload()
+    }
+
+    onMonthChanged: {
+        reload()
+    }
 
     Connections {
         target: SqlModel
@@ -50,7 +60,7 @@ Pane {
                 id: monthly_total
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 0.25 * parent.width
-                text: SqlModel.courseTotalForMonth(currentUser.userId, calendar.visibleYear, calendar.visibleMonth)
+                text: SqlModel.courseTotalForMonth(currentUser.userId, year, month)
                 color: "#696969"
             }
 
@@ -65,7 +75,7 @@ Pane {
                 id: monthly_average
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 0.25 * parent.width
-                text: SqlModel.courseAverageForMonth(currentUser.userId, calendar.visibleYear, calendar.visibleMonth)
+                text: SqlModel.courseAverageForMonth(currentUser.userId, year, month)
                 color: "#696969"
             }
 
@@ -80,7 +90,7 @@ Pane {
                 id: yearly_total
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 0.25 * parent.width
-                text: SqlModel.courseTotalForYear(currentUser.userId, calendar.visibleYear)
+                text: SqlModel.courseTotalForYear(currentUser.userId, year)
                 color: "#696969"
             }
 
@@ -95,7 +105,7 @@ Pane {
                 id: yearly_average
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 0.25 * parent.width
-                text: SqlModel.courseAverageForYear(currentUser.userId, calendar.visibleYear)
+                text: SqlModel.courseAverageForYear(currentUser.userId, year)
                 color: "#696969"
             }
 
@@ -157,7 +167,7 @@ Pane {
                 }
 
                 onClicked: {
-                    var res = ClipBoard.copyMonthlyCourse(calendar.visibleYear, calendar.visibleMonth)
+                    var res = ClipBoard.copyMonthlyCourse(year, month)
                     clipboard_status.show(res)
                 }
             }
@@ -167,10 +177,10 @@ Pane {
     function reload() {
         if(currentUser === null) return;
 
-        monthly_total.text = SqlModel.courseTotalForMonth(currentUser.userId, calendar.visibleYear, calendar.visibleMonth)
-        monthly_average.text = SqlModel.courseAverageForMonth(currentUser.userId, calendar.visibleYear, calendar.visibleMonth)
-        yearly_total.text = SqlModel.courseTotalForYear(currentUser.userId, calendar.visibleYear)
-        yearly_average.text = SqlModel.courseAverageForYear(currentUser.userId, calendar.visibleYear)
+        monthly_total.text = SqlModel.courseTotalForMonth(currentUser.userId, year, month)
+        monthly_average.text = SqlModel.courseAverageForMonth(currentUser.userId, year, month)
+        yearly_total.text = SqlModel.courseTotalForYear(currentUser.userId, year)
+        yearly_average.text = SqlModel.courseAverageForYear(currentUser.userId, year)
         historic_average.text = SqlModel.courseAverage(currentUser.userId)
         historic_total.text = SqlModel.courseTotal(currentUser.userId)
     }

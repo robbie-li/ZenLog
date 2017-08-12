@@ -62,6 +62,7 @@ class SqlModel : public QSqlQueryModel {
 
   // User Management
   Q_INVOKABLE QList<User> listUsers();
+  Q_INVOKABLE QStringList listUserNames();
   Q_INVOKABLE User* getCurrentUser();
   Q_INVOKABLE User* getUser(const QString& userId);
   Q_INVOKABLE bool createUser(User* user);

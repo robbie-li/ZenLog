@@ -24,6 +24,7 @@ DISTFILES += \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
+    qtquickcontrols2.conf \
     +android/qtquickcontrols2.conf \
     +windows/qtquickcontrols2.conf
 

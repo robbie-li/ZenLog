@@ -33,12 +33,14 @@ Page {
         }
 
         onMonthSelected: {
-            updateStatistic()
+            //root.reload()
         }
     }
 
     CourseStatistic {
         id: statitisc_pane
+        year: calendar.visibleYear
+        month: calendar.visibleMonth
         anchors {
             topMargin: 0
             top: calendar.bottom; bottom: parent.bottom; left: parent.left; right: parent.right;
@@ -63,7 +65,6 @@ Page {
     }
 
     function reload() {
-        console.log("reload CalendarPage")
         statitisc_pane.reload()
         calendar.reload()
         reloadUser()

@@ -68,6 +68,23 @@ QList<User> SqlModel::listUsers() {
   return users;
 }
 
+QStringList SqlModel::listUserNames() {
+  const QString queryStr = QString::fromLatin1("SELECT name FROM user");
+
+  QSqlQuery query;
+  if (!query.exec(queryStr)) {
+    qDebug() << ("failed to load user") << query.lastError();
+  }
+
+  QStringList users;
+
+  while (query.next()) {
+    users.append(query.value("name").toString());
+  }
+
+  return users;
+}
+
 User* SqlModel::getCurrentUser() {
   const QString queryStr = QString::fromLatin1("SELECT * FROM user where is_default='1' ");
 

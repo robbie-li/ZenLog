@@ -9,6 +9,7 @@ Button {
     property color bgColor: "#B2E0E0"
     property color textColor: "#287B7B"
     property bool imageVisible: true
+    property color orgBgColor: "#B2E0E0"
 
     contentItem: Rectangle {
         anchors.fill: control
@@ -48,5 +49,14 @@ Button {
         anchors.fill: parent
         opacity: enabled ? 1 : 0.3
         color: bgColor
+    }
+
+    onHoveredChanged: {
+        if(hovered) {
+            orgBgColor = bgColor;
+            bgColor = Qt.darker(orgBgColor, 1.1)
+        } else {
+            bgColor = orgBgColor
+        }
     }
 }

@@ -23,5 +23,6 @@
         <file>content/controls/+windows/UserDelegate.qml</file>
         <file>content/controls/+android/UserDelegate.qml</file>
         <file>content/controls/UserDelegate.qml</file>
+        <file>content/dialogs/CurrentUserSelection.qml</file>
     </qresource>
 </RCC>

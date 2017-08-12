@@ -199,8 +199,7 @@ Page {
         delegate: CourseDelegate {
             width: parent.width
             onTrashButtonClicked: {
-                SqlModel.deleteCourse(modelData.courseId)
-                root.reload()
+                SqlModel.deleteCourse(courseID)
             }
         }
     }
