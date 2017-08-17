@@ -19,7 +19,7 @@ Dialog {
             font.bold: true
             anchors.margins: 10
             anchors.top: parent.top
-            horizontalAlignment: Qt.AlignCenter
+            horizontalAlignment: Qt.AlignLeft
         }
     }
 

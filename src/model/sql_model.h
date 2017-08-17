@@ -88,6 +88,7 @@ class SqlModel : public QSqlQueryModel {
  signals:
   void userChanged();
   void courseChanged();
+  void databaseError(const QString& errorText);
 
  private:
   int getDatabaseVersion();

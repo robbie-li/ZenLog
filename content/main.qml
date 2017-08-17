@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick.Layouts 1.3
 
 import zenlog.model 1.0
@@ -18,6 +19,11 @@ ApplicationWindow {
     visible: true
     title: qsTr("精进修行")
     flags: Qt.FramelessWindowHint | Qt.Window
+
+    Material.theme: Material.Light
+    Material.accent:     "#66BAB7"
+    Material.primary:    "#66BAB7"
+    Material.background: "white"
 
     header: ToolBar {
         id: toolbar
@@ -137,7 +143,7 @@ ApplicationWindow {
         x: 50
         y: 0
         width: window.width - 100
-        contentHeight: 200
+        contentHeight: 230
     }
 
     UserManagementPage {

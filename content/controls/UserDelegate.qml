@@ -136,8 +136,4 @@ SwipeDelegate {
             color: editLabel.SwipeDelegate.pressed ? Qt.darker("deepskyblue", 1.1) : "deepskyblue"
         }
     }
-
-    Component.onCompleted: {
-        console.log("Loading UserDelegate")
-    }
 }

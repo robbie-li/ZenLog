@@ -32,7 +32,6 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-
             ColumnLayout {
                 anchors {
                     fill:parent
@@ -82,6 +81,10 @@ Item {
                             editDialog.open()
                         }
 
+                        onSetDefaultUser: {
+                            SqlModel.setDefaultUser(userName)
+                        }
+
                         onRemoveUser: {
                             deleteUserDialog.userName = userName
                             deleteUserDialog.open()
@@ -114,7 +117,7 @@ Item {
     CreateUserDialog {
         id: createUserDialog
         width: root.width
-        contentHeight: 500
+        contentHeight: 560
     }
 
     DeleteUserDialog {
@@ -126,6 +129,17 @@ Item {
     UserDialog {
         id: editDialog
         width: root.width
-        contentHeight: 500
+        contentHeight: 560
+    }
+
+    ToastManager{
+        id: toast
+    }
+
+    Connections {
+        target: SqlModel
+        onDatabaseError: {
+            toast.show("数据库操作失败:" + errorText, 5000);
+        }
     }
 }

@@ -12,15 +12,55 @@ Dialog {
     modal: true
     focus: true
 
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    Rectangle {
+        anchors.fill:  parent
 
-    contentItem: UserSetting {
-        id: userSetting
-        currentUser: root.currentUser
-    }
+        UserSetting {
+            id: userSetting
 
-    onAccepted: {
-        userSetting.updateUser(root.currentUser.current)
-        SqlModel.updateUser(userSetting.currentUser)
+            anchors.top: parent.top
+            anchors.bottom: buttonBox.top
+            width: parent.width
+
+            currentUser: root.currentUser
+            currentEditable: true
+        }
+
+        DialogButtonBox {
+            id: buttonBox
+
+            height: 32
+
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ImageTextButton {
+                text: "取消"
+                imageVisible: false
+                width: 120
+                height: 30
+                font.pixelSize: 18
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            }
+
+            ImageTextButton {
+                text: "保存"
+                imageVisible: false
+                width: 120
+                height: 30
+                font.pixelSize: 18
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            }
+
+            onAccepted: {
+                userSetting.updateUser(root.currentUser.current)
+                SqlModel.updateUser(userSetting.currentUser)
+                root.close()
+            }
+
+            onRejected: {
+                root.close()
+            }
+        }
     }
 }

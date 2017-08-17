@@ -7,17 +7,6 @@ import "../controls"
 Popup {
     id: popup
 
-    /*
-    ComboBox {
-        id: combo
-        width: parent.width
-        model: SqlModel.listUserNames()
-        Component.onCompleted: {
-           combo.currentIndex = combo.find(SqlModel.getCurrentUser().name)
-        }
-    }
-    */
-
     ListView {
         id: view
         anchors.fill: parent
@@ -43,7 +32,7 @@ Popup {
                 width: view.width
                 text: name
                 imageVisible: false
-                bgColor: "lightgrey"
+                bgColor: "white"
                 onClicked: {
                     SqlModel.setDefaultUser(button.text)
                     itemDelegate.ListView.view.closeView()
@@ -59,7 +48,7 @@ Popup {
                 anchors.bottom: parent.bottom
                 width: parent.width
                 height: 1
-                color: "black"
+                color: "lightgrey"
             }
         }
     }

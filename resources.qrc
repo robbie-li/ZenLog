@@ -24,5 +24,9 @@
         <file>content/controls/+android/UserDelegate.qml</file>
         <file>content/controls/UserDelegate.qml</file>
         <file>content/dialogs/CurrentUserSelection.qml</file>
+        <file>content/controls/InfoBanner.qml</file>
+        <file>content/controls/InfoBannerComponnent.qml</file>
+        <file>content/controls/Toast.qml</file>
+        <file>content/controls/ToastManager.qml</file>
     </qresource>
 </RCC>

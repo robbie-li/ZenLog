@@ -16,14 +16,52 @@ Dialog {
     modal: true
     focus: true
 
-    standardButtons: Dialog.Yes | Dialog.No
+    Rectangle {
+        anchors.fill:  parent
 
-    contentItem: Text {
-        text: "你确定要删除该用户:" + userName + "?"
-    }
+        Text {
+            text: "你确定要删除该用户:" + userName + "?"
+            anchors.top: parent.top
+            anchors.bottom: buttonBox.top
+            width: parent.width
+            font.pixelSize: 18
+        }
 
-    onAccepted: {
-        console.log("deleting user:" + userName)
-        SqlModel.removeUser(userName);
+        DialogButtonBox {
+            id: buttonBox
+
+            height: 40
+
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ImageTextButton {
+                text: "取消"
+                imageVisible: false
+                width: 120
+                height: 35
+                font.pixelSize: 22
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            }
+
+            ImageTextButton {
+                text: "删除"
+                imageVisible: false
+                width: 120
+                height: 35
+                font.pixelSize: 22
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            }
+
+            onAccepted: {
+                console.log("deleting user:" + userName)
+                SqlModel.removeUser(userName);
+                dialog.close()
+            }
+
+            onRejected: {
+                dialog.close()
+            }
+        }
     }
 }

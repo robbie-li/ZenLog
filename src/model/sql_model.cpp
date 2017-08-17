@@ -147,7 +147,18 @@ User* SqlModel::getUser(const QString& userId) {
 bool SqlModel::createUser(User* user) {
   if (!user) return false;
 
+  QSqlDatabase::database().transaction();
+
   QSqlQuery query;
+
+  if (user->current()) {
+    QString sqlUpdate = QString::fromLatin1(R"(update User set is_default='false')");
+    if (!query.exec(sqlUpdate)) {
+      QSqlDatabase::database().rollback();
+      emit databaseError(query.lastError().text());
+      return false;
+    }
+  }
 
   QString sqlSave = QString::fromLatin1(R"(insert into User (user_id, is_default, user_type, class_num, group_num, group_idx, qq, name, course_name, target_count)
                                           values('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10'))")
@@ -167,9 +178,12 @@ bool SqlModel::createUser(User* user) {
   bool success = query.exec(sqlSave);
   if (success) {
     qDebug() << "user created.";
+    QSqlDatabase::database().commit();
     emit userChanged();
   } else {
+    QSqlDatabase::database().rollback();
     qDebug() << "Failed to execute SQL:" << query.lastError();
+    emit databaseError(query.lastError().text());
   }
 
   return success;
@@ -178,7 +192,18 @@ bool SqlModel::createUser(User* user) {
 bool SqlModel::updateUser(User* user) {
   if (!user) return false;
 
+  QSqlDatabase::database().transaction();
+
   QSqlQuery query;
+
+  if (user->current()) {
+    QString sqlUpdate = QString::fromLatin1(R"(update User set is_default='false')");
+    if (!query.exec(sqlUpdate)) {
+      QSqlDatabase::database().rollback();
+      emit databaseError(query.lastError().text());
+      return false;
+    }
+  }
 
   QString sqlSave = QString::fromLatin1(R"(update User set
                                           is_default='%2',
@@ -209,9 +234,12 @@ bool SqlModel::updateUser(User* user) {
   bool success = query.exec(sqlSave);
   if (success) {
     qDebug() << "user updated.";
+    QSqlDatabase::database().commit();
     emit userChanged();
   } else {
+    QSqlDatabase::database().rollback();
     qDebug() << "Failed to execute SQL:" << query.lastError();
+    emit databaseError(query.lastError().text());
   }
 
   return success;
@@ -232,6 +260,7 @@ bool SqlModel::removeUser(const QString& name) {
     emit userChanged();
   } else {
     qDebug() << "Failed to execute SQL:" << query.lastError();
+    emit databaseError(query.lastError().text());
   }
 
   return success;
@@ -242,6 +271,8 @@ bool SqlModel::setDefaultUser(const QString& name) {
 
   QSqlQuery query;
 
+  QSqlDatabase::database().transaction();
+
   QString sqlUpdateAll = QString::fromLatin1(R"(update User set is_default='0')");
 
   QString sqlUpdateOne = QString::fromLatin1(R"(update User set is_default='1' where name='%1')").arg(name);
@@ -250,6 +281,7 @@ bool SqlModel::setDefaultUser(const QString& name) {
   bool success = query.exec(sqlUpdateAll);
   if (!success) {
     qDebug() << "Failed to execute SQL:" << query.lastError();
+    QSqlDatabase::database().rollback();
     return false;
   }
 
@@ -257,8 +289,11 @@ bool SqlModel::setDefaultUser(const QString& name) {
   success = query.exec(sqlUpdateOne);
   if (!success) {
     qDebug() << "Failed to execute SQL:" << query.lastError();
+    QSqlDatabase::database().rollback();
+    emit databaseError(query.lastError().text());
     return false;
   } else {
+    QSqlDatabase::database().commit();
     emit userChanged();
   }
 
@@ -303,7 +338,8 @@ bool SqlModel::createCourse(const QString& userId, const QDate& date, const QStr
   qDebug() << "Executing:" << queryStr;
   QSqlQuery query;
   if (!query.exec(queryStr)) {
-    qDebug() << query.lastError().text();
+    qDebug() << query.lastError();
+    emit databaseError(query.lastError().text());
     return false;
   }
 
@@ -316,7 +352,8 @@ bool SqlModel::deleteCourse(const int courseId) {
   qDebug() << "executing:" << queryStr;
   QSqlQuery query;
   if (!query.exec(queryStr)) {
-    qDebug() << query.lastError().text();
+    qDebug() << query.lastError();
+    emit databaseError(query.lastError().text());
     return false;
   }
 
@@ -545,8 +582,8 @@ bool SqlModel::createTables() {
                     user_type     smallint NOT NULL,
                     is_default    smallint NOT NULL,
                     course_name   text NOT NULL,
-                    qq            text,
-                    name          text,
+                    qq            text NOT NULL,
+                    name          text NOT NULL,
                     group_num     integer,
                     group_idx     integer,
                     class_num     integer,

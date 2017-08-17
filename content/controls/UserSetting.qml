@@ -7,21 +7,35 @@ import zenlog.model 1.0
 Item {
     property User currentUser
 
-    function updateUser(isCurrent) {
+    property bool currentEditable: false
+
+    function updateUser() {
         currentUser.name = textName.text
         currentUser.qq = textQQ.text
         currentUser.classNum = comboClass.currentIndex
         currentUser.groupNum = comboGroup.currentIndex
         currentUser.groupIdx = textGroupIndex.text
         currentUser.courseName = comboCourse.currentText
-        currentUser.current = isCurrent
+        currentUser.current = checkboxCurrent.checked
         currentUser.targetCount = textTarget.text
-        currentUser.userType = userType.checked ? User.ExternalUser : User.GroupUser
+        currentUser.userType = checkboxExternalUser.checked ? User.ExternalUser : User.GroupUser
+    }
+
+    function reload() {
+        textName.text = currentUser.name
+        textQQ.text = currentUser.qq
+        comboClass.currentIndex = currentUser.classNum
+        comboGroup.currentIndex = currentUser.groupNum
+        textGroupIndex.text = currentUser.groupIdx
+        comboCourse.currentIndex = (currentUser.courseName == '大悲咒' ? 0 : 1)
+        checkboxCurrent.checked = currentUser.current
+        textTarget.text = currentUser.targetCount
+        checkboxExternalUser.checked = (currentUser.userType == User.ExternalUser ? true : false)
     }
 
     function valid() {
         if( !textTarget.acceptableInput ) return false;
-        if( !userType.checked  && !textGroupIndex.acceptableInput) {
+        if( !checkboxExternalUser.checked  && !textGroupIndex.acceptableInput) {
           return false;
         }
         if( textQQ.text === '') return false;
@@ -34,7 +48,7 @@ Item {
         id: grid
         width: parent.width
         columns: 2
-        rowSpacing: 10
+        rowSpacing: 4
         columnSpacing: 10
 
         Label {
@@ -97,7 +111,7 @@ Item {
         }
 
         CheckBox {
-            id: userType
+            id: checkboxExternalUser
             text: "群外莲友"
             checked: currentUser.userType === User.ExternalUser
         }
@@ -108,11 +122,11 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
         }
 
         RowLayout {
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
             Layout.fillWidth: true
 
             ComboBox {
@@ -136,7 +150,7 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
         }
 
         TextField {
@@ -146,7 +160,7 @@ Item {
             text: currentUser.groupIdx
             inputMethodHints : Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 1000000 }
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
             color: acceptableInput ? "black" : "red"
         }
 
@@ -156,7 +170,7 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width* 0.2
             horizontalAlignment: Text.AlignRight
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
         }
 
         TextField {
@@ -165,7 +179,7 @@ Item {
             Layout.fillHeight: true
             text: comboCourse.currentText === "大悲咒" ? "108" : "10000"
             readOnly: true
-            visible: !userType.checked
+            visible: !checkboxExternalUser.checked
         }
 
         Label {
@@ -184,6 +198,21 @@ Item {
             inputMethodHints : Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 999999 }
             color: acceptableInput ? "black" : "red"
+        }
+
+        Label {
+            text: qsTr("")
+            verticalAlignment: Text.AlignVCenter
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width* 0.2
+            horizontalAlignment: Text.AlignRight
+        }
+
+        CheckBox {
+            id: checkboxCurrent
+            text: "设为默认用户"
+            checked: currentUser.current
+            checkable: currentEditable
         }
     }
 }

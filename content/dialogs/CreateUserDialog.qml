@@ -12,38 +12,69 @@ Dialog {
     title: "创建用户"
 
     function reload() {
-        currentUser.userId = guid()
-    }
-
-    function guid() {
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    }
-
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
+        currentUser.reset()
+        userSetting.reload()
     }
 
     User {
         id: currentUser
-        userId: guid()
     }
 
     modal: true
     focus: true
 
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    Rectangle {
+        anchors.fill:  parent
 
-    contentItem: UserSetting {
-        id: userSetting
-        currentUser: currentUser
-    }
+        UserSetting {
+            anchors.top: parent.top
+            anchors.bottom: buttonBox.top
+            width: parent.width
 
-    onAccepted: {
-        if(userSetting.valid()) {
-            userSetting.updateUser(false)
-            SqlModel.createUser(userSetting.currentUser);
+            id: userSetting
+            currentUser: currentUser
+            currentEditable: true
+        }
+
+        DialogButtonBox {
+            id: buttonBox
+
+            height: 32
+
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ImageTextButton {
+                text: "取消"
+                imageVisible: false
+                width: 120
+                height: 30
+                font.pixelSize: 18
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            }
+
+            ImageTextButton {
+                text: "创建"
+                imageVisible: false
+                width: 120
+                height: 30
+                font.pixelSize: 18
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            }
+
+            onAccepted: {
+                if(userSetting.valid()) {
+                    userSetting.updateUser()
+                    if (!SqlModel.createUser(userSetting.currentUser)) {
+                        console.log("failed to create user");
+                    }
+                }
+                dialog.close()
+            }
+
+            onRejected: {
+                dialog.close()
+            }
         }
     }
 }
