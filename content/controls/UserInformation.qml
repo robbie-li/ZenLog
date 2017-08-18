@@ -44,6 +44,7 @@ Frame {
         id: userSetting
         width: parent.width
         currentUser: SqlModel.getCurrentUser()
+        currentVisible: false
         anchors {
             topMargin: 20
             top: rowButtons.bottom
@@ -53,6 +54,9 @@ Frame {
 
     Connections {
         target: SqlModel
-        onUserChanged: userSetting.currentUser = SqlModel.getCurrentUser()
+        onUserChanged: {
+            userSetting.currentUser = SqlModel.getCurrentUser()
+            userSetting.reload()
+        }
     }
 }

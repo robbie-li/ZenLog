@@ -156,9 +156,9 @@ ApplicationWindow {
         modal: true
         focus: true
         x: 0
-        y: window.height / 12
+        y: 0
         width: window.width
-        contentHeight: 600
+        contentHeight: window.height
     }
 
     function reloadTitle() {

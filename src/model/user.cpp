@@ -40,7 +40,7 @@ void User::reset() {
   this->m_name =  "";
   this->m_classNum = 0;
   this->m_courseName = "";
-  this->m_current = true;
+  this->m_current = false;
   this->m_groupIdx = 0;
   this->m_groupNum = 0;
   this->m_qq = "";

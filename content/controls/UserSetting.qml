@@ -8,13 +8,14 @@ Item {
     property User currentUser
 
     property bool currentEditable: false
+    property bool currentVisible: false
 
     function updateUser() {
         currentUser.name = textName.text
         currentUser.qq = textQQ.text
         currentUser.classNum = comboClass.currentIndex
         currentUser.groupNum = comboGroup.currentIndex
-        currentUser.groupIdx = textGroupIndex.text
+        currentUser.groupIdx = textGroupIndex.text === "" ? 0 : textGroupIndex.text
         currentUser.courseName = comboCourse.currentText
         currentUser.current = checkboxCurrent.checked
         currentUser.targetCount = textTarget.text
@@ -26,10 +27,12 @@ Item {
         textQQ.text = currentUser.qq
         comboClass.currentIndex = currentUser.classNum
         comboGroup.currentIndex = currentUser.groupNum
-        textGroupIndex.text = currentUser.groupIdx
+        textGroupIndex.text = currentUser.groupIdx == 0 ? "" : currentUser.groupIdx
         comboCourse.currentIndex = (currentUser.courseName == '大悲咒' ? 0 : 1)
         checkboxCurrent.checked = currentUser.current
-        textTarget.text = currentUser.targetCount
+        textBaseTarget.text = (currentUser.courseName == '大悲咒' ? 108 : 10000)
+        console.log('current target:' + currentUser.targetCount)
+        textTarget.text = (currentUser.targetCount == 0 ? (currentUser.courseName == '大悲咒' ? 108 : 10000) : currentUser.targetCount )
         checkboxExternalUser.checked = (currentUser.userType == User.ExternalUser ? true : false)
     }
 
@@ -66,6 +69,10 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             currentIndex: currentUser.courseName === "大悲咒" ? 0 : 1
+            onCurrentTextChanged: {
+                textBaseTarget.text = (currentText == '大悲咒' ? 108 : 10000)
+                textTarget.text = (currentUser.targetCount == 0 ? (currentText == '大悲咒' ? 108 : 10000) : currentUser.targetCount )
+            }
         }
 
         Label {
@@ -83,6 +90,7 @@ Item {
             Layout.fillWidth: true
             text: currentUser.name
             color: text === '' ? "red" : "black"
+            placeholderText: "必填项"
         }
 
         Label {
@@ -100,6 +108,7 @@ Item {
             Layout.fillHeight: true
             text: currentUser.qq
             color: text === '' ? "red" : "black"
+            placeholderText: "必填项"
         }
 
         Label {
@@ -157,11 +166,12 @@ Item {
             id: textGroupIndex
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: currentUser.groupIdx
+            text: currentUser.groupIdx === '0' ? "" : currentUser.groupIdx
             inputMethodHints : Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 1000000 }
             visible: !checkboxExternalUser.checked
             color: acceptableInput ? "black" : "red"
+            placeholderText: "必填项"
         }
 
         Label {
@@ -194,10 +204,11 @@ Item {
             id: textTarget
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: currentUser.targetCount
+            text: currentUser.targetCount === 0 ? (comboCourse.currentText === "大悲咒" ? "108" : "10000") : currentUser.targetCount
             inputMethodHints : Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 0; top: 999999 }
             color: acceptableInput ? "black" : "red"
+            placeholderText: "必填项"
         }
 
         Label {
@@ -213,6 +224,7 @@ Item {
             text: "设为默认用户"
             checked: currentUser.current
             checkable: currentEditable
+            visible: currentVisible
         }
     }
 }
